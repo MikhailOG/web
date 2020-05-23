@@ -2,6 +2,7 @@
   function insertAfter(newNode, referenceNode) {
     referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
   }
+  // NEW COMMENT
   INPUT_ROWS.addEventListener("click", (function (e) {
       var INPUT = e.target.parentElement.parentElement.parentElement;
       function reveal(e) {
