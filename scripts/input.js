@@ -82,3 +82,17 @@
         reveal(e);
       }
   }));
+
+  // var qty = INPUT_ROWS.querySelector("#qty");
+  // var observer = new MutationObserver(callback);
+  // var config = {
+  //   characterData: true,
+  //   subtree: true, 
+  //   childList: true
+  // }
+  // observer.observe(INPUT_ROWS, config);
+  function deleteZero() {
+        e.target.parentElement.parentElement.parentElement.querySelector(".button").classList.add("redButton");
+
+      }}
+  }
