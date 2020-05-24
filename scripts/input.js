@@ -46,13 +46,17 @@
           (function subtract() {
             var num = INPUT.getElementsByTagName("input")["qty"].value;
             var minusNum = num*1 - 1;
-            if (minusNum >= 0) {
+            if (minusNum > 0) {
               INPUT.getElementsByTagName("input")["qty"].value = minusNum;
-            }})();
+            }
+            else if (minusNum == 0) {
+              INPUT.getElementsByTagName("input")["qty"].value = minusNum;
+              deleteZero(e);
+            }
+          })();
         }
       else if (e.target && e.target.classList.contains("fa-plus-square")) {
         for (var i = 0; i < (INPUT_ROWS.childElementCount); i++) {
-
           if (INPUT_ROWS.children[i].contains(e.target)) {
             var newRowIndex = i + 1;
             break;
@@ -82,17 +86,15 @@
         reveal(e);
       }
   }));
-
-  // var qty = INPUT_ROWS.querySelector("#qty");
-  // var observer = new MutationObserver(callback);
-  // var config = {
-  //   characterData: true,
-  //   subtree: true, 
-  //   childList: true
-  // }
-  // observer.observe(INPUT_ROWS, config);
-  function deleteZero() {
-        e.target.parentElement.parentElement.parentElement.querySelector(".button").classList.add("redButton");
-
+  function deleteZero(e) {
+    let curRow = e.target.parentElement.parentElement.parentElement;
+        if (curRow.parentElement.children.length > 1) {
+          curRow.querySelector(".button").classList.toggle("redButton");
+          curRow.querySelector(".button").classList.toggle("button");
+          var redButton = curRow.querySelector(".redButton");
+          redButton.textContent="Удалить строку";
+          redButton.addEventListener("click", function(event){
+          curRow.remove();
+          });
+        }
       }
-  
