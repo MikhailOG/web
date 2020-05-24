@@ -1,7 +1,48 @@
   // Script that appends a row on click event
+
   function insertAfter(newNode, referenceNode) {
     referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
   }
+function switchToRed(curRow) {
+  curRow.querySelector(".button").classList.toggle("redButton");
+  curRow.querySelector(".button").classList.toggle("button");
+  redButton = curRow.querySelector(".redButton");
+  redButton.textContent="Удалить строку";
+  redButton.addEventListener("click", function(){
+    if (curRow.querySelector("button").classList.contains("redButton"))
+      curRow.remove();
+  });
+}
+function switchToWhite(curRow) {
+  curRow.querySelector(".redButton").classList.toggle("button");
+  curRow.querySelector(".redButton").classList.toggle("redButton");
+  button = curRow.querySelector(".button");
+  button.textContent="Нарисовать схему";
+  button.removeEventListener("click", arguments.callee,false);
+}
+  function addZeroListener(row) {
+    let qty=row.getElementsByTagName("input")["qty"];
+    qty.addEventListener('input', function(e) {
+      if ((e.target.value == 0) && (row.querySelector("button").classList.contains("button"))){
+        switchToRed(row);
+        this.removeEventListener('input', arguments.callee,false);
+        restoreDrawButton(row);
+      }
+      else if ((e.target.value > 0) && (row.querySelector("button").classList.contains("redButton")))
+        restoreDrawButton(row);
+    });
+  }
+  function restoreDrawButton(row) {
+    let qty=row.getElementsByTagName("input")["qty"];
+    qty.addEventListener('input', function(e) {
+      if ((e.target.value > 0) && (row.querySelector("button").classList.contains("redButton"))){
+        switchToWhite(row);
+        this.removeEventListener('input', arguments.callee,false);
+        addZeroListener(row);
+      }
+    });
+  }
+  addZeroListener(INPUT_ROWS.firstElementChild);
   INPUT_ROWS.addEventListener("click", (function (e) {
       var INPUT = e.target.parentElement.parentElement.parentElement;
       function reveal(e) {
@@ -39,7 +80,14 @@
         (function add() {
           var num = INPUT.getElementsByTagName("input")["qty"].value;
           var plusNum = num*1 + 1;
+          if (plusNum > 0)
           INPUT.getElementsByTagName("input")["qty"].value = plusNum;
+          else
+          INPUT.getElementsByTagName("input")["qty"].value = 1;
+          if (INPUT.querySelector("button").classList.contains("redButton")) {
+            switchToWhite(INPUT);
+            addZeroListener(INPUT);
+          }
         })();
       }
         else if (e.target && e.target.classList.contains("fa-minus")) {
@@ -48,10 +96,17 @@
             var minusNum = num*1 - 1;
             if (minusNum > 0) {
               INPUT.getElementsByTagName("input")["qty"].value = minusNum;
+              if (INPUT.querySelector("button").classList.contains("redButton")) {
+                switchToWhite(INPUT);
+                addZeroListener(INPUT);
+              }
             }
-            else if (minusNum == 0) {
-              INPUT.getElementsByTagName("input")["qty"].value = minusNum;
-              deleteZero(e);
+            else if (minusNum <= 0) {
+              INPUT.getElementsByTagName("input")["qty"].value = 0;
+              if ((INPUT.querySelector("button").classList.contains("button")) && (INPUT_ROWS.childElementCount > 1)) {
+              switchToRed(INPUT);
+              restoreDrawButton(INPUT)
+              }
             }
           })();
         }
@@ -64,15 +119,23 @@
         }
         if (INPUT_ROWS.children[i].classList.contains("input-mod")){
           reveal(e);
+          if (INPUT.querySelector("button").classList.contains("redButton")) {
+            switchToWhite(INPUT);
+          }
           referenceNode = INPUT;
           row_to_copy = referenceNode.cloneNode(true)
           insertAfter(row_to_copy, referenceNode);
+          addZeroListener(INPUT.nextSibling);
           hide();
         }
         else {
+          if (INPUT.querySelector("button").classList.contains("redButton")) {
+            switchToWhite(INPUT);
+          }
           referenceNode = INPUT;
           row_to_copy = referenceNode.cloneNode(true)
           insertAfter(row_to_copy, referenceNode);
+          addZeroListener(INPUT.nextSibling);
         }
         INPUT_ROWS.children[newRowIndex].getElementsByTagName("input")["qty"].value = "1";
         INPUT_ROWS.children[newRowIndex].getElementsByTagName("input")["width"].value = "500";
@@ -86,15 +149,3 @@
         reveal(e);
       }
   }));
-  function deleteZero(e) {
-    let curRow = e.target.parentElement.parentElement.parentElement;
-        if (curRow.parentElement.children.length > 1) {
-          curRow.querySelector(".button").classList.toggle("redButton");
-          curRow.querySelector(".button").classList.toggle("button");
-          var redButton = curRow.querySelector(".redButton");
-          redButton.textContent="Удалить строку";
-          redButton.addEventListener("click", function(event){
-          curRow.remove();
-          });
-        }
-      }

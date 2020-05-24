@@ -400,6 +400,7 @@ button {
  font-size: 1.125rem;
  font-weight: 600;
  border: 2px solid #10387d;
+ transition: all 0.5s ease-out 0s;
 }
 .button:hover {
   transition: all 0.5s linear 0s;
@@ -408,7 +409,7 @@ button {
 }
 .redButton {
   font-family: 'Vollkorn', serif;
-  transition: all 0.5s linear 0s;
+  transition: all 0.5s ease-out 0s;
   background: #966B9D;
   color: #f3fffd;
   width: 90%;
