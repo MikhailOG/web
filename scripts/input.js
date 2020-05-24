@@ -127,6 +127,7 @@ function switchToWhite(curRow) {
           row_to_copy = referenceNode.cloneNode(true)
           insertAfter(row_to_copy, referenceNode);
           addZeroListener(INPUT.nextSibling);
+          addZeroListener(INPUT);
           hide();
         }
         else {
