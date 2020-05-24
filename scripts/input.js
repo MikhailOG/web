@@ -4,14 +4,15 @@
     referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
   }
 function switchToRed(curRow) {
-  curRow.querySelector(".button").classList.toggle("redButton");
-  curRow.querySelector(".button").classList.toggle("button");
-  redButton = curRow.querySelector(".redButton");
-  redButton.textContent="Удалить строку";
-  redButton.addEventListener("click", function(){
-    if (curRow.querySelector("button").classList.contains("redButton"))
-      curRow.remove();
-  });
+  if (INPUT_ROWS.childElementCount > 1) 
+  {  curRow.querySelector(".button").classList.toggle("redButton");
+    curRow.querySelector(".button").classList.toggle("button");
+    redButton = curRow.querySelector(".redButton");
+    redButton.textContent="Удалить строку";
+    redButton.addEventListener("click", function(){
+      if ((curRow.querySelector("button").classList.contains("redButton")) && (INPUT_ROWS.childElementCount > 1))
+        curRow.remove();
+    });}
 }
 function switchToWhite(curRow) {
   curRow.querySelector(".redButton").classList.toggle("button");
@@ -103,7 +104,7 @@ function switchToWhite(curRow) {
             }
             else if (minusNum <= 0) {
               INPUT.getElementsByTagName("input")["qty"].value = 0;
-              if ((INPUT.querySelector("button").classList.contains("button")) && (INPUT_ROWS.childElementCount > 1)) {
+              if (INPUT.querySelector("button").classList.contains("button")) {
               switchToRed(INPUT);
               restoreDrawButton(INPUT)
               }
