@@ -1,17 +1,16 @@
-  // Script that appends a row on click event
-
-  function insertAfter(newNode, referenceNode) {
+// Script that appends a row on click event
+function insertAfter(newNode, referenceNode) {
     referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
   }
-function switchToRed(curRow) {
+function switchToRed(row) {
   if (INPUT_ROWS.childElementCount > 1) 
-  {  curRow.querySelector(".button").classList.toggle("redButton");
-    curRow.querySelector(".button").classList.toggle("button");
-    redButton = curRow.querySelector(".redButton");
+  {  row.querySelector(".button").classList.toggle("redButton");
+    row.querySelector(".button").classList.toggle("button");
+    redButton = row.querySelector(".redButton");
     redButton.textContent="Удалить строку";
     redButton.addEventListener("click", function(){
-      if ((curRow.querySelector("button").classList.contains("redButton")) && (INPUT_ROWS.childElementCount > 1))
-        curRow.remove();
+      if ((row.querySelector("button").classList.contains("redButton")) && (INPUT_ROWS.childElementCount > 1))
+        row.remove();
     });}
 }
 function switchToWhite(curRow) {
@@ -21,17 +20,17 @@ function switchToWhite(curRow) {
   button.textContent="Нарисовать схему";
   button.removeEventListener("click", arguments.callee,false);
 }
-  function addZeroListener(row) {
-    let qty=row.getElementsByTagName("input")["qty"];
-    qty.addEventListener('input', function(e) {
-      if ((e.target.value == 0) && (row.querySelector("button").classList.contains("button"))){
+function addZeroListener(row) {
+  let qty=row.getElementsByTagName("input")["qty"];
+  qty.addEventListener('input', function(e) {
+   if ((e.target.value == 0) && (row.querySelector("button").classList.contains("button"))){
         switchToRed(row);
         this.removeEventListener('input', arguments.callee,false);
         restoreDrawButton(row);
       }
-      else if ((e.target.value > 0) && (row.querySelector("button").classList.contains("redButton")))
+    else if ((e.target.value > 0) && (row.querySelector("button").classList.contains("redButton")))
         restoreDrawButton(row);
-    });
+  });
   }
   function restoreDrawButton(row) {
     let qty=row.getElementsByTagName("input")["qty"];
@@ -138,6 +137,7 @@ function switchToWhite(curRow) {
           row_to_copy = referenceNode.cloneNode(true)
           insertAfter(row_to_copy, referenceNode);
           addZeroListener(INPUT.nextSibling);
+          addZeroListener(INPUT);
         }
         INPUT_ROWS.children[newRowIndex].getElementsByTagName("input")["qty"].value = "1";
         INPUT_ROWS.children[newRowIndex].getElementsByTagName("input")["width"].value = "500";
