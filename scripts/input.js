@@ -1,3 +1,27 @@
+function switchCircleDisk (row) {
+  row.querySelector(".disk .far").classList.toggle("fa-check-circle");
+  row.querySelector(".disk .far").classList.toggle("fa-circle");
+  row.querySelector(".disk .far").classList.toggle("fas");
+}
+function switchCircleBit (row) {
+  row.querySelector(".bit .far").classList.toggle("fa-check-circle");
+  row.querySelector(".bit .far").classList.toggle("fa-circle");
+  row.querySelector(".bit .far").classList.toggle("fas");
+}
+function addCircleListener(row) {
+  row.querySelector(".select").addEventListener("click", (function (e) {
+    if (e.target && (e.target.classList.contains("disk") && (e.target.parentElement.querySelector(".disk .far").classList.contains("fa-circle")))) {
+      switchCircleDisk(row);
+      if (e.target.parentElement.parentElement.querySelector(".bit .far").classList.contains("fa-check-circle"))
+      switchCircleBit (row);
+    }
+    else if (e.target && (e.target.classList.contains("bit") && (e.target.parentElement.querySelector(".bit .far").classList.contains("fa-circle")))) {
+      switchCircleBit(row);
+      if (e.target.parentElement.parentElement.querySelector(".disk .far").classList.contains("fa-check-circle"))
+      switchCircleDisk (row);
+    }
+  }));
+}
 // Script that appends a row on click event
 function insertAfter(newNode, referenceNode) {
     referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
@@ -13,10 +37,10 @@ function switchToRed(row) {
         row.remove();
     });}
 }
-function switchToWhite(curRow) {
-  curRow.querySelector(".redButton").classList.toggle("button");
-  curRow.querySelector(".redButton").classList.toggle("redButton");
-  button = curRow.querySelector(".button");
+function switchToWhite(row) {
+  row.querySelector(".redButton").classList.toggle("button");
+  row.querySelector(".redButton").classList.toggle("redButton");
+  button = row.querySelector(".button");
   button.textContent="Нарисовать схему";
   button.removeEventListener("click", arguments.callee,false);
 }
@@ -43,6 +67,7 @@ function addZeroListener(row) {
     });
   }
   addZeroListener(INPUT_ROWS.firstElementChild);
+  addCircleListener(INPUT_ROWS.firstElementChild);
   INPUT_ROWS.addEventListener("click", (function (e) {
       var INPUT = e.target.parentElement.parentElement.parentElement;
       function reveal(e) {
@@ -121,24 +146,37 @@ function addZeroListener(row) {
           reveal(e);
           if (INPUT.querySelector("button").classList.contains("redButton")) {
             switchToWhite(INPUT);
+            switchResult = true;
           }
           referenceNode = INPUT;
           row_to_copy = referenceNode.cloneNode(true)
           insertAfter(row_to_copy, referenceNode);
-          addZeroListener(INPUT.nextSibling);
-          addZeroListener(INPUT);
           hide();
+          if (switchResult) {
+          switchToRed(INPUT);
+          switchResult = false;
+          }
         }
         else {
           if (INPUT.querySelector("button").classList.contains("redButton")) {
             switchToWhite(INPUT);
+            switchResult = true;
           }
           referenceNode = INPUT;
           row_to_copy = referenceNode.cloneNode(true)
           insertAfter(row_to_copy, referenceNode);
-          addZeroListener(INPUT.nextSibling);
-          addZeroListener(INPUT);
+          if (switchResult) {
+            switchToRed(INPUT);
+            switchResult = false;
+            }
         }
+        if (!INPUT_ROWS.children[newRowIndex].getElementsByTagName("i")["bit"].classList.contains("fas")) {
+          switchCircleDisk (INPUT_ROWS.children[newRowIndex]);
+          switchCircleBit (INPUT_ROWS.children[newRowIndex]);
+        }
+        addZeroListener(INPUT.nextSibling);
+        addZeroListener(INPUT);
+        addCircleListener(INPUT.nextSibling);
         INPUT_ROWS.children[newRowIndex].getElementsByTagName("input")["qty"].value = "1";
         INPUT_ROWS.children[newRowIndex].getElementsByTagName("input")["width"].value = "500";
         INPUT_ROWS.children[newRowIndex].getElementsByTagName("input")["height"].value = "500";

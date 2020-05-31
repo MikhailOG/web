@@ -389,6 +389,13 @@ p {
   grid-column: 9 / 13;
   grid-row: 4 / 5;
 }
+.select {
+  margin-left: 1rem;
+}
+.select img{
+  width: auto;
+  max-height: 3rem;
+}
 button {
  font-family: 'Vollkorn', serif;
  color: #10387d;
@@ -424,7 +431,7 @@ button {
   transition: all 0.5s linear 0s;
   color: #DDFFF7;
   background: #993955;
-  border: 3px solid #4A4063;
+  border: 2px solid #4A4063;
  }
 canvas {
   grid-column: 5 / 13;
