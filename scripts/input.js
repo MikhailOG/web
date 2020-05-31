@@ -27,14 +27,16 @@ function insertAfter(newNode, referenceNode) {
     referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
   }
 function switchToRed(row) {
-  if (INPUT_ROWS.childElementCount > 1) 
-  {  row.querySelector(".button").classList.toggle("redButton");
+  if (INPUT_ROWS.childElementCount > 1) {  
+    row.querySelector(".button").classList.toggle("redButton");
     row.querySelector(".button").classList.toggle("button");
     redButton = row.querySelector(".redButton");
     redButton.textContent="Удалить строку";
     redButton.addEventListener("click", function(){
-      if ((row.querySelector("button").classList.contains("redButton")) && (INPUT_ROWS.childElementCount > 1))
+    if ((row.querySelector("button").classList.contains("redButton")) && (INPUT_ROWS.childElementCount > 1)) 
         row.remove();
+    if ((INPUT_ROWS.childElementCount == 1) && (INPUT_ROWS.firstElementChild.querySelector("button").classList.contains("redButton")))
+      switchToWhite(INPUT_ROWS.firstElementChild);
     });}
 }
 function switchToWhite(row) {
@@ -142,6 +144,7 @@ function addZeroListener(row) {
             break;
           }
         }
+        switchResult = false;
         if (INPUT_ROWS.children[i].classList.contains("input-mod")){
           reveal(e);
           if (INPUT.querySelector("button").classList.contains("redButton")) {
@@ -174,13 +177,13 @@ function addZeroListener(row) {
           switchCircleDisk (INPUT_ROWS.children[newRowIndex]);
           switchCircleBit (INPUT_ROWS.children[newRowIndex]);
         }
-        addZeroListener(INPUT.nextSibling);
-        addZeroListener(INPUT);
-        addCircleListener(INPUT.nextSibling);
         INPUT_ROWS.children[newRowIndex].getElementsByTagName("input")["qty"].value = "1";
         INPUT_ROWS.children[newRowIndex].getElementsByTagName("input")["width"].value = "500";
         INPUT_ROWS.children[newRowIndex].getElementsByTagName("input")["height"].value = "500";
         INPUT_ROWS.children[newRowIndex].getElementsByTagName("input")["depth"].value = "250";
+        addZeroListener(INPUT.nextSibling);
+        addZeroListener(INPUT);
+        addCircleListener(INPUT.nextSibling);
       }
       else if (e.target && e.target.classList.contains("fa-caret-right")) {
         hide(e);
