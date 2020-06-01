@@ -184,7 +184,7 @@ function addZeroListener(row) {
         addZeroListener(INPUT.nextSibling);
         addZeroListener(INPUT);
         addCircleListener(INPUT.nextSibling);
-        if (INPUT_ROWS.firstElementChild.getElementsByTagName("input")["qty"].value == 0)
+        if ((INPUT_ROWS.firstElementChild.getElementsByTagName("input")["qty"].value == 0) && (INPUT_ROWS.firstElementChild.querySelector("button").classList.contains("button")))
         switchToRed(INPUT_ROWS.firstElementChild);
       }
       else if (e.target && e.target.classList.contains("fa-caret-right")) {
