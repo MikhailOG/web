@@ -22,6 +22,19 @@ function addCircleListener(row) {
     }
   }));
 }
+function addSpinner(row) {
+  row.querySelector(".buttons i").addEventListener("mouseenter", function (e){
+    if (!e.target.classList.contains("fa-spin"))
+      e.target.classList.toggle("fa-spin");
+  });
+  row.querySelector(".buttons i").addEventListener("mouseleave", function (e){
+    if (e.target.classList.contains("fa-spin"))
+      e.target.classList.toggle("fa-spin");
+  });
+  row.querySelector(".buttons i").addEventListener("click", function (e){
+      e.target.classList.toggle("hide");
+  });
+}
 // Script that appends a row on click event
 function insertAfter(newNode, referenceNode) {
     referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
@@ -70,8 +83,9 @@ function addZeroListener(row) {
   }
   addZeroListener(INPUT_ROWS.firstElementChild);
   addCircleListener(INPUT_ROWS.firstElementChild);
+  addSpinner(INPUT_ROWS.firstElementChild);
   INPUT_ROWS.addEventListener("click", (function (e) {
-      var INPUT = e.target.parentElement.parentElement.parentElement;
+      var INPUT = e.target.parentElement.parentElement.parentElement.parentElement.children[0];
       function reveal(e) {
         INPUT.lastChild.remove();
         INPUT.lastChild.remove();
@@ -151,7 +165,7 @@ function addZeroListener(row) {
             switchToWhite(INPUT);
             switchResult = true;
           }
-          referenceNode = INPUT;
+          referenceNode = INPUT.parentElement;
           row_to_copy = referenceNode.cloneNode(true)
           insertAfter(row_to_copy, referenceNode);
           hide();
@@ -165,7 +179,7 @@ function addZeroListener(row) {
             switchToWhite(INPUT);
             switchResult = true;
           }
-          referenceNode = INPUT;
+          referenceNode = INPUT.parentElement;
           row_to_copy = referenceNode.cloneNode(true)
           insertAfter(row_to_copy, referenceNode);
           if (switchResult) {
@@ -173,19 +187,20 @@ function addZeroListener(row) {
             switchResult = false;
             }
         }
-        if (!INPUT_ROWS.children[newRowIndex].getElementsByTagName("i")["bit"].classList.contains("fas")) {
-          switchCircleDisk (INPUT_ROWS.children[newRowIndex]);
-          switchCircleBit (INPUT_ROWS.children[newRowIndex]);
+        if (!INPUT_ROWS.children[newRowIndex].children[0].getElementsByTagName("i")["bit"].classList.contains("fas")) {
+          switchCircleDisk (INPUT_ROWS.children[newRowIndex].children[0]);
+          switchCircleBit (INPUT_ROWS.children[newRowIndex].children[0]);
         }
-        INPUT_ROWS.children[newRowIndex].getElementsByTagName("input")["qty"].value = "1";
-        INPUT_ROWS.children[newRowIndex].getElementsByTagName("input")["width"].value = "500";
-        INPUT_ROWS.children[newRowIndex].getElementsByTagName("input")["height"].value = "500";
-        INPUT_ROWS.children[newRowIndex].getElementsByTagName("input")["depth"].value = "250";
-        addZeroListener(INPUT.nextSibling);
-        addZeroListener(INPUT);
-        addCircleListener(INPUT.nextSibling);
-        if ((INPUT_ROWS.firstElementChild.getElementsByTagName("input")["qty"].value == 0) && (INPUT_ROWS.firstElementChild.querySelector("button").classList.contains("button")))
-        switchToRed(INPUT_ROWS.firstElementChild);
+        INPUT_ROWS.children[newRowIndex].children[0].getElementsByTagName("input")["qty"].value = "1";
+        INPUT_ROWS.children[newRowIndex].children[0].getElementsByTagName("input")["width"].value = "500";
+        INPUT_ROWS.children[newRowIndex].children[0].getElementsByTagName("input")["height"].value = "500";
+        INPUT_ROWS.children[newRowIndex].children[0].getElementsByTagName("input")["depth"].value = "250";
+        addZeroListener(INPUT.parentElement.nextSibling);
+        addZeroListener(INPUT.parentElement);
+        addCircleListener(INPUT.parentElement.nextSibling);
+        addSpinner(INPUT.parentElement.nextSibling);
+        if ((INPUT_ROWS.firstElementChild.children[0].getElementsByTagName("input")["qty"].value == 0) && (INPUT_ROWS.firstElementChild.querySelector("button").classList.contains("button")))
+        switchToRed(INPUT_ROWS.firstElementChild.children[0]);
       }
       else if (e.target && e.target.classList.contains("fa-caret-right")) {
         hide(e);
