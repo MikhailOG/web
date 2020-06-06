@@ -1,120 +1,150 @@
 <!DOCTYPE html>
 <html>
-<head>
-<script src="https://kit.fontawesome.com/4d075e0ab3.js" crossorigin="anonymous"></script>
-<title>Калькулятор алмазного бурения</title>
-<meta charset="UTF-8" >
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="icon" href="images/new_logo.png">
-<link href="https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,700;1,700&family=Vollkorn:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css">
-<script src="scripts/jquery-3.4.1.js"></script>
-</head>
-<body>
-<div class="grid-container">
-<header>
-  <div class= "header-cont">
-      <figure><img id="logo" src="images/new_logo.png" alt="logo"></figure>
-    <div class=first-name>
-    <h1>Morozco</h1>
-    <p>Алмазная резка и алмазное бурение</p>
-    </div>
-    <div class="telefone">
-    <p><i class="fas fa-phone"></i> +7 (926) 932 68 40<br>Михаил</br></p>
-    </div>
-  </div>
-</header>
-<div class="nav">
-  <a href="#calculator"><i class="fas fa-calculator"></i> Расчет онлайн</a>
-  <a href="#price"><i class="fas fa-dollar-sign"></i> Прайс-лист</a>
-  <a href="#gallery"><i class="far fa-images"></i> Фото работ</a>
-  <a href="#contacts"><i class="far fa-address-card"></i> Контакты</a>
-</div>
-<div class="main-container">
-    <h2 class="firstSection" id="calculator">Расчет требуемого количества<br> отверстий в проеме</h2>
-    <div class="input-rows">
-      <div class="input">
-        <div class="signs">
-          <p><i class="far fa-plus-square"></i>
-          <i class="fas fa-caret-right"></i></p>
-        </div>
-      <div class="input-width">
-        <p>Ширина, мм:</p>
-        <div class="width">
-          <input type="text" id="width" value="500">
-        </div>
-      </div>
-      <div class="input-height">
-        <p>Высота, мм:</p>
-        <div class="height">
-        <input type="text" id="height" value="500">
-      </div>
-      </div>
-      <div class="input-depth">
-        <p>Толщина, мм:</p>
-        <div class="depth">
-        <input type="text" id="depth" value="250">
-      </div>
-      </div>
-      <div class="input-diameter">
-        <p>Диаметр коронки:</p>
-              <div class="diameter">
-        <select name="diameter" id="diameter">
-          <option value="42">42 мм</option>
-          <option value="52">52 мм</option>
-          <option value="62">62 мм</option>
-          <option value="72">72 мм</option>
-          <option value="82">82 мм</option>
-          <option value="92">92 мм</option>
-          <option value="102">102 мм</option>
-          <option value="112">112 мм</option>
-          <option value="122">122 мм</option>
-          <option value="132">132 мм</option>
-          <option value="142">142 мм</option>
-          <option selected value="152">152 мм</option>
-          <option value="162">162 мм</option>
-          <option value="172">172 мм</option>
-          <option value="182">182 мм</option>
-          <option value="192">192 мм</option>
-          <option value="200">200 мм</option>
-          <option value="250">250 мм</option>
-          <option value="300">300 мм</option>
-          <option value="350">350 мм</option>
-        </select>
-        </div>
-        </div>
-        <div class="select">
-          <div class="bit">
-            <i id="bit" class="bit far fas fa-check-circle"></i>
-            <img class="bit" src="images/bit.png" alt="bit">
+  <head>
+    <script src="https://kit.fontawesome.com/4d075e0ab3.js" crossorigin="anonymous"></script>
+    <title>Калькулятор алмазного бурения</title>
+    <meta charset="UTF-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="images/new_logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,700;1,700&family=Vollkorn:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="scripts/jquery-3.4.1.js"></script>
+  </head>
+  <body>
+    <div class="grid-container">
+      <header>
+        <div class= "header-cont">
+          <figure><img id="logo" src="images/new_logo.png" alt="logo"></figure>
+          <div class=first-name>
+            <h1>Morozco</h1>
+            <p>Алмазная резка и алмазное бурение</p>
           </div>
-          <div class="disk">
-            <i id="disk" class="disk far fa-circle"></i>
-            <img class="disk" src="images/disk.png" alt="disk">
+          <div class="telefone">
+            <p><i class="fas fa-phone"></i> +7 (926) 932 68 40<br>Михаил</br></p>
           </div>
         </div>
-        <div class="add-to-cart">
-          <div class="count">
-            <i class="fas fa-plus"></i>
-            <input type="text" id="qty" value="1">
-            <i class="fas fa-minus"></i>
-          </div>
-          <div class="cart">
-          <i class="fas fa-cart-arrow-down"></i>
-        </div>
-        </div>
-        <div class="buttons">
-        <button class="button" type="submit">Нарисовать схему</button>
+      </header>
+      <div class="nav">
+        <a href="#calculator"><i class="fas fa-calculator"></i> Расчет онлайн</a>
+        <a href="#price"><i class="fas fa-dollar-sign"></i> Прайс-лист</a>
+        <a href="#gallery"><i class="far fa-images"></i> Фото работ</a>
+        <a href="#contacts"><i class="far fa-address-card"></i> Контакты</a>
       </div>
+      <div class="main-container">
+        <h2 class="firstSection" id="calculator">Расчет требуемого количества<br> отверстий в проеме</h2>
+        <div class="input-rows">
+          <div class="input">
+            <div class="first-line"> 
+              <div class="signs">
+                <p><i class="far fa-plus-square"></i>
+                <i class="fas fa-caret-right"></i></p>
+              </div>
+              <div class="input-width">
+                <p>Ширина, мм:</p>
+                <div class="width">
+                  <input type="text" id="width" value="500">
+                </div>
+              </div>
+              <div class="input-height">
+                <p>Высота, мм:</p>
+                <div class="height">
+                  <input type="text" id="height" value="500">
+                </div>
+              </div>
+              <div class="input-depth">
+                <p>Толщина, мм:</p>
+                <div class="depth">
+                  <input type="text" id="depth" value="250">
+                </div>
+              </div>
+              <div class="input-diameter">
+                <p>Диаметр коронки:</p>
+                <div class="diameter">
+                  <select name="diameter" id="diameter">
+                    <option value="42">42 мм</option>
+                    <option value="52">52 мм</option>
+                    <option value="62">62 мм</option>
+                    <option value="72">72 мм</option>
+                    <option value="82">82 мм</option>
+                    <option value="92">92 мм</option>
+                    <option value="102">102 мм</option>
+                    <option value="112">112 мм</option>
+                    <option value="122">122 мм</option>
+                    <option value="132">132 мм</option>
+                    <option value="142">142 мм</option>
+                    <option selected value="152">152 мм</option>
+                    <option value="162">162 мм</option>
+                    <option value="172">172 мм</option>
+                    <option value="182">182 мм</option>
+                    <option value="192">192 мм</option>
+                    <option value="200">200 мм</option>
+                    <option value="250">250 мм</option>
+                    <option value="300">300 мм</option>
+                    <option value="350">350 мм</option>
+                  </select>
+                </div>
+              </div>
+              <div class="select">
+                <div class="bit">
+                  <i id="bit" class="bit far fas fa-check-circle"></i>
+                  <img class="bit" src="images/bit.png" alt="bit">
+                </div>
+                <div class="disk">
+                  <i id="disk" class="disk far fa-circle"></i>
+                  <img class="disk" src="images/disk.png" alt="disk">
+                </div>
+              </div>
+              <div class="buttons">
+                <i class="fa fa-cog"></i>
+              </div>
+              <div class="add-to-cart">
+                <div class="count">
+                  <i class="fas fa-plus"></i>
+                  <input type="text" id="qty" value="1">
+                  <i class="fas fa-minus"></i>
+                </div>
+                <div class="cart">
+                  <i class="fas fa-cart-arrow-down"></i>
+                </div>
+              </div>
+              <div class="buttons">
+                <button class="button" type="submit">Нарисовать схему</button>
+              </div>
+            </div>
+            <div class="second-line"> 
+              <div class="waste">
+                <i id="waste-off" class="bit far fas fa-check-circle"><p>Вынос мусора вручную</p></i>
+                <i id="waste-on" class="disk far fa-circle"><p>Вывоз мусора с использованием техники</p></i>
+              </div>
+              <div class="input-waste-weight">
+                <p>Разделить проем<br> на части весом, кг:</p>
+                <div class="waste-weight">
+                  <input type="text" id="waste-weight" value="100">
+                </div>
+              </div>
+              <div class="input-concrete-weight">
+                <p>Плотность бетона, т/м2:</p>
+                <div class="concrete-weight">
+                  <input type="text" id="concrete-weight" value="2.4">
+                </div>
+              </div>
+              <div class="elevation-check">
+                <p>Проем на высоте более 3м от пола</p>
+                <div class="answers">
+                  <i id="elevation-over-limit" class="disk far fa-circle"><p>да</p></i>
+                  <i id="elevation-under-limit" class="bit far fas fa-check-circle"><p>нет</p></i>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-  </div>
-    <!--Canvas-->
-    <canvas id="myCanvas" width="500" height="500"></canvas>
+        <!--Canvas-->
+        <canvas id="myCanvas" width="500" height="500"></canvas>
         <div class="secondSection">
           <h2 id="price">Основные расценки</h2>
         </div>
         <div class="titlePrice titlePrice1">
-        <h3>Алмазное бурение (сверление) отверстий</h3>
+          <h3>Алмазное бурение (сверление) отверстий</h3>
         </div>
         <div class="price price1">
           <div class="head"><p>Стоимость 1 см бурения в рублях</p></div>
@@ -160,15 +190,15 @@
           <div class="content"><p>145</p></div>
         </div>
         <div class="notes">
-        <ul>
-          <p>К работам повышенной сложности применяются повышающие коэффициенты:</p>
-          <li><i>Устройство отверстий на высоте более 3 метров от пола</i></li>
-          <li><i>Устройство отверстий диаметром более 200 мм при толщине более 400 мм</i></li>
-          <li><i>Устройство отверстий в ж/б конструкциях с повышенной степенью армирования</i></li>
-        </ul>
+          <ul>
+            <p>К работам повышенной сложности применяются повышающие коэффициенты:</p>
+            <li><i>Устройство отверстий на высоте более 3 метров от пола</i></li>
+            <li><i>Устройство отверстий диаметром более 200 мм при толщине более 400 мм</i></li>
+            <li><i>Устройство отверстий в ж/б конструкциях с повышенной степенью армирования</i></li>
+          </ul>
         </div>
         <div class="titlePrice titlePrice2">
-        <h3>Алмазная резка стенорезной машиной</h3>
+          <h3>Алмазная резка стенорезной машиной</h3>
         </div>
         <div class="price price2">
           <div class="head"><p>Стоимость 1 м реза в рублях</p></div>
@@ -210,7 +240,7 @@
           <div class="content"><p>3500</p></div>
         </div>
         <div class="titlePrice titlePrice3">
-        <h3>Алмазная резка канатом</h3>
+          <h3>Алмазная резка канатом</h3>
         </div>
         <div class="price price3">
           <div class="head"><p>Стоимость 1 м&#178; реза в рублях</p></div>
@@ -244,14 +274,14 @@
         <div class="thirdSection">
           <h2 id="gallery">Фотографии наших работ</h2>
         </div>
-          </div>
+      </div>
       <footer id="contacts">
           <a href="mailto:m.popov@thermolines.ru"><i class="far fa-envelope" area-hidden="true"></i>
           <span class="sr-only">m.popov@thermolines.ru</span></a>
           <p>Copyright 2020 <i class="far fa-gem" style="font-size: 1.25rem;"></i> by Mikhail Popov</p>
       </footer>
-</div>
-</body>
-<script src="scripts/canvas.js"></script>
-<script src="scripts/input.js"></script>
+    </div>
+  </body>
+  <script src="scripts/canvas.js"></script>
+  <script src="scripts/input.js"></script>
 </html>
