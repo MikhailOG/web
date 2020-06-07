@@ -276,7 +276,6 @@ h2 {
   flex-direction: column;
   background: #f3fffd;
   color: #10387d;
-  /* transition: padding 0.2s linear 0s; */
   margin-top: -3px;
 }
 .input-mod {
@@ -301,11 +300,13 @@ h2 {
   border-bottom: 3px solid #10387d;
   padding: 0.625rem 0px 0.625rem 0.3125rem;
   margin-top: -3px;
-  height: 10rem;
+  height: 8rem;
   transition: height 0.15s ease-out;
 }
 .second-line{
   height: auto;
+  display: flex;
+  justify-content: space-between;
 }
 .signs {
   align-self: center;
@@ -321,7 +322,7 @@ h2 {
   align-content:center;
   display: flex;
   flex-direction: column;
-  justify-content:space-between;
+  justify-content:space-evenly;
   text-align: center;
   margin-left: 1.25rem;
 }
@@ -375,17 +376,32 @@ p {
 .width, .height, .depth {
   justify-self: start;
 }
-.waste {
+.second-line p{
+/* text-align: center; */
+font-family: 'Vollkorn', serif;
+font-weight: 600;
+font-size: 1.125rem;
+}
+.waste, .input-waste-weight, .input-concrete-weight, .elevation-check {
   display: flex;
   flex-direction: column;
-  align-content: space-between;
+  align-items: center;
   justify-content: space-between;
   padding: 1rem 0;
+  border-right: 2px solid #993955;
+  border-left: 2px solid #993955;
 }
-.elevation-check {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+.waste {
+  align-items: flex-start;
+}
+i p {
+  padding-left: 0.5rem;
+}
+#waste-head {
+  align-self: center;
+}
+#concrete-weight, #waste-weight {
+  width: 10rem;
 }
 .answers {
   display: flex;
