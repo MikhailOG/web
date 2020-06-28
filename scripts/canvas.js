@@ -234,5 +234,56 @@ INPUT_ROWS.addEventListener("click", (function (e) {
         circNum: circNum,
     };
     }
+    /* CanvasInfo */
+    var canvasInfo = document.querySelector(".canvasInfo");
+    canvasInfo
   }
 }));
+function Embrasure(width, height, depth, diameter, selectBitOrSaw, quantity, material, job, waste, wasteWeightLimit, concreteWeight, elevation, water, holesNum, holesDistHor, holesDistVert, cutNum, cutLengthHor, cutLengthVert, cutLengthTotal, coringPrice, coringMoney, cuttingPrice, cuttingMoney) {
+  this.width = width;
+  this.height = height;
+  this.depth = depth;
+  this.diameter = diameter;
+  this.selectBitOrSaw = selectBitOrSaw;
+  this.quantity = quantity;
+  this.material = material;
+  this.job = job;
+  this.waste = waste;
+  this.wasteWeightLimit = wasteWeightLimit;
+  this.concreteWeight = concreteWeight;
+  this.elevation = elevation;
+  this.water = water;
+  this.holesNum = holesNum;
+  this.holesDistHor = holesDistHor;
+  this.holesDistVert = holesDistVert;
+  this.cutNum = cutNum;
+  this.cutLengthHor = function() {
+    if (this.width < 1000)
+      return 0;
+    else return this.width*2;
+  };
+  this.cutLengthVert = function() {
+    if (this.height < 1000)
+      return 0;
+    else return this.height*2;
+  };
+  this.cutLengthTotal = function() {
+    return (this.cutLengthHor+this.cutLengthVert);
+  };
+  this.coringPrice = coringPrice;
+  this.coringMoney = function() {
+    var money = (this.holesNum*this.depth*this.coringPrice/100);
+    if (elevation)
+      money = 1.1*money;
+    if (water)
+      money = 1.2*money;
+    return money;
+  };
+  this.cuttingPrice = cuttingPrice;
+  this.cuttingMoney = cuttingMoney;
+  this.wasteWeight = wasteWeight;
+  this.wastePrice = wastePrice;
+  this.wasteMoney = function() {
+    return (this.wasteWeight*wastePrice);
+  };
+}

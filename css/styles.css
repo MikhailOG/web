@@ -514,6 +514,14 @@ canvas {
   border:3px solid #10387d;
   margin: 3rem 0;
 }
+.canvasInfo {
+  grid-column: 1 / 5;
+  grid-row: 4 / 5;
+  justify-self: center;
+  background: #f3fffd;
+  border:3px solid #10387d;
+  margin: 3rem 0;
+}
 body>.content-wrap {
   background: #f3fffd;
   width: 40%;
