@@ -94,7 +94,7 @@
                   <img class="disk" src="images/disk.png" alt="disk">
                 </div>
               </div>
-              <div class="buttons">
+              <div class="cog">
                 <i class="fa fa-cog"></i>
               </div>
               <div class="add-to-cart">
@@ -111,59 +111,81 @@
                 <button class="button" type="submit">Нарисовать схему</button>
               </div>
             </div>
-            <div class="second-line"> 
-              <div class="waste">
-                <p id="waste-head">Вынос мусора</p>
-                <i id="waste-off" class="bit far fas fa-check-circle"><p> вручную</p></i>
-                <i id="waste-on" class="disk far fa-circle"><p> с использованием техники</p></i>
-              </div>
+            <div class="second-line hide">
               <div class="input-material">
-                <p>Вид работ:</p>
-                <div class="diameter">
-                  <select name="diameter" id="diameter">
-                    <option value="42">42 мм</option>
-                    <option value="52">52 мм</option>
-                    <option value="62">62 мм</option>
-                    <option value="72">72 мм</option>
-                    <option value="82">82 мм</option>
-                    <option value="92">92 мм</option>
-                    <option value="102">102 мм</option>
-                    <option value="112">112 мм</option>
-                    <option value="122">122 мм</option>
-                    <option value="132">132 мм</option>
-                    <option value="142">142 мм</option>
-                    <option selected value="152">152 мм</option>
-                    <option value="162">162 мм</option>
-                    <option value="172">172 мм</option>
-                    <option value="182">182 мм</option>
-                    <option value="192">192 мм</option>
-                    <option value="200">200 мм</option>
-                    <option value="250">250 мм</option>
-                    <option value="300">300 мм</option>
-                    <option value="350">350 мм</option>
+                <p>Материал стены<br>(перекрытия)</p>               
+                <div class="select-material">
+                  <select name="material-type" id="material-type">
+                    <option selected value="reinforced-concrete">Железобетон</option>
+                    <option value="concrete">Бетон</option>
+                    <option value="brick">Кирпич</option>
                   </select>
                 </div>
               </div>
+              <div class="input-job">
+                <p>Вид работ:</p>
+                <div class="select-job">
+                  <select name="job-type" id="job-type">
+                    <option selected value="wall">Проем в стене</option>
+                    <option value="floor">Проем в перекрытии</option>
+                    <option value="wire-saw">Канатная резка</option>
+                  </select>
+                </div>
+              </div> 
+              <div class="waste">
+                <p>Вынос мусора</p>
+                <div class="waste-answers">
+                  <div class="waste-off">
+                    <i id="waste-off" class="waste-off far fas fa-check-circle"><p class="waste-off">Вручную</p></i>
+                  </div>
+                  <div class="waste-on">
+                    <i id="waste-on" class="waste-on far fa-circle"><p class="waste-on">Погрузчиком</p></i>
+                  </div>
+                </div>
+              </div>
               <div class="input-waste-weight">
-                <p>Разделить проем</p> 
-                <p>на части весом, кг:</p>
+                <p>Разделить проем<br>на части весом<br>не более, кг:</p>
                 <div class="waste-weight">
                   <input type="text" id="waste-weight" value="100">
                 </div>
               </div>
               <div class="input-concrete-weight">
-                <p>Плотность бетона,</p>
-                <p>т/м3:</p>
+                <p>Плотность бетона,<br>т/м3:</p>
                 <div class="concrete-weight">
                   <input type="text" id="concrete-weight" value="2.4">
                 </div>
               </div>
               <div class="elevation-check">
-                <p>Проем на высоте</p>
-                <p>более 3 м от пола</p>
-                <div class="answers">
-                  <i id="elevation-over-limit" class="disk far fa-circle"><p>да</p></i>
-                  <i id="elevation-under-limit" class="bit far fas fa-check-circle"><p>нет</p></i>
+                <p>Проем на высоте<br>более 3 м от пола</p>
+                <div class="elevation-check-answers">
+                  <div class="elevation-over-limit">
+                    <i id="elevation-over-limit" class="elevation-over-limit far fa-circle"><p class="elevation-over-limit">да</p></i>
+                  </div>
+                  <div class="elevation-under-limit">
+                    <i id="elevation-under-limit" class="elevation-under-limit far fas fa-check-circle"><p class="elevation-under-limit">нет</p></i>
+                  </div>
+                </div>
+              </div>
+              <div class="water-check">
+                <p>Требуется сбор воды<br>(помещение с отделкой)</p>
+                <div class="water-check-answers">
+                  <div class="water-check-on">
+                    <i id="water-check-on" class="water-check-on far fa-circle"><p class="water-check-on">да</p></i>
+                  </div>
+                  <div class="water-check-off">
+                    <i id="water-check-off" class="water-check-off far fas fa-check-circle"><p class="water-check-off">нет</p></i>
+                  </div>
+                </div>
+              </div>
+              <div class="settings-check">
+                <p>Использовать как шаблон для следующих проемов</p>
+                <div class="settings-check-answers">
+                  <div class="settings-check-on">
+                    <i id="settings-check-on" class="settings-check-on far fa-circle"><p class="settings-check-on">да</p></i>
+                  </div>
+                  <div class="settings-check-off">
+                    <i id="settings-check-off" class="settings-check-off far fas fa-check-circle"><p class="settings-check-off">нет</p></i>
+                  </div>
                 </div>
               </div>
             </div>

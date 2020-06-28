@@ -1,39 +1,73 @@
-function switchCircleDisk (row) {
-  row.querySelector(".disk .far").classList.toggle("fa-check-circle");
-  row.querySelector(".disk .far").classList.toggle("fa-circle");
-  row.querySelector(".disk .far").classList.toggle("fas");
+function switchCircle (circ) {
+  circ.classList.toggle("fa-check-circle");
+  circ.classList.toggle("fa-circle");
+  circ.classList.toggle("fas");
 }
-function switchCircleBit (row) {
-  row.querySelector(".bit .far").classList.toggle("fa-check-circle");
-  row.querySelector(".bit .far").classList.toggle("fa-circle");
-  row.querySelector(".bit .far").classList.toggle("fas");
-}
-function addCircleListener(row) {
-  row.querySelector(".select").addEventListener("click", (function (e) {
-    if (e.target && (e.target.classList.contains("disk") && (e.target.parentElement.querySelector(".disk .far").classList.contains("fa-circle")))) {
-      switchCircleDisk(row);
-      if (e.target.parentElement.parentElement.querySelector(".bit .far").classList.contains("fa-check-circle"))
-      switchCircleBit (row);
+function addCircleListener(row, divContainer, firstAnswerClass, secondAnswerClass) {
+  row.querySelector("." + divContainer).addEventListener("click", (function (e) {
+    if (e.target && (e.target.classList.contains(firstAnswerClass) && (e.target.parentElement.parentElement.querySelector("." + firstAnswerClass + " .far").classList.contains("fa-circle")))) {
+      switchCircle(row.querySelector("." + firstAnswerClass + " .far"));
+      if (e.target.parentElement.parentElement.parentElement.querySelector("." + secondAnswerClass + " .far").classList.contains("fa-check-circle"))
+      switchCircle (row.querySelector("." + secondAnswerClass + " .far"));
     }
-    else if (e.target && (e.target.classList.contains("bit") && (e.target.parentElement.querySelector(".bit .far").classList.contains("fa-circle")))) {
-      switchCircleBit(row);
-      if (e.target.parentElement.parentElement.querySelector(".disk .far").classList.contains("fa-check-circle"))
-      switchCircleDisk (row);
+    else if (e.target && (e.target.classList.contains(secondAnswerClass) && (e.target.parentElement.parentElement.querySelector("." + secondAnswerClass + " .far").classList.contains("fa-circle")))) {
+      switchCircle (row.querySelector("." + secondAnswerClass + " .far"));
+      if (e.target.parentElement.parentElement.parentElement.querySelector("." + firstAnswerClass + " .far").classList.contains("fa-check-circle"))
+      switchCircle(row.querySelector("." + firstAnswerClass + " .far"));
     }
   }));
 }
+function hideSecondRow (e, secondLine) {
+  secondLine.classList.toggle("second-line-transition");
+  secondLine.classList.toggle("second-line");
+  for (var i = 0; i < (secondLine.children.length); i++) {
+    secondLine.children[i].style.opacity = "0";
+  }
+  if (e.target && e.target.classList.contains("fa-plus-square")) {
+    secondLine.classList.toggle("hide");
+    secondLine.classList.toggle("second-line");
+    secondLine.classList.toggle("second-line-transition");
+  }
+  else {
+    setTimeout(function() {
+      secondLine.classList.toggle("hide");
+      secondLine.classList.toggle("second-line");
+      secondLine.classList.toggle("second-line-transition");
+    }, 150);
+  }
+}
 function addSpinner(row) {
-  row.querySelector(".buttons i").addEventListener("mouseenter", function (e){
+  row.querySelector(".cog i").addEventListener("mouseenter", function (e){
     if (!e.target.classList.contains("fa-spin"))
       e.target.classList.toggle("fa-spin");
   });
-  row.querySelector(".buttons i").addEventListener("mouseleave", function (e){
+  row.querySelector(".cog i").addEventListener("mouseleave", function (e){
     if (e.target.classList.contains("fa-spin"))
       e.target.classList.toggle("fa-spin");
   });
-  // row.querySelector(".buttons i").addEventListener("click", function (e){
-  //     e.target.classList.toggle("hide");
-  // });
+  row.querySelector(".cog i").addEventListener("click", function (e){
+    var secondLine = e.target.parentElement.parentElement.parentElement.querySelector(".second-line");
+    if (secondLine.classList.contains("hide")) {
+      if ((secondLine.firstElementChild.style.opacity == "") || (secondLine.firstElementChild.style.opacity == "1")) {
+        for (var i = 0; i < (secondLine.children.length); i++) {
+          secondLine.children[i].style.opacity = "0";
+        }
+      }
+      secondLine.classList.toggle("second-line-transition");
+      var transitionLine = e.target.parentElement.parentElement.parentElement.querySelector(".second-line-transition");
+      secondLine.classList.toggle("second-line");
+      transitionLine.classList.toggle("hide");
+      setTimeout(function() {
+        transitionLine.classList.toggle("second-line");
+        secondLine.classList.toggle("second-line-transition");
+        for (var i = 0; i < (secondLine.children.length); i++) {
+          secondLine.children[i].style.opacity = "1";
+        }
+      }, 150);
+    }
+    else if (!secondLine.classList.contains("hide"))
+      hideSecondRow (e, secondLine);
+  });
 }
 // Script that appends a row on click event
 function insertAfter(newNode, referenceNode) {
@@ -82,31 +116,44 @@ function addZeroListener(row) {
     });
   }
   addZeroListener(INPUT_ROWS.firstElementChild);
-  addCircleListener(INPUT_ROWS.firstElementChild);
+  addCircleListener(INPUT_ROWS.firstElementChild, "select", "disk", "bit");
+  addCircleListener(INPUT_ROWS.firstElementChild, "waste-answers", "waste-off", "waste-on");
+  addCircleListener(INPUT_ROWS.firstElementChild, "elevation-check-answers", "elevation-over-limit", "elevation-under-limit");
+  addCircleListener(INPUT_ROWS.firstElementChild, "water-check-answers", "water-check-on", "water-check-off");
+  addCircleListener(INPUT_ROWS.firstElementChild, "settings-check-answers", "settings-check-on", "settings-check-off");
   addSpinner(INPUT_ROWS.firstElementChild);
   INPUT_ROWS.addEventListener("click", (function (e) {
       var INPUT = e.target.parentElement.parentElement.parentElement.parentElement;
-      var firstRow = INPUT.children[0];
-      var secondRow = INPUT.children[1];
+
       function reveal(e) {
+        var firstRow = INPUT.children[0];
+        // var secondRow = INPUT.children[1];
         firstRow.lastChild.remove();
         firstRow.lastChild.remove();
-        for (var i = 1; i < (firstRow.children.length); i++) {
-          if (!firstRow.children[i].classList.contains("input-diameter"))
-            firstRow.children[i].classList.toggle("hide");
-          else
-            break;
-        }
-        setTimeout(function() {
-          for (i; i < (firstRow.children.length); i++)
+        if ((e.target) && !(e.target.classList.contains("fa-plus-square"))) {
+          for (var i = 1; i < (firstRow.children.length); i++) {
+            if (!firstRow.children[i].classList.contains("input-diameter"))
               firstRow.children[i].classList.toggle("hide");
-        }, 150);
+            else
+              break;
+          }
+          setTimeout(function() {
+            for (i; i < (firstRow.children.length); i++)
+              firstRow.children[i].classList.toggle("hide");
+          }, 150);
+        }
+        else if ((e.target) && (e.target.classList.contains("fa-plus-square"))) {
+          for (var i = 1; i < (firstRow.children.length); i++)
+            firstRow.children[i].classList.toggle("hide");
+        }
         firstRow.classList.toggle("input-mod");
         firstRow.classList.toggle("first-line");
         firstRow.querySelector(".signs p").children[1].classList.remove("fa-caret-down");
         firstRow.querySelector(".signs p").children[1].classList.add("fa-caret-right");
       }
       function hide(e) {
+        var firstRow = INPUT.children[0];
+        var secondRow = INPUT.children[1];
         for (var i = 1; i < (firstRow.children.length); i++)
           firstRow.children[i].classList.toggle("hide");
         var newText = document.createTextNode("Проем " + INPUT.getElementsByTagName("input")["width"].value + " x " + INPUT.getElementsByTagName("input")["height"].value + " x " + INPUT.getElementsByTagName("input")["depth"].value + " мм - " + INPUT.getElementsByTagName("input")["qty"].value + " шт.");
@@ -127,7 +174,7 @@ function addZeroListener(row) {
         firstRow.querySelector(".signs p").children[1].classList.remove("fa-caret-right");
         firstRow.querySelector(".signs p").children[1].classList.add("fa-caret-down");
         if (!secondRow.classList.contains("hide"))
-        secondRow.classList.add("hide");
+          hideSecondRow (e, secondRow);
       }
       if (e.target && e.target.classList.contains("fa-plus")) {
         (function add() {
@@ -171,12 +218,13 @@ function addZeroListener(row) {
           }
         }
         switchResult = false;
-        if (INPUT_ROWS.children[i].classList.contains("input-mod")){
+        if (INPUT_ROWS.children[i].firstElementChild.classList.contains("input-mod")){
           reveal(e);
           if (INPUT.querySelector("button").classList.contains("redButton")) {
             switchToWhite(INPUT);
             switchResult = true;
           }
+
           referenceNode = INPUT;
           row_to_copy = referenceNode.cloneNode(true)
           insertAfter(row_to_copy, referenceNode);
@@ -199,20 +247,43 @@ function addZeroListener(row) {
             switchResult = false;
             }
         }
-        if (!INPUT_ROWS.children[newRowIndex].getElementsByTagName("i")["bit"].classList.contains("fas")) {
-          switchCircleDisk (INPUT_ROWS.children[newRowIndex]);
-          switchCircleBit (INPUT_ROWS.children[newRowIndex]);
+        if (INPUT.getElementsByTagName("i")["settings-check-off"].classList.contains("fas")) {
+          if (!INPUT_ROWS.children[newRowIndex].getElementsByTagName("i")["bit"].classList.contains("fas")) {
+            switchCircle (INPUT_ROWS.children[newRowIndex].querySelector(".disk .far"));
+            switchCircle (INPUT_ROWS.children[newRowIndex].querySelector(".bit .far"));
+          }
+          INPUT_ROWS.children[newRowIndex].getElementsByTagName("input")["width"].value = "500";
+          INPUT_ROWS.children[newRowIndex].getElementsByTagName("input")["height"].value = "500";
+          INPUT_ROWS.children[newRowIndex].getElementsByTagName("input")["depth"].value = "250";
+          INPUT_ROWS.children[newRowIndex].getElementsByTagName("input")["waste-weight"].value = "100";
+          INPUT_ROWS.children[newRowIndex].getElementsByTagName("input")["concrete-weight"].value = "2.4";
+          if (!INPUT_ROWS.children[newRowIndex].getElementsByTagName("i")["elevation-under-limit"].classList.contains("fas")) {
+            switchCircle(INPUT_ROWS.children[newRowIndex].getElementsByTagName("i")["elevation-under-limit"]);
+            switchCircle(INPUT_ROWS.children[newRowIndex].getElementsByTagName("i")["elevation-over-limit"]);
+          }
+          if (!INPUT_ROWS.children[newRowIndex].getElementsByTagName("i")["water-check-off"].classList.contains("fas")) {
+            switchCircle(INPUT_ROWS.children[newRowIndex].getElementsByTagName("i")["water-check-off"]);
+            switchCircle(INPUT_ROWS.children[newRowIndex].getElementsByTagName("i")["water-check-on"]);
+          }
+        }
+        else {
+          INPUT_ROWS.children[newRowIndex].getElementsByTagName("select")["diameter"].options.selectedIndex = INPUT.getElementsByTagName("select")["diameter"].options.selectedIndex;
+          INPUT_ROWS.children[newRowIndex].getElementsByTagName("select")["material-type"].options.selectedIndex = INPUT.getElementsByTagName("select")["material-type"].options.selectedIndex;
+          INPUT_ROWS.children[newRowIndex].getElementsByTagName("select")["job-type"].options.selectedIndex = INPUT.getElementsByTagName("select")["job-type"].options.selectedIndex;
         }
         INPUT_ROWS.children[newRowIndex].getElementsByTagName("input")["qty"].value = "1";
-        INPUT_ROWS.children[newRowIndex].getElementsByTagName("input")["width"].value = "500";
-        INPUT_ROWS.children[newRowIndex].getElementsByTagName("input")["height"].value = "500";
-        INPUT_ROWS.children[newRowIndex].getElementsByTagName("input")["depth"].value = "250";
         addZeroListener(INPUT.nextSibling);
         addZeroListener(INPUT);
-        addCircleListener(INPUT.nextSibling);
+        addCircleListener(INPUT.nextSibling, "select", "disk", "bit");
+        addCircleListener(INPUT.nextSibling, "waste-answers", "waste-off", "waste-on");
+        addCircleListener(INPUT.nextSibling, "elevation-check-answers", "elevation-over-limit", "elevation-under-limit");
+        addCircleListener(INPUT.nextSibling, "water-check-answers", "water-check-on", "water-check-off");
+        addCircleListener(INPUT.nextSibling, "settings-check-answers", "settings-check-on", "settings-check-off");
         addSpinner(INPUT.nextSibling);
         if ((INPUT_ROWS.firstElementChild.getElementsByTagName("input")["qty"].value == 0) && (INPUT_ROWS.firstElementChild.querySelector("button").classList.contains("button")))
-        switchToRed(INPUT_ROWS.firstElementChild);
+          switchToRed(INPUT_ROWS.firstElementChild);
+        if (!INPUT.nextSibling.children[1].classList.contains("hide"))
+          hideSecondRow (e, INPUT.nextSibling.children[1])
       }
       else if (e.target && e.target.classList.contains("fa-caret-right")) {
         hide(e);
