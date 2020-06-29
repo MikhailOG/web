@@ -122,9 +122,110 @@ function addZeroListener(row) {
   addCircleListener(INPUT_ROWS.firstElementChild, "water-check-answers", "water-check-on", "water-check-off");
   addCircleListener(INPUT_ROWS.firstElementChild, "settings-check-answers", "settings-check-on", "settings-check-off");
   addSpinner(INPUT_ROWS.firstElementChild);
+ 
   INPUT_ROWS.addEventListener("click", (function (e) {
       var INPUT = e.target.parentElement.parentElement.parentElement.parentElement;
-
+    // embrasure variables
+      // var holesNum = 0; ---> canvas.js
+      // var holesDistHor = "null"; ---> canvas.js
+      // var holesDistVert = "null"; ---> canvas.js
+      var cutNum = "null";
+      var cutLengthHor = "null";
+      var cutLengthVert = "null";
+      var coringPrice = 35;
+      var cutNum = "null";
+      var cuttingPrice = 2500;
+      var wastePrice = 415;
+      function Embrasure(width, height, depth, diameter, selectBitOrSaw, quantity, material, job, waste, wasteWeightLimit, concreteWeight, elevation, water, holesNum, holesDistHor, holesDistVert, cutNum, coringPrice, cuttingPrice, wastePrice) {
+        this.width = width;
+        this.height = height;
+        this.depth = depth;
+        this.diameter = diameter;
+        this.selectBitOrSaw = selectBitOrSaw;
+        this.quantity = quantity;
+        this.material = material;
+        this.job = job;
+        this.waste = waste;
+        this.wasteWeightLimit = wasteWeightLimit;
+        this.concreteWeight = concreteWeight;
+        this.elevation = elevation;
+        this.water = water;
+        this.holesNum = holesNum;
+        this.holesDistHor = holesDistHor;
+        this.holesDistVert = holesDistVert;
+        this.cutNum = cutNum;
+        this.cutLengthHor = function() {
+          if (this.width < 1000)
+            return 0;
+          else return this.width*2;
+        };
+        this.cutLengthVert = function() {
+          if (this.height < 1000)
+            return 0;
+          else return this.height*2;
+        };
+        this.cutLengthTotal = function() {
+          return (this.cutLengthHor+this.cutLengthVert);
+        };
+        this.coringPrice = coringPrice;
+        this.coringMoney = function() {
+          var money = (this.holesNum*this.depth*this.coringPrice/100);
+          if (this.elevation)
+            money = 1.1*money;
+          if (this.water)
+            money = 1.2*money;
+          return money;
+        };
+        this.cuttingPrice = cuttingPrice;
+        this.cuttingMoney = function() {
+          return (this.cutLengthTotal*this.depth*this.cuttingPrice/1000);
+        };
+        this.wasteWeight = function() {
+          return (this.height*this.width*this.depth*this.concreteWeight/1000/1000/1000);
+        };
+        this.wastePrice = wastePrice;
+        this.wasteMoney = function() {
+          return (this.wasteWeight*wastePrice);
+        };
+      }
+      var embrasures = [
+        new Embrasure(
+          INPUT.getElementsByTagName("input")["width"].value, 
+          INPUT.getElementsByTagName("input")["height"].value,
+          INPUT.getElementsByTagName("input")["depth"].value,
+          INPUT.getElementsByTagName("select")["diameter"].children[INPUT.getElementsByTagName("select")["diameter"].options.selectedIndex].value, 
+          bitOrSawValue = (function(){
+            if (INPUT.getElementsByTagName("i")["bit"].classList.contains("fas"))
+              return "bit"
+            else
+              return "disk"
+          })(), 
+          INPUT.getElementsByTagName("input")["qty"].value, 
+          INPUT.getElementsByTagName("select")["material-type"].children[INPUT.getElementsByTagName("select")["material-type"].options.selectedIndex].value,
+          INPUT.getElementsByTagName("select")["job-type"].children[INPUT.getElementsByTagName("select")["job-type"].options.selectedIndex].value,
+          wasteValue = (function(){
+            if (INPUT.getElementsByTagName("i")["waste-off"].classList.contains("fas"))
+              return "waste-off"
+            else
+              return "waste-on"
+          })(),
+          INPUT.getElementsByTagName("input")["waste-weight"].value,
+          INPUT.getElementsByTagName("input")["concrete-weight"].value,
+          elevationValue = (function(){
+            if (INPUT.getElementsByTagName("i")["elevation-over-limit"].classList.contains("fas"))
+              return "true"
+            else
+              return "false"
+          })(),
+          waterValue = (function(){
+            if (INPUT.getElementsByTagName("i")["water-check-on"].classList.contains("fas"))
+              return "true"
+            else
+              return "false"
+          })(),
+          holesNum, holesDistHor, holesDistVert, cutNum, coringPrice, cuttingPrice, wastePrice
+          )];
+          console.log(embrasures[0]);
       function reveal(e) {
         var firstRow = INPUT.children[0];
         // var secondRow = INPUT.children[1];
