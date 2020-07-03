@@ -93,6 +93,10 @@
                   <i id="disk" class="disk far fa-circle"></i>
                   <img class="disk" src="images/disk.png" alt="disk">
                 </div>
+                <div class="wire hide">
+                  <i class="wire fas fa-check-circle"></i>
+                  <img id="wire" src="images/wire.png" alt="wire">
+                </div>
               </div>
               <div class="cog">
                 <i class="fa fa-cog"></i>
@@ -129,7 +133,7 @@
                     <option selected value="wall">Проем в стене</option>
                     <option value="floor">Проем в перекрытии</option>
                     <option value="wire-saw">Канатная резка</option>
-                    <option value="wire-saw">Расширение проема</option>
+                    <option value="enhancement">Расширение проема</option>
                   </select>
                 </div>
               </div> 
@@ -186,6 +190,43 @@
                   </div>
                   <div class="settings-check-off">
                     <i id="settings-check-off" class="settings-check-off far fas fa-check-circle"><p class="settings-check-off">нет</p></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="third-line hide">
+              <div class="input-wire hide">
+                <div class="wire-calculate">
+                  <p>В случае отличной от прямоугольника формы вырезаемого проема -<br>введите объем вручную.</p>
+                  <div>
+                    <p>Объем резки канатной пилой: </p>
+                    <input type="text" id="wire-calculate" value="0.5">
+                    <p> , м2</p>
+                  </div>
+                </div>
+                <div class="wire-comments">
+                  <p>Для детального расчета опишите задачу:</p>
+                  <textarea type="text" id="wire-comments" placeholder="Опишите задачу здесь..."></textarea>
+                </div>
+              </div>
+              <div class="input-enhancement hide">
+                <p>Насколько расширить проем?</p>
+                <div class="enhancement-sides">
+                  <div class="enhancement-top">
+                    <p>Сверху, мм:</p>
+                    <input type="text" id="enhancement-top" value="0">
+                  </div>
+                  <div class="enhancement-bot">
+                    <p>Снизу, мм:</p>
+                    <input type="text" id="enhancement-bot" value="0">
+                  </div>
+                  <div class="enhancement-left">
+                    <p>Слева, мм:</p>
+                    <input type="text" id="enhancement-left" value="0">
+                  </div>
+                  <div class="enhancement-right">
+                    <p>Справа, мм:</p>
+                    <input type="text" id="enhancement-right" value="0">
                   </div>
                 </div>
               </div>
