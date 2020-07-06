@@ -533,6 +533,16 @@ i p {
   flex-grow: 1;
   justify-content: space-around;
 }
+.input-wire img {
+  max-width: 20%;
+  height: auto;
+  margin-left: -3rem;
+}
+.wire-formula {
+  border: 2px solid #10387d;
+  padding: 0.5rem 1rem;
+  margin-bottom: 0.5rem;
+}
 .wire-calculate input {
   text-align: center;
   width: 2.5rem;
@@ -599,7 +609,7 @@ footer a {
   0% { background-color: rgba(255,255,153,.8); }
   100% { background-color: rgba(255,255,153,0); }
 }
-.higlight {
+.highlight {
   -webkit-animation: target-fade 3s 1;
   -moz-animation: target-fade 3s 1;
 }
