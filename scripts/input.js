@@ -20,7 +20,7 @@ function addCircleListener(row, divContainer, firstAnswerClass, secondAnswerClas
       if (e.target.parentElement.parentElement.parentElement.querySelector("." + firstAnswerClass + " .far").classList.contains("fa-check-circle"))
       switchCircle(row.querySelector("." + firstAnswerClass + " .far"));
     }
-  }));
+  }), false);
 }
 function hideSecondRow (e, secondLine) {
   secondLine.classList.toggle("second-line-transition");
@@ -75,11 +75,11 @@ function addSpinner(row) {
   row.querySelector(".cog i").addEventListener("mouseenter", function (e){
     if (!e.target.classList.contains("fa-spin"))
       e.target.classList.toggle("fa-spin");
-  });
+  }, false);
   row.querySelector(".cog i").addEventListener("mouseleave", function (e){
     if (e.target.classList.contains("fa-spin"))
       e.target.classList.toggle("fa-spin");
-  });
+  }, false);
   row.querySelector(".cog i").addEventListener("click", function (e){
     var secondLine = e.target.parentElement.parentElement.parentElement.querySelector(".second-line");
     if (secondLine.classList.contains("hide")) {
@@ -102,7 +102,7 @@ function addSpinner(row) {
     }
     else if (!secondLine.classList.contains("hide"))
       hideSecondRow (e, secondLine);
-  });
+  }, false);
 }
 // Script that appends a row on click event
 function insertAfter(newNode, referenceNode) {
@@ -119,7 +119,8 @@ function switchToRed(row) {
         row.remove();
     if ((INPUT_ROWS.childElementCount == 1) && (INPUT_ROWS.firstElementChild.querySelector("button").classList.contains("redButton")))
       switchToWhite(INPUT_ROWS.firstElementChild);
-    });}
+    }, false);
+  }
 }
 function switchToWhite(row) {
   row.querySelector(".redButton").classList.toggle("button");
@@ -138,7 +139,7 @@ function addZeroListener(row) {
       }
     else if ((e.target.value > 0) && (row.querySelector("button").classList.contains("redButton")))
         restoreDrawButton(row);
-  });
+  }, false);
 }
 function restoreDrawButton(row) {
   let qty=row.getElementsByTagName("input")["qty"];
@@ -148,7 +149,7 @@ function restoreDrawButton(row) {
       this.removeEventListener('input', arguments.callee,false);
       addZeroListener(row);
     }
-  });
+  }, false);
 }
 function addInputListener(row, inputId) {
   let input=row.getElementsByTagName("select")[inputId];
@@ -179,8 +180,96 @@ function addInputListener(row, inputId) {
         switchWireImg (row);
       hideThirdRow(thirdLine);
     }
-  })
+  }, false)
 }
+// function AddEnhancementInputListener (row) {
+//   var top = row.getElementsByTagName("input")["enhancement-top"];
+//   var bot = row.getElementsByTagName("input")["enhancement-bot"];
+//   var left = row.getElementsByTagName("input")["enhancement-left"];
+//   var right = row.getElementsByTagName("input")["enhancement-right"];
+//   var enhancement = [top, bot, left, right];
+//   row.setAttribute("sides", 0)
+//   enhancement.forEach((side) => {
+//     side.addEventListener("input", enhancementInput)
+//   });
+//   function enhancementInput(e) {
+//     if (e.target.value > 0) {
+//       if ((e.target.getAttribute("modified") == "") || (e.target.getAttribute("modified") == null)) {
+//         row.setAttribute("sides", (parseFloat(row.getAttribute("sides"))+1));
+//         row.setAttribute(e.target.id, 1);
+//         e.target.setAttribute("modified", 1);
+//       }
+//       else if (e.target.getAttribute("modified") == 0) {
+//         row.setAttribute("sides", (parseFloat(row.getAttribute("sides"))+1));
+//         row.setAttribute(e.target.id, 1);
+//         e.target.setAttribute("modified", 1);
+//       }
+//       row.setAttribute("last", e.target.id);
+//     }
+//     else if ((e.target.value == 0) || (e.target.value == "")) {
+//         if (e.target.getAttribute("modified") == 1) {
+//         row.setAttribute("sides", (parseFloat(row.getAttribute("sides"))-1));
+//         row.setAttribute(e.target.id, 0);
+//         row.setAttribute("last", "deleted")
+//         e.target.setAttribute("modified", 0);
+//       }
+//     }
+//   }
+//   function updateValue(valueSide, updateSide) {
+//     updateSide.value = valueSide.value;
+//   }
+//   const config = {
+//       attributes: true,
+//   }; 
+//   const callback = function(mutationsList, observer) {
+//     for (let mutation of mutationsList) {
+//       if (mutation.type === 'attributes') {
+//         if (row.getAttribute("sides") == 4) {
+//           switch (row.getAttribute("last")) {
+//             case "enhancement-top":
+//               if (row.getAttribute("enhancement-bot") == 1)
+//                 top.addEventListener("input", updateValue(top, bot)); 
+//               if ((row.getAttribute("enhancement-right") == 1) && (row.getAttribute("enhancement-left") == 1) && !(right.value == left.value)) {
+//                 right.value = left.value;
+//                 right.classList.add("highlight");
+//                 setTimeout(function() {right.classList.remove("highlight")}, 3000);
+//               }
+//               break;
+//             case "enhancement-bot":
+//               if (row.getAttribute("enhancement-top") == 1)
+//                 bot.addEventListener("input", updateValue(bot, top));
+//               if ((row.getAttribute("enhancement-right") == 1) && (row.getAttribute("enhancement-left") == 1) && !(right.value == left.value)) {
+//                 right.value = left.value;
+//                 right.classList.add("highlight");
+//                 setTimeout(function() {right.classList.remove("highlight")}, 3000);
+//               } 
+//               break;
+//             case "enhancement-left":
+//               if (row.getAttribute("enhancement-right") == 1)
+//                 left.addEventListener("input", updateValue(left, right)); 
+//               if ((row.getAttribute("enhancement-top") == 1) && (row.getAttribute("enhancement-bot") == 1) && !(bot.value == top.value)) {
+//                 bot.value = top.value;
+//                 bot.classList.add("highlight");
+//                 setTimeout(function() {bot.classList.remove("highlight")}, 3000);
+//               }
+//               break;
+//             case "enhancement-right":
+//               if (row.getAttribute("enhancement-left") == 1)
+//                 right.addEventListener("input", updateValue(right, left));  
+//               if ((row.getAttribute("enhancement-top") == 1) && (row.getAttribute("enhancement-bot") == 1) && !(bot.value == top.value)) {
+//                 bot.value = top.value;
+//                 bot.classList.add("highlight");
+//                 setTimeout(function() {bot.classList.remove("highlight")}, 3000);
+//               }
+//               break;
+//           }
+//         }
+//       }
+//     }
+//   };
+//   const observer = new MutationObserver(callback);
+//   observer.observe(row, config);
+// }
 addZeroListener(INPUT_ROWS.firstElementChild);
 addCircleListener(INPUT_ROWS.firstElementChild, "select", "disk", "bit");
 addCircleListener(INPUT_ROWS.firstElementChild, "waste-answers", "waste-off", "waste-on");
@@ -465,4 +554,4 @@ INPUT_ROWS.addEventListener("click", (function (e) {
     else if (e.target && e.target.classList.contains("fa-caret-down")) {
       reveal(e);
     }
-}));
+}), false);

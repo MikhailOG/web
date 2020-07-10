@@ -10,7 +10,7 @@ INPUT_ROWS.addEventListener("click", (function (e) {
     holesNum = 0;
     holesDistHor = 0;
     holesDistVert = 0;
-    var error = false;
+    error = false;
     var width = curINPUT.getElementsByTagName("input")["width"].value;
     var height = curINPUT.getElementsByTagName("input")["height"].value;
     var diameter = curINPUT.getElementsByTagName("select")["diameter"].value;
@@ -18,9 +18,24 @@ INPUT_ROWS.addEventListener("click", (function (e) {
     var radius = diameter/2;
     var c = document.getElementById("myCanvas");
     var ctx = c.getContext("2d");
-    reset_canvas()
+    reset_canvas();
+    if ((width <= 0) || (height <= 0) || (depth <= 0)) {
+      window.alert("Введите корректные гарабиты проема");
+      var sides = [];
+      if (width <= 0) 
+        sides.push("width");
+      if (height <= 0)
+        sides.push("height");
+      if (depth <= 0)
+        sides.push("depth");
+      sides.forEach((side) => {curINPUT.getElementsByTagName("input")[side].classList.add("highlight");});
+      setTimeout(function() {
+        sides.forEach((side) => {curINPUT.getElementsByTagName("input")[side].classList.remove("highlight")});
+      }, 4000);
+      error = true;
+    }
     var enhancement = curINPUT.getElementsByTagName("select")["job-type"].value == "enhancement";
-    if (enhancement) {
+    if ((enhancement) && (!error)) {
       topEnhancement = get_input(curINPUT.getElementsByTagName("input")["enhancement-top"].value);
       botEnhancement = get_input(curINPUT.getElementsByTagName("input")["enhancement-bot"].value);
       leftEnhancement = get_input(curINPUT.getElementsByTagName("input")["enhancement-left"].value);
@@ -33,17 +48,17 @@ INPUT_ROWS.addEventListener("click", (function (e) {
         enhancementSides.forEach((inputId) => {curINPUT.getElementsByTagName("input")[inputId].classList.add("highlight");});
         setTimeout(function() {
           enhancementSides.forEach((inputId) => {curINPUT.getElementsByTagName("input")[inputId].classList.remove("highlight")});
-        }, 14000);
+        }, 4000);
         error = true;
       }
       else {
         if ((topEnhancement > 0) && (botEnhancement <= 0) && (leftEnhancement <= 0) && (rightEnhancement <= 0)) {
           rectMoveX = 250;
           rectMoveY = 250 + topEnhancement/2;
-          var heightCircNum = get_circNum(topEnhancement).circNum;
-          var heightCircStep = get_circNum(topEnhancement).circStep;
-          var widthCircNum = get_circNum(width).circNum;
-          var widthCircStep = get_circNum(width).circStep;
+          var heightCircNum = get_circNum(topEnhancement, length, length).circNum;
+          var heightCircStep = get_circNum(topEnhancement, length, length).circStep;
+          var widthCircNum = get_circNum(width, length, length).circNum;
+          var widthCircStep = get_circNum(width, length, length).circStep;
           collect_first_Nums();
           fill_rectangle("rgb(223,222,227)");
           fill_enhancement_rectangle("top-enhancement");
@@ -117,10 +132,10 @@ INPUT_ROWS.addEventListener("click", (function (e) {
         else if ((topEnhancement <= 0) && (botEnhancement > 0) && (leftEnhancement <= 0) && (rightEnhancement <= 0)) {
           rectMoveX = 250;
           rectMoveY = 250 - botEnhancement/2;
-          var heightCircNum = get_circNum(botEnhancement).circNum;
-          var heightCircStep = get_circNum(botEnhancement).circStep;
-          var widthCircNum = get_circNum(width).circNum;
-          var widthCircStep = get_circNum(width).circStep;
+          var heightCircNum = get_circNum(botEnhancement, length, length).circNum;
+          var heightCircStep = get_circNum(botEnhancement, length, length).circStep;
+          var widthCircNum = get_circNum(width, length, length).circNum;
+          var widthCircStep = get_circNum(width, length, length).circStep;
           collect_first_Nums();
           fill_rectangle("rgb(223,222,227)");
           fill_enhancement_rectangle("bot-enhancement");
@@ -194,10 +209,10 @@ INPUT_ROWS.addEventListener("click", (function (e) {
         else if ((topEnhancement <= 0) && (botEnhancement <= 0) && (leftEnhancement > 0) && (rightEnhancement <= 0)) {
           rectMoveX = 250 + leftEnhancement/2;
           rectMoveY = 250;
-          var heightCircNum = get_circNum(height).circNum;
-          var heightCircStep = get_circNum(height).circStep;
-          var widthCircNum = get_circNum(leftEnhancement).circNum;
-          var widthCircStep = get_circNum(leftEnhancement).circStep;
+          var heightCircNum = get_circNum(height, length, length).circNum;
+          var heightCircStep = get_circNum(height, length, length).circStep;
+          var widthCircNum = get_circNum(leftEnhancement, length, length).circNum;
+          var widthCircStep = get_circNum(leftEnhancement, length, length).circStep;
           collect_first_Nums();
           fill_rectangle("rgb(223,222,227)");
           fill_enhancement_rectangle("left-enhancement");
@@ -234,7 +249,7 @@ INPUT_ROWS.addEventListener("click", (function (e) {
             x = rectMoveX - width/2 - leftEnhancement/2;
             y = rectMoveY - (height/2) + length;
             fill_circle(x, y, radius);
-            x = rectMoveX - width/2 - leftEnhancement/2;;
+            x = rectMoveX - width/2 - leftEnhancement/2;
             y = rectMoveY + (height/2) - length;
             fill_circle(x, y, radius);
             drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "left-enhancement-single");
@@ -271,10 +286,10 @@ INPUT_ROWS.addEventListener("click", (function (e) {
         else if ((topEnhancement <= 0) && (botEnhancement <= 0) && (leftEnhancement <= 0) && (rightEnhancement > 0)) {
           rectMoveX = 250 - rightEnhancement/2;
           rectMoveY = 250;
-          var heightCircNum = get_circNum(height).circNum;
-          var heightCircStep = get_circNum(height).circStep;
-          var widthCircNum = get_circNum(rightEnhancement).circNum;
-          var widthCircStep = get_circNum(rightEnhancement).circStep;
+          var heightCircNum = get_circNum(height, length, length).circNum;
+          var heightCircStep = get_circNum(height, length, length).circStep;
+          var widthCircNum = get_circNum(rightEnhancement, length, length).circNum;
+          var widthCircStep = get_circNum(rightEnhancement, length, length).circStep;
           collect_first_Nums();
           fill_rectangle("rgb(223,222,227)");
           fill_enhancement_rectangle("right-enhancement");
@@ -346,12 +361,12 @@ INPUT_ROWS.addEventListener("click", (function (e) {
           draw_rectangle(rightEnhancement, height, "right-enhancement");
         }
         else if ((topEnhancement > 0) && (botEnhancement <= 0) && (leftEnhancement > 0) && (rightEnhancement <= 0)) {
-          rectMoveX = 250 + leftEnhancement/2;;
+          rectMoveX = 250 + leftEnhancement/2;
           rectMoveY = 250 + topEnhancement/2;
-          var heightCircNum = get_circNum(topEnhancement+height).circNum;
-          var heightCircStep = get_circNum(topEnhancement+height).circStep;
-          var widthCircNum = get_circNum(width+leftEnhancement).circNum;
-          var widthCircStep = get_circNum(width+leftEnhancement).circStep;
+          var heightCircNum = get_circNum(topEnhancement+height, length, length).circNum;
+          var heightCircStep = get_circNum(topEnhancement+height, length, length).circStep;
+          var widthCircNum = get_circNum(width+leftEnhancement, length, length).circNum;
+          var widthCircStep = get_circNum(width+leftEnhancement, length, length).circStep;
           collect_first_Nums();
           fill_rectangle("rgb(223,222,227)");
           if ((diameter < topEnhancement) && (diameter < leftEnhancement)) {
@@ -372,10 +387,10 @@ INPUT_ROWS.addEventListener("click", (function (e) {
             y = rectMoveY + (height/2) - length;
             fill_circle(x, y, radius);
             drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "true", "true", rectMoveX - width/2 - leftEnhancement + length, rectMoveY - (height/2) - topEnhancement + length);
-            heightCircNum = get_circNum(topEnhancement).circNum;
-            heightCircStep = get_circNum(topEnhancement).circStep;
-            widthCircNum = get_circNum(leftEnhancement).circNum;
-            widthCircStep = get_circNum(leftEnhancement).circStep;
+            heightCircNum = get_circNum(topEnhancement, length, length).circNum;
+            heightCircStep = get_circNum(topEnhancement, length, length).circStep;
+            widthCircNum = get_circNum(leftEnhancement, length, length).circNum;
+            widthCircStep = get_circNum(leftEnhancement, length, length).circStep;
             collect_second_Nums();
             drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "true", "false", rectMoveX + width/2 - length, rectMoveY - (height/2) - topEnhancement + length);
             drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "false", "true", rectMoveX - width/2 - leftEnhancement + length, rectMoveY + (height/2) - length);
@@ -409,14 +424,14 @@ INPUT_ROWS.addEventListener("click", (function (e) {
             x = rectMoveX - width/2 - length;
             y = rectMoveY + (height/2) - length;
             fill_circle(x, y, radius);
-            // heightCircNum = get_circNum(height + topEnhancement/2 + length).circNum;
-            // heightCircStep = get_circNum(height + topEnhancement/2 + length).circStep;
+            heightCircNum = get_circNum(topEnhancement + height, topEnhancement/2, length).circNum;
+            heightCircStep = get_circNum(topEnhancement + height, topEnhancement/2, length).circStep;
             collect_first_Nums();
             drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "true", "true", rectMoveX - width/2 - leftEnhancement + length, rectMoveY - (height/2) - topEnhancement/2);
-            heightCircNum = get_circNum(topEnhancement).circNum;
-            heightCircStep = get_circNum(topEnhancement).circStep;
-            widthCircNum = get_circNum(leftEnhancement).circNum;
-            widthCircStep = get_circNum(leftEnhancement).circStep;
+            heightCircNum = get_circNum(topEnhancement, length, length).circNum;
+            heightCircStep = get_circNum(topEnhancement, length, length).circStep;
+            widthCircNum = get_circNum(leftEnhancement, length, length).circNum;
+            widthCircStep = get_circNum(leftEnhancement, length, length).circStep;
             collect_second_Nums();
             drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "false", "true", rectMoveX - width/2 - leftEnhancement + length, rectMoveY + (height/2) - length);
             x = rectMoveX + width/2 - length;
@@ -446,11 +461,13 @@ INPUT_ROWS.addEventListener("click", (function (e) {
             x = rectMoveX - width/2 - leftEnhancement/2;
             y = rectMoveY + (height/2) - length;
             fill_circle(x, y, radius);
-            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "true", "true", rectMoveX - width/2 - leftEnhancement + length, rectMoveY - (height/2) - topEnhancement + length);
-            heightCircNum = get_circNum(topEnhancement).circNum;
-            heightCircStep = get_circNum(topEnhancement).circStep;
-            widthCircNum = get_circNum(leftEnhancement).circNum;
-            widthCircStep = get_circNum(leftEnhancement).circStep;
+            widthCircNum = get_circNum(leftEnhancement + width, length, leftEnhancement/2).circNum;
+            widthCircStep = get_circNum(leftEnhancement + width, length, leftEnhancement/2).circStep;
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "true", "true", rectMoveX - width/2 - leftEnhancement/2, rectMoveY - (height/2) - topEnhancement + length);
+            heightCircNum = get_circNum(topEnhancement, length, length).circNum;
+            heightCircStep = get_circNum(topEnhancement, length, length).circStep;
+            widthCircNum = get_circNum(leftEnhancement, length, length).circNum;
+            widthCircStep = get_circNum(leftEnhancement, length, length).circStep;
             collect_second_Nums();
             drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "true", "false", rectMoveX + width/2 - length, rectMoveY - (height/2) - topEnhancement + length);
             x = rectMoveX + width/2 - length;
@@ -477,10 +494,10 @@ INPUT_ROWS.addEventListener("click", (function (e) {
             x = rectMoveX - width/2 - leftEnhancement/2;
             y = rectMoveY + (height/2) - length;
             fill_circle(x, y, radius);
-            var heightCircNum = get_circNum(topEnhancement+height + length - leftEnhancement/2).circNum;
-            var heightCircStep = get_circNum(topEnhancement+height + length - leftEnhancement/2).circStep;
-            var widthCircNum = get_circNum(width+leftEnhancement + length - topEnhancement/2).circNum;
-            var widthCircStep = get_circNum(width+leftEnhancement + length - topEnhancement/2).circStep;
+            heightCircNum = get_circNum(topEnhancement+height, topEnhancement/2, length).circNum;
+            heightCircStep = get_circNum(topEnhancement+height, topEnhancement/2, length).circStep;
+            widthCircNum = get_circNum(width+leftEnhancement, leftEnhancement/2, length).circNum;
+            widthCircStep = get_circNum(width+leftEnhancement, leftEnhancement/2, length).circStep;
             collect_first_Nums();
             drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "true", "true", rectMoveX - width/2 - leftEnhancement/2, rectMoveY - (height/2) - topEnhancement/2);
             x = rectMoveX + width/2 - length;
@@ -493,33 +510,646 @@ INPUT_ROWS.addEventListener("click", (function (e) {
             y = rectMoveY + (height/2) - length;
             draw_circle(x, y, radius);
           }
-          else {
-            window.alert("Выбранный диаметр не применим для заданного вида работ. Рекомендуем выбрать диаметр не более длины, на которую будет расширен проем");
-            curINPUT.getElementsByTagName("select")["diameter"].classList.add("highlight");
-            setTimeout(function() {
-              curINPUT.getElementsByTagName("select")["diameter"].classList.remove("highlight");
-            }, 14000);
-            error = true;
-            fill_rectangle("rgb(243,255,253)");
-            var minSide = Math.min(topEnhancement/scalar, leftEnhancement/scalar);
-            var diameters = curINPUT.querySelector("select");
-            var dif = minSide;
-            var diameterSelected = "";
-            for (let i=0; (i<diameters.childElementCount); i++) {
-              let difValue = Math.abs(diameters.children[i].value-minSide);
-              if (difValue < dif) {
-                dif = difValue;
-                diameterSelected = i;
-              }
-            }
-            curINPUT.getElementsByTagName("select")["diameter"].options.selectedIndex = diameterSelected;
-          }
+          else 
+            errorAlert();
           draw_polyline("top-left-enhancement");
+        }
+        else if ((topEnhancement > 0) && (botEnhancement <= 0) && (leftEnhancement <= 0) && (rightEnhancement > 0)) {
+          rectMoveX = 250 - rightEnhancement/2;
+          rectMoveY = 250 + topEnhancement/2;
+          var heightCircNum = get_circNum(topEnhancement, length, length).circNum;
+          var heightCircStep = get_circNum(topEnhancement, length, length).circStep;
+          var widthCircNum = get_circNum(width+rightEnhancement, length, length).circNum;
+          var widthCircStep = get_circNum(width+rightEnhancement, length, length).circStep;
+          collect_first_Nums();
+          fill_rectangle("rgb(223,222,227)");
+          if ((diameter < topEnhancement) && (diameter < rightEnhancement)) {
+            fill_enhancement_rectangle("top-right-enhancement");
+            x = rectMoveX + width/2 + length;
+            y = rectMoveY + height/2 - length;
+            fill_circle(x, y, radius);
+            x = rectMoveX + width/2 + rightEnhancement - length;
+            y = rectMoveY + height/2 - length;
+            fill_circle(x, y, radius);
+            x = rectMoveX + width/2 + rightEnhancement - length;
+            y = rectMoveY - height/2 - topEnhancement + length;
+            fill_circle(x, y, radius);
+            x = rectMoveX - width/2 + length;
+            y = rectMoveY - height/2 - topEnhancement + length;
+            fill_circle(x, y, radius);
+            x = rectMoveX - width/2 + length;
+            y = rectMoveY - height/2 - length;
+            fill_circle(x, y, radius);
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "true", "true", rectMoveX - width/2 + length, rectMoveY - height/2 - topEnhancement + length);
+            heightCircNum = get_circNum(topEnhancement + height, length, length).circNum;
+            heightCircStep = get_circNum(topEnhancement + height, length, length).circStep;
+            widthCircNum = get_circNum(rightEnhancement, length, length).circNum;
+            widthCircStep = get_circNum(rightEnhancement, length, length).circStep;
+            collect_second_Nums();
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "true", "false", rectMoveX + width/2 + rightEnhancement - length, rectMoveY - (height/2) - topEnhancement + length);
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "false", "true", rectMoveX + width/2 + length, rectMoveY + (height/2) - length);
+            x = rectMoveX + width/2 + length;
+            y = rectMoveY + height/2 - length;
+            draw_circle(x, y, radius);
+            x = rectMoveX + width/2 + rightEnhancement - length;
+            y = rectMoveY + height/2 - length;
+            draw_circle(x, y, radius);
+            x = rectMoveX + width/2 + rightEnhancement - length;
+            y = rectMoveY - height/2 - topEnhancement + length;
+            draw_circle(x, y, radius);
+            x = rectMoveX - width/2 + length;
+            y = rectMoveY - height/2 - topEnhancement + length;
+            draw_circle(x, y, radius);
+            x = rectMoveX - width/2 + length;
+            y = rectMoveY - height/2 - length;
+            draw_circle(x, y, radius);
+          }
+          else if ((diameter >= topEnhancement) && (diameter < rightEnhancement)) {
+            fill_enhancement_rectangle("top-right-enhancement");
+            x = rectMoveX + width/2 + length;
+            y = rectMoveY + height/2 - length;
+            fill_circle(x, y, radius);
+            x = rectMoveX + width/2 + rightEnhancement - length;
+            y = rectMoveY + height/2 - length;
+            fill_circle(x, y, radius);
+            x = rectMoveX + width/2 + rightEnhancement - length;
+            y = rectMoveY - height/2 - topEnhancement/2;
+            fill_circle(x, y, radius);
+            x = rectMoveX - width/2 + length;
+            y = rectMoveY - height/2 - topEnhancement/2;
+            fill_circle(x, y, radius);
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "false", "true", rectMoveX - width/2 + length, rectMoveY - height/2 - topEnhancement/2);
+            heightCircNum = get_circNum(topEnhancement + height, topEnhancement/2, length).circNum;
+            heightCircStep = get_circNum(topEnhancement + height, topEnhancement/2, length).circStep;
+            collect_first_Nums();
+            widthCircNum = get_circNum(rightEnhancement, length, length).circNum;
+            widthCircStep = get_circNum(rightEnhancement, length, length).circStep;
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "false", "true", rectMoveX + width/2 + length, rectMoveY + height/2 - length);
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "true", "false", rectMoveX + width/2 + rightEnhancement - length, rectMoveY - height/2 - topEnhancement/2);
+            heightCircNum = 0;
+            heightCircStep = 0;
+            collect_second_Nums();
+            x = rectMoveX + width/2 + length;
+            y = rectMoveY + height/2 - length;
+            draw_circle(x, y, radius);
+            x = rectMoveX + width/2 + rightEnhancement - length;
+            y = rectMoveY + height/2 - length;
+            draw_circle(x, y, radius);
+            x = rectMoveX + width/2 + rightEnhancement - length;
+            y = rectMoveY - height/2 - topEnhancement/2;
+            draw_circle(x, y, radius);
+            x = rectMoveX - width/2 + length;
+            y = rectMoveY - height/2 - topEnhancement/2;
+            draw_circle(x, y, radius);
+          }
+          else if ((diameter < topEnhancement) && (diameter >= rightEnhancement)) {
+            fill_enhancement_rectangle("top-right-enhancement");
+            x = rectMoveX + width/2 + rightEnhancement/2;
+            y = rectMoveY + height/2 - length;
+            fill_circle(x, y, radius);
+            x = rectMoveX + width/2 + rightEnhancement/2;
+            y = rectMoveY - height/2 - topEnhancement + length;
+            fill_circle(x, y, radius);
+            x = rectMoveX - width/2 + length;
+            y = rectMoveY - height/2 - topEnhancement + length;
+            fill_circle(x, y, radius);
+            x = rectMoveX - width/2 + length;
+            y = rectMoveY - height/2 - length;
+            fill_circle(x, y, radius);
+            var widthCircNum = get_circNum(width+rightEnhancement, rightEnhancement/2, length).circNum;
+            var widthCircStep = get_circNum(width+rightEnhancement, rightEnhancement/2, length).circStep;
+            collect_first_Nums();
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "true", "true", rectMoveX - width/2 + length, rectMoveY - height/2 - topEnhancement + length);
+            heightCircNum = get_circNum(topEnhancement + height, length, length).circNum;
+            heightCircStep = get_circNum(topEnhancement + height, length, length).circStep;
+            widthCircNum = 0;
+            widthCircStep = 0;
+            collect_second_Nums();
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "true", "false", rectMoveX + width/2 + rightEnhancement/2, rectMoveY - height/2 - topEnhancement + length);
+            x = rectMoveX + width/2 + rightEnhancement/2;
+            y = rectMoveY + height/2 - length;
+            draw_circle(x, y, radius);
+            x = rectMoveX + width/2 + rightEnhancement/2;
+            y = rectMoveY - height/2 - topEnhancement + length;
+            draw_circle(x, y, radius);
+            x = rectMoveX - width/2 + length;
+            y = rectMoveY - height/2 - topEnhancement + length;
+            draw_circle(x, y, radius);
+            x = rectMoveX - width/2 + length;
+            y = rectMoveY - height/2 - length;
+            draw_circle(x, y, radius);
+          }
+          else if ((diameter >= topEnhancement) && (diameter >= rightEnhancement) && (diameter < topEnhancement+height) && (diameter < rightEnhancement+width)) {
+            fill_enhancement_rectangle("top-right-enhancement");
+            x = rectMoveX + width/2 + rightEnhancement/2;
+            y = rectMoveY + height/2 - length;
+            fill_circle(x, y, radius);
+            x = rectMoveX + width/2 + rightEnhancement/2;
+            y = rectMoveY - height/2 - topEnhancement/2;
+            fill_circle(x, y, radius);
+            x = rectMoveX - width/2 + length;
+            y = rectMoveY - height/2 - topEnhancement/2;
+            fill_circle(x, y, radius);
+            heightCircNum = get_circNum(topEnhancement+height, topEnhancement/2, length).circNum;
+            heightCircStep = get_circNum(topEnhancement+height, topEnhancement/2, length).circStep;
+            widthCircNum = get_circNum(width+rightEnhancement, rightEnhancement/2, length).circNum;
+            widthCircStep = get_circNum(width+rightEnhancement, rightEnhancement/2, length).circStep;
+            collect_first_Nums();
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "false", "true", rectMoveX - width/2 + length, rectMoveY - height/2 - topEnhancement/2);
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "true", "false", rectMoveX + width/2 + rightEnhancement/2, rectMoveY - height/2 - topEnhancement/2);
+            x = rectMoveX + width/2 + rightEnhancement/2;
+            y = rectMoveY + height/2 - length;
+            draw_circle(x, y, radius);
+            x = rectMoveX + width/2 + rightEnhancement/2;
+            y = rectMoveY - height/2 - topEnhancement/2;
+            draw_circle(x, y, radius);
+            x = rectMoveX - width/2 + length;
+            y = rectMoveY - height/2 - topEnhancement/2;
+            draw_circle(x, y, radius);
+          }
+          else 
+            errorAlert();
+          draw_polyline("top-right-enhancement");
+        }
+        else if ((topEnhancement <= 0) && (botEnhancement > 0) && (leftEnhancement <= 0) && (rightEnhancement > 0)) {
+          rectMoveX = 250 - rightEnhancement/2;
+          rectMoveY = 250 - botEnhancement/2;
+          var heightCircNum = get_circNum(botEnhancement, length, length).circNum;
+          var heightCircStep = get_circNum(botEnhancement, length, length).circStep;
+          var widthCircNum = get_circNum(rightEnhancement, length, length).circNum;
+          var widthCircStep = get_circNum(rightEnhancement, length, length).circStep;
+          collect_first_Nums();
+          fill_rectangle("rgb(223,222,227)");
+          if ((diameter < botEnhancement) && (diameter < rightEnhancement)) {
+            fill_enhancement_rectangle("bot-right-enhancement");
+            x = rectMoveX - width/2 + length;
+            y = rectMoveY + height/2 + length;
+            fill_circle(x, y, radius);
+            x = rectMoveX - width/2 + length;
+            y = rectMoveY + height/2 + botEnhancement - length;
+            fill_circle(x, y, radius);
+            x = rectMoveX + width/2 + rightEnhancement - length;
+            y = rectMoveY + height/2 + botEnhancement - length;
+            fill_circle(x, y, radius);
+            x = rectMoveX + width/2 + rightEnhancement - length;
+            y = rectMoveY - height/2 + length;
+            fill_circle(x, y, radius);
+            x = rectMoveX + width/2 + length;
+            y = rectMoveY - height/2 + length;
+            fill_circle(x, y, radius);
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "true", "false", rectMoveX - width/2 + length, rectMoveY + height/2 + length);
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "false", "true", rectMoveX + width/2 + length, rectMoveY - height/2 + length);
+            heightCircNum = get_circNum(botEnhancement + height, length, length).circNum;
+            heightCircStep = get_circNum(botEnhancement + height, length, length).circStep;
+            widthCircNum = get_circNum(width+rightEnhancement, length, length).circNum;
+            widthCircStep = get_circNum(width+rightEnhancement, length, length).circStep;
+            collect_second_Nums();
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "false", "true", rectMoveX - width/2 + length, rectMoveY + height/2 + botEnhancement - length);
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "true", "false", rectMoveX + width/2 + rightEnhancement - length, rectMoveY - height/2 + length);
+            x = rectMoveX - width/2 + length;
+            y = rectMoveY + height/2 + length;
+            draw_circle(x, y, radius);
+            x = rectMoveX - width/2 + length;
+            y = rectMoveY + height/2 + botEnhancement - length;
+            draw_circle(x, y, radius);
+            x = rectMoveX + width/2 + rightEnhancement - length;
+            y = rectMoveY + height/2 + botEnhancement - length;
+            draw_circle(x, y, radius);
+            x = rectMoveX + width/2 + rightEnhancement - length;
+            y = rectMoveY - height/2 + length;
+            draw_circle(x, y, radius);
+            x = rectMoveX + width/2 + length;
+            y = rectMoveY - height/2 + length;
+            draw_circle(x, y, radius);
+          }
+          else if ((diameter >= botEnhancement) && (diameter < rightEnhancement)) {
+            fill_enhancement_rectangle("bot-right-enhancement");
+            x = rectMoveX - width/2 + length;
+            y = rectMoveY + height/2 + botEnhancement/2;
+            fill_circle(x, y, radius);
+            x = rectMoveX + width/2 + rightEnhancement - length;
+            y = rectMoveY + height/2 + botEnhancement/2;
+            fill_circle(x, y, radius);
+            x = rectMoveX + width/2 + rightEnhancement - length;
+            y = rectMoveY - height/2 - topEnhancement + length;
+            fill_circle(x, y, radius);
+            x = rectMoveX + width/2 + length;
+            y = rectMoveY - height/2 - topEnhancement + length;
+            fill_circle(x, y, radius);
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "false", "true", rectMoveX + width/2 + length, rectMoveY - height/2 + length);
+            heightCircNum = get_circNum(botEnhancement + height, botEnhancement/2, length).circNum;
+            heightCircStep = get_circNum(botEnhancement + height, botEnhancement/2, length).circStep;
+            collect_first_Nums();
+            widthCircNum = get_circNum(width+rightEnhancement, length, length).circNum;
+            widthCircStep = get_circNum(width+rightEnhancement, length, length).circStep;
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "false", "true", rectMoveX - width/2 + length, rectMoveY + height/2 + botEnhancement/2);
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "true", "false", rectMoveX + width/2 + rightEnhancement - length, rectMoveY - height/2 + length);
+            heightCircNum = 0;
+            heightCircStep = 0;
+            collect_second_Nums();
+            x = rectMoveX - width/2 + length;
+            y = rectMoveY + height/2 + botEnhancement/2;
+            draw_circle(x, y, radius);
+            x = rectMoveX + width/2 + rightEnhancement - length;
+            y = rectMoveY + height/2 + botEnhancement/2;
+            draw_circle(x, y, radius);
+            x = rectMoveX + width/2 + rightEnhancement - length;
+            y = rectMoveY - height/2 - topEnhancement + length;
+            draw_circle(x, y, radius);
+            x = rectMoveX + width/2 + length;
+            y = rectMoveY - height/2 - topEnhancement + length;
+            draw_circle(x, y, radius);
+          }
+          else if ((diameter < botEnhancement) && (diameter >= rightEnhancement)) {
+            fill_enhancement_rectangle("bot-right-enhancement");
+            x = rectMoveX - width/2 + length;
+            y = rectMoveY + height/2 + length;
+            fill_circle(x, y, radius);
+            x = rectMoveX - width/2 + length;
+            y = rectMoveY + height/2 + botEnhancement - length;
+            fill_circle(x, y, radius);
+            x = rectMoveX + width/2 + rightEnhancement/2;
+            y = rectMoveY + height/2 + botEnhancement - length;
+            fill_circle(x, y, radius);
+            x = rectMoveX + width/2 + rightEnhancement/2;
+            y = rectMoveY - height/2 + length;
+            fill_circle(x, y, radius);
+            var widthCircNum = get_circNum(width+rightEnhancement, rightEnhancement/2, length).circNum;
+            var widthCircStep = get_circNum(width+rightEnhancement, rightEnhancement/2, length).circStep;
+            collect_first_Nums();
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "true", "false", rectMoveX - width/2 + length, rectMoveY + height/2 + length);
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "false", "true", rectMoveX - width/2 + length, rectMoveY + height/2 + botEnhancement - length);
+            heightCircNum = get_circNum(botEnhancement + height, length, length).circNum;
+            heightCircStep = get_circNum(botEnhancement + height, length, length).circStep;
+            widthCircNum = 0;
+            widthCircStep = 0;
+            collect_second_Nums();
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "true", "false", rectMoveX + width/2 + rightEnhancement/2, rectMoveY - height/2 + length);
+            x = rectMoveX - width/2 + length;
+            y = rectMoveY + height/2 + length;
+            draw_circle(x, y, radius);
+            x = rectMoveX - width/2 + length;
+            y = rectMoveY + height/2 + botEnhancement - length;
+            draw_circle(x, y, radius);
+            x = rectMoveX + width/2 + rightEnhancement/2;
+            y = rectMoveY + height/2 + botEnhancement - length;
+            draw_circle(x, y, radius);
+            x = rectMoveX + width/2 + rightEnhancement/2;
+            y = rectMoveY - height/2 + length;
+            draw_circle(x, y, radius);
+          }
+          else if ((diameter >= botEnhancement) && (diameter >= rightEnhancement) && (diameter < botEnhancement+height) && (diameter < rightEnhancement+width)) {
+            fill_enhancement_rectangle("bot-right-enhancement");
+            x = rectMoveX - width/2 + length;
+            y = rectMoveY + height/2 + botEnhancement/2;
+            fill_circle(x, y, radius);
+            x = rectMoveX + width/2 + rightEnhancement/2;
+            y = rectMoveY + height/2 + botEnhancement/2;
+            fill_circle(x, y, radius);
+            x = rectMoveX + width/2 + rightEnhancement/2;
+            y = rectMoveY - height/2 + length;
+            fill_circle(x, y, radius);
+            heightCircNum = get_circNum(botEnhancement+height, botEnhancement/2, length).circNum;
+            heightCircStep = get_circNum(botEnhancement+height, botEnhancement/2, length).circStep;
+            widthCircNum = get_circNum(width+rightEnhancement, rightEnhancement/2, length).circNum;
+            widthCircStep = get_circNum(width+rightEnhancement, rightEnhancement/2, length).circStep;
+            collect_first_Nums();
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "false", "true", rectMoveX - width/2 + length, rectMoveY + height/2 + botEnhancement/2);
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "true", "false", rectMoveX + width/2 + rightEnhancement/2, rectMoveY - height/2 + length);
+            x = rectMoveX - width/2 + length;
+            y = rectMoveY + height/2 + botEnhancement/2;
+            draw_circle(x, y, radius);
+            x = rectMoveX + width/2 + rightEnhancement/2;
+            y = rectMoveY + height/2 + botEnhancement/2;
+            draw_circle(x, y, radius);
+            x = rectMoveX + width/2 + rightEnhancement/2;
+            y = rectMoveY - height/2 + length;
+            draw_circle(x, y, radius);
+          }
+          else 
+            errorAlert();
+          draw_polyline("bot-right-enhancement");
+        }
+        else if ((topEnhancement <= 0) && (botEnhancement > 0) && (leftEnhancement > 0) && (rightEnhancement <= 0)) {
+          rectMoveX = 250 + leftEnhancement/2;
+          rectMoveY = 250 - botEnhancement/2;
+          var heightCircNum = get_circNum(height + botEnhancement, length, length).circNum;
+          var heightCircStep = get_circNum(height + botEnhancement, length, length).circStep;
+          var widthCircNum = get_circNum(leftEnhancement, length, length).circNum;
+          var widthCircStep = get_circNum(leftEnhancement, length, length).circStep;
+          collect_first_Nums();
+          fill_rectangle("rgb(223,222,227)");
+          if ((diameter < botEnhancement) && (diameter < leftEnhancement)) {
+            fill_enhancement_rectangle("bot-left-enhancement");
+            x = rectMoveX - width/2 - length;
+            y = rectMoveY - height/2 + length;
+            fill_circle(x, y, radius);
+            x = rectMoveX - width/2 - leftEnhancement+ length;
+            y = rectMoveY - height/2 + length;
+            fill_circle(x, y, radius);
+            x = rectMoveX - width/2 - leftEnhancement + length;
+            y = rectMoveY + height/2 + botEnhancement - length;
+            fill_circle(x, y, radius);
+            x = rectMoveX + width/2 - length;
+            y = rectMoveY + height/2 + botEnhancement - length;
+            fill_circle(x, y, radius);
+            x = rectMoveX + width/2 - length;
+            y = rectMoveY + height/2 + length;
+            fill_circle(x, y, radius);
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "true", "true", rectMoveX - width/2 - leftEnhancement + length, rectMoveY - height/2 + length);
+            heightCircNum = get_circNum(botEnhancement, length, length).circNum;
+            heightCircStep = get_circNum(botEnhancement, length, length).circStep;
+            widthCircNum = get_circNum(width+leftEnhancement, length, length).circNum;
+            widthCircStep = get_circNum(width+leftEnhancement, length, length).circStep;
+            collect_second_Nums();
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "false", "true", rectMoveX - width/2 - leftEnhancement + length, rectMoveY + height/2 + botEnhancement - length);
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "true", "false", rectMoveX + width/2 - length, rectMoveY + height/2 + length);
+            x = rectMoveX - width/2 - length;
+            y = rectMoveY - height/2 + length;
+            draw_circle(x, y, radius);
+            x = rectMoveX - width/2 - leftEnhancement + length;
+            y = rectMoveY - height/2 + length;
+            draw_circle(x, y, radius);
+            x = rectMoveX - width/2 - leftEnhancement + length;
+            y = rectMoveY + height/2 + botEnhancement - length;
+            draw_circle(x, y, radius);
+            x = rectMoveX + width/2 - length;
+            y = rectMoveY + height/2 + botEnhancement - length;
+            draw_circle(x, y, radius);
+            x = rectMoveX + width/2 - length;
+            y = rectMoveY + height/2 + length;
+            draw_circle(x, y, radius);
+          }
+          else if ((diameter >= botEnhancement) && (diameter < leftEnhancement)) {
+            fill_enhancement_rectangle("bot-left-enhancement");
+            x = rectMoveX - width/2 - length;
+            y = rectMoveY - height/2 + length;
+            fill_circle(x, y, radius);
+            x = rectMoveX - width/2 - leftEnhancement + length;
+            y = rectMoveY - height/2 + length;
+            fill_circle(x, y, radius);
+            x = rectMoveX - width/2 - leftEnhancement + length;
+            y = rectMoveY + height/2 + botEnhancement/2;
+            fill_circle(x, y, radius);
+            x = rectMoveX + width/2 - length;
+            y = rectMoveY + height/2 + botEnhancement/2;
+            fill_circle(x, y, radius);
+            heightCircNum = get_circNum(height + botEnhancement, botEnhancement/2, length).circNum;
+            heightCircStep = get_circNum(height + botEnhancement, botEnhancement/2, length).circStep;
+            collect_first_Nums();
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "true", "true", rectMoveX - width/2 - leftEnhancement + length, rectMoveY - height/2 + length);
+            heightCircNum = 0;
+            heightCircStep = 0;
+            widthCircNum = get_circNum(width+leftEnhancement, length, length).circNum;
+            widthCircStep = get_circNum(width+leftEnhancement, length, length).circStep;
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "false", "true", rectMoveX - width/2 - leftEnhancement + length, rectMoveY + height/2 + botEnhancement/2);
+            collect_second_Nums();
+            x = rectMoveX - width/2 - length;
+            y = rectMoveY - height/2 + length;
+            draw_circle(x, y, radius);
+            x = rectMoveX - width/2 - leftEnhancement + length;
+            y = rectMoveY - height/2 + length;
+            draw_circle(x, y, radius);
+            x = rectMoveX - width/2 - leftEnhancement + length;
+            y = rectMoveY + height/2 + botEnhancement/2;
+            draw_circle(x, y, radius);
+            x = rectMoveX + width/2 - length;
+            y = rectMoveY + height/2 + botEnhancement/2;
+            draw_circle(x, y, radius);
+          }
+          else if ((diameter < botEnhancement) && (diameter >= leftEnhancement)) {
+            fill_enhancement_rectangle("bot-left-enhancement");
+            x = rectMoveX - width/2 - leftEnhancement/2;
+            y = rectMoveY - height/2 + length;
+            fill_circle(x, y, radius);
+            x = rectMoveX - width/2 - leftEnhancement/2;
+            y = rectMoveY + height/2 + botEnhancement - length;
+            fill_circle(x, y, radius);
+            x = rectMoveX + width/2 - length;
+            y = rectMoveY + height/2 + botEnhancement - length;
+            fill_circle(x, y, radius);
+            x = rectMoveX + width/2 - length;
+            y = rectMoveY + height/2 + length;
+            fill_circle(x, y, radius);
+            widthCircNum = get_circNum(width+leftEnhancement, leftEnhancement/2, length).circNum;
+            widthCircStep = get_circNum(width+leftEnhancement, leftEnhancement/2, length).circStep;
+            collect_first_Nums();
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "true", "false", rectMoveX - width/2 - leftEnhancement/2, rectMoveY - height/2 + length);
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "false", "true", rectMoveX - width/2 - leftEnhancement/2, rectMoveY + height/2 + botEnhancement- length);
+            heightCircNum = get_circNum(botEnhancement, length, length).circNum;
+            heightCircStep = get_circNum(botEnhancement, length, length).circStep;
+            widthCircNum = 0;
+            widthCircStep = 0;
+            collect_second_Nums();
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "true", "false", rectMoveX + width/2 -length, rectMoveY + height/2 + length);
+            x = rectMoveX - width/2 - leftEnhancement/2;
+            y = rectMoveY - height/2 + length;
+            draw_circle(x, y, radius);
+            x = rectMoveX - width/2 - leftEnhancement/2;
+            y = rectMoveY + height/2 + botEnhancement - length;
+            draw_circle(x, y, radius);
+            x = rectMoveX + width/2 - length;
+            y = rectMoveY + height/2 + botEnhancement - length;
+            draw_circle(x, y, radius);
+            x = rectMoveX + width/2 - length;
+            y = rectMoveY + height/2 + length;
+            draw_circle(x, y, radius);
+          }
+          else if ((diameter >= botEnhancement) && (diameter >= leftEnhancement) && (diameter < botEnhancement+height) && (diameter < leftEnhancement+width)) {
+            fill_enhancement_rectangle("bot-left-enhancement");
+            x = rectMoveX - width/2 - leftEnhancement/2;
+            y = rectMoveY - height/2 + length;
+            fill_circle(x, y, radius);
+            x = rectMoveX - width/2 - leftEnhancement/2;
+            y = rectMoveY + height/2 + botEnhancement/2;
+            fill_circle(x, y, radius);
+            x = rectMoveX + width/2 - length;
+            y = rectMoveY + height/2 + botEnhancement/2;
+            fill_circle(x, y, radius);
+            heightCircNum = get_circNum(botEnhancement+height, botEnhancement/2, length).circNum;
+            heightCircStep = get_circNum(botEnhancement+height, botEnhancement/2, length).circStep;
+            widthCircNum = get_circNum(width+leftEnhancement, leftEnhancement/2, length).circNum;
+            widthCircStep = get_circNum(width+leftEnhancement, leftEnhancement/2, length).circStep;
+            collect_first_Nums();
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "false", "true", rectMoveX - width/2 - leftEnhancement/2, rectMoveY + height/2 + botEnhancement/2);
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "true", "false", rectMoveX - width/2 - leftEnhancement/2, rectMoveY - height/2 + length);
+            x = rectMoveX - width/2 - leftEnhancement/2;
+            y = rectMoveY - height/2 + length;
+            draw_circle(x, y, radius);
+            x = rectMoveX - width/2 - leftEnhancement/2;
+            y = rectMoveY + height/2 + botEnhancement/2;
+            draw_circle(x, y, radius);
+            x = rectMoveX + width/2 - length;
+            y = rectMoveY + height/2 + botEnhancement/2;
+            draw_circle(x, y, radius);
+          }
+          else 
+            errorAlert();
+          draw_polyline("bot-left-enhancement");
+        }
+        else if ((topEnhancement <= 0) && (botEnhancement > 0) && (leftEnhancement > 0) && (rightEnhancement > 0)) {
+          switch (longest_side) {
+            case maxWidth:
+              rectMoveX = 50 + leftEnhancement + width/2;
+              break;
+            case maxHeight:
+              rectMoveX = (500 - leftEnhancement - width - rightEnhancement)/2 + leftEnhancement + width/2;
+            break;
+          }
+          rectMoveY = 250 - botEnhancement/2;
+          var heightCircNum = get_circNum(height + botEnhancement, length, length).circNum;
+          var heightCircStep = get_circNum(height + botEnhancement, length, length).circStep;
+          var widthCircNum = get_circNum(leftEnhancement, length, length).circNum;
+          var widthCircStep = get_circNum(leftEnhancement, length, length).circStep;
+          collect_first_Nums();
+          fill_rectangle("rgb(223,222,227)");
+          if ((diameter < botEnhancement) && (diameter < leftEnhancement) && (diameter < rightEnhancement)) {
+            x = rectMoveX - width/2 - length;
+            y = rectMoveY - height/2 + length;
+            var path = new Path(x, y,
+            [(-leftEnhancement + 2 * length), 0, (leftEnhancement + width + rightEnhancement - 2 * length), 0, (-rightEnhancement + 2* length)],
+            [0, (height + botEnhancement - 2 * length), 0, (-botEnhancement - height + 2 * length), 0]);
+            fill_enhancement_rectangle("bot-left-right-enhancement");
+            fillCirclesByPath(path);
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "true", "true", rectMoveX - width/2 - leftEnhancement + length, rectMoveY - height/2 + length, rightEnhancement + width + leftEnhancement - 2 * length);
+            widthCircNum = get_circNum(rightEnhancement, length, length).circNum;
+            widthCircStep = get_circNum(rightEnhancement, length, length).circStep;
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "false", "true", rectMoveX + width/2 + length, rectMoveY - height/2 + length);
+            collect_second_Nums();
+            widthCircNum = get_circNum(leftEnhancement + width + rightEnhancement, length, length).circNum;
+            widthCircStep = get_circNum(leftEnhancement + width + rightEnhancement, length, length).circStep;
+            heightCircNum = 0;
+            heightCircStep = 0;
+            collect_third_Nums();
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "false", "true", rectMoveX - width/2 - leftEnhancement + length, rectMoveY + height/2 + botEnhancement - length);
+            drawCirclesByPath(path);
+          }
+          else if ((diameter >= botEnhancement) && (diameter < leftEnhancement) && (diameter < rightEnhancement) && (diameter < botEnhancement+height)) {
+            x = rectMoveX - width/2 - length;
+            y = rectMoveY - height/2 + length;
+            var path = new Path(x, y,
+            [(-leftEnhancement + 2 * length), 0, (leftEnhancement + width + rightEnhancement - 2 * length), 0, (-rightEnhancement + 2* length)],
+            [0, (height + botEnhancement/2 - length), 0, (-botEnhancement/2 - height + length), 0]);
+            fill_enhancement_rectangle("bot-left-right-enhancement");
+            fillCirclesByPath(path);
+            heightCircNum = get_circNum(height + botEnhancement, botEnhancement/2, length).circNum;
+            heightCircStep = get_circNum(height + botEnhancement, botEnhancement/2, length).circStep;
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "true", "true", rectMoveX - width/2 - leftEnhancement + length, rectMoveY - height/2 + length, rightEnhancement + width + leftEnhancement - 2 * length);
+            collect_first_Nums();
+            widthCircNum = get_circNum(rightEnhancement, length, length).circNum;
+            widthCircStep = get_circNum(rightEnhancement, length, length).circStep;
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "false", "true", rectMoveX + width/2 + length, rectMoveY - height/2 + length);
+            collect_second_Nums();
+            widthCircNum = get_circNum(leftEnhancement + width + rightEnhancement, length, length).circNum;
+            widthCircStep = get_circNum(leftEnhancement + width + rightEnhancement, length, length).circStep;
+            heightCircNum = 0;
+            heightCircStep = 0;
+            collect_third_Nums();
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "false", "true", rectMoveX - width/2 - leftEnhancement + length, rectMoveY + height/2 + botEnhancement/2);
+            drawCirclesByPath(path);
+          }
+          else if ((diameter >= botEnhancement) && (diameter >= leftEnhancement) && (diameter < rightEnhancement) && (diameter < botEnhancement+height)) {
+            x = rectMoveX - width/2 - leftEnhancement/2;
+            y = rectMoveY - height/2 + length;
+            var path = new Path(x, y,
+            [0, (leftEnhancement/2 + width + rightEnhancement - length), 0, (-rightEnhancement + 2* length)],
+            [(height + botEnhancement/2 - length), 0, (-botEnhancement/2 - height + length), 0]);
+            fill_enhancement_rectangle("bot-left-right-enhancement");
+            fillCirclesByPath(path);
+            heightCircNum = get_circNum(height + botEnhancement, botEnhancement/2, length).circNum;
+            heightCircStep = get_circNum(height + botEnhancement, botEnhancement/2, length).circStep;
+            widthCircNum = get_circNum(rightEnhancement, length, length).circNum;
+            widthCircStep = get_circNum(rightEnhancement, length, length).circStep;
+            collect_first_Nums();
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "true", "false", rectMoveX - width/2 - leftEnhancement/2, rectMoveY - height/2 + length, leftEnhancement/2 + width + rightEnhancement - length);
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "false", "true", rectMoveX + width/2 + length, rectMoveY - height/2 + length);
+            widthCircNum = get_circNum(leftEnhancement + width + rightEnhancement, leftEnhancement/2, length).circNum;
+            widthCircStep = get_circNum(leftEnhancement + width + rightEnhancement, leftEnhancement/2, length).circStep;
+            collect_second_Nums();
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "false", "true", rectMoveX - width/2 - leftEnhancement/2, rectMoveY + height/2 + botEnhancement/2);
+            drawCirclesByPath(path);
+          }
+          else if ((diameter >= botEnhancement) && (diameter >= leftEnhancement) && (diameter >= rightEnhancement) && ((diameter < leftEnhancement+width) || (diameter < rightEnhancement+width)) && (diameter < botEnhancement+height)) {
+            x = rectMoveX - width/2 - leftEnhancement/2;
+            y = rectMoveY - height/2 + length;
+            var path = new Path(x, y,
+            [0, (leftEnhancement/2 + width + rightEnhancement/2), 0],
+            [(height + botEnhancement/2 - length), 0, (-botEnhancement/2 - height + length)]);
+            fill_enhancement_rectangle("bot-left-right-enhancement");
+            fillCirclesByPath(path);
+            heightCircNum = get_circNum(height + botEnhancement, botEnhancement/2, length).circNum;
+            heightCircStep = get_circNum(height + botEnhancement, botEnhancement/2, length).circStep;
+            widthCircNum = get_circNum(leftEnhancement + width + rightEnhancement, leftEnhancement/2, rightEnhancement/2).circNum;
+            widthCircStep = get_circNum(leftEnhancement + width + rightEnhancement, leftEnhancement/2, rightEnhancement/2).circStep;
+            collect_first_Nums();
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "true", "false", rectMoveX - width/2 - leftEnhancement/2, rectMoveY - height/2 + length, leftEnhancement/2 + width + rightEnhancement/2);
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "false", "true", rectMoveX - width/2 - leftEnhancement/2, rectMoveY + height/2 + botEnhancement/2);
+            widthCircNum = 0;
+            widthCircStep = 0;
+            collect_second_Nums();
+            drawCirclesByPath(path);
+          }
+          else if ((diameter >= botEnhancement) && (diameter < leftEnhancement) && (diameter >= rightEnhancement) && (diameter < botEnhancement+height)) {
+            x = rectMoveX - width/2 - length;
+            y = rectMoveY - height/2 + length;
+            var path = new Path(x, y,
+            [(-leftEnhancement + 2 * length), 0, (leftEnhancement + width + rightEnhancement/2 - length), 0],
+            [0, (height + botEnhancement/2 - length), 0, (-botEnhancement/2 - height + length)]);
+            fill_enhancement_rectangle("bot-left-right-enhancement");
+            fillCirclesByPath(path);
+            heightCircNum = get_circNum(height + botEnhancement, botEnhancement/2, length).circNum;
+            heightCircStep = get_circNum(height + botEnhancement, botEnhancement/2, length).circStep;
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "true", "true", rectMoveX - width/2 - leftEnhancement + length, rectMoveY - height/2 + length, rightEnhancement/2 + width + leftEnhancement - length);
+            collect_first_Nums();
+            widthCircNum = get_circNum(leftEnhancement + width + rightEnhancement, length, rightEnhancement/2).circNum;
+            widthCircStep = get_circNum(leftEnhancement + width + rightEnhancement, length, rightEnhancement/2).circStep;
+            heightCircNum = 0;
+            heightCircStep = 0;
+            collect_second_Nums();
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "false", "true", rectMoveX - width/2 - leftEnhancement + length, rectMoveY + height/2 + botEnhancement/2);
+            drawCirclesByPath(path);
+          }
+          else if ((diameter < botEnhancement) && (diameter >= leftEnhancement) && (diameter >= rightEnhancement) && ((diameter < leftEnhancement+width) || (diameter < rightEnhancement+width))) {
+            x = rectMoveX - width/2 - leftEnhancement/2;
+            y = rectMoveY - height/2 + length;
+            var path = new Path(x, y,
+            [0, (leftEnhancement/2 + width + rightEnhancement/2), 0],
+            [(height + botEnhancement - 2*length), 0, (-botEnhancement - height + 2 * length)]);
+            fill_enhancement_rectangle("bot-left-right-enhancement");
+            fillCirclesByPath(path);
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "true", "false", rectMoveX - width/2 - leftEnhancement/2, rectMoveY - height/2 + length, rightEnhancement/2 + width + leftEnhancement/2);
+            widthCircNum = get_circNum(leftEnhancement + width + rightEnhancement, leftEnhancement/2, rightEnhancement/2).circNum;
+            widthCircStep = get_circNum(leftEnhancement + width + rightEnhancement, leftEnhancement/2, rightEnhancement/2).circStep;
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "false", "true", rectMoveX - width/2 - leftEnhancement/2, rectMoveY + height/2 + botEnhancement - length);
+            collect_first_Nums();
+            widthCircNum = 0;
+            widthCircStep = 0;
+            collect_second_Nums();
+            drawCirclesByPath(path);
+          }
+          else if ((diameter < botEnhancement) && (diameter < leftEnhancement) && (diameter >= rightEnhancement)) {
+            x = rectMoveX - width/2 - length;
+            y = rectMoveY - height/2 + length;
+            var path = new Path(x, y,
+            [(-leftEnhancement + 2 * length), 0, (leftEnhancement + width + rightEnhancement/2 - length), 0],
+            [0, (height + botEnhancement - 2 * length), 0, (-botEnhancement - height + 2 * length)]);
+            fill_enhancement_rectangle("bot-left-right-enhancement");
+            fillCirclesByPath(path);
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "true", "true", rectMoveX - width/2 - leftEnhancement + length, rectMoveY - height/2 + length, rightEnhancement/2 + width + leftEnhancement - length);
+            widthCircNum = get_circNum(leftEnhancement + width + rightEnhancement, length, rightEnhancement/2).circNum;
+            widthCircStep = get_circNum(leftEnhancement + width + rightEnhancement, length, rightEnhancement/2).circStep;
+            collect_second_Nums();
+            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "false", "true", rectMoveX - width/2 - leftEnhancement + length, rectMoveY + height/2 + botEnhancement - length);
+            drawCirclesByPath(path);
+          }
+          else 
+            errorAlert();
+          draw_polyline("bot-left-right-enhancement");
         }
       }
       draw_rectangle(width, height, "standart");
     }
-    else {
+    else if (!error) {
       rectMoveX = 250;
       rectMoveY = 250;
       var saw = curINPUT.getElementsByTagName("i")["disk"].classList.contains("fas");
@@ -586,12 +1216,12 @@ INPUT_ROWS.addEventListener("click", (function (e) {
       else {
         if ((width>diameter)&&(height>diameter)) {
           fillAllCorners();
-          let heightCircNum = get_circNum(height).circNum;
-          let heightCircStep = get_circNum(height).circStep;
+          let heightCircNum = get_circNum(height, length, length).circNum;
+          let heightCircStep = get_circNum(height, length, length).circStep;
           holesDistVert = heightCircStep/scalar;
           holesDistVert = Math.trunc(heightCircStep/scalar) + holesDistVert.toString().slice(holesDistVert.toString().indexOf("."), (holesDistVert.toString().indexOf(".")+3));
-          let widthCircNum = get_circNum(width).circNum;
-          let widthCircStep = get_circNum(width).circStep;
+          let widthCircNum = get_circNum(width, length, length).circNum;
+          let widthCircStep = get_circNum(width, length, length).circStep;
           holesDistHor = widthCircStep/scalar;
           holesDistHor = Math.trunc(widthCircStep/scalar) + holesDistHor.toString().slice(holesDistHor.toString().indexOf("."), (holesDistHor.toString().indexOf(".")+3));
           drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "standart");
@@ -697,8 +1327,6 @@ INPUT_ROWS.addEventListener("click", (function (e) {
           ctx.fillRect(xUpperLeft, yUpperLeft, rightEnhancement, height);
         }
         if (mode == "top-left-enhancement") {
-          var xUpperLeft = rectMoveX + (width/2);
-          var yUpperLeft = rectMoveY - (height/2);
           ctx.beginPath();
           ctx.moveTo(rectMoveX + width/2, rectMoveY - height/2);
           ctx.lineTo(rectMoveX + width/2, rectMoveY - height/2 - topEnhancement);
@@ -706,6 +1334,48 @@ INPUT_ROWS.addEventListener("click", (function (e) {
           ctx.lineTo(rectMoveX - width/2 - leftEnhancement, rectMoveY + height/2);
           ctx.lineTo(rectMoveX - width/2, rectMoveY + height/2);
           ctx.lineTo(rectMoveX - width/2, rectMoveY - height/2);
+          ctx.fill();
+        }
+        if (mode == "top-right-enhancement") {
+          ctx.beginPath();
+          ctx.moveTo(rectMoveX + width/2, rectMoveY + height/2);
+          ctx.lineTo(rectMoveX + width/2 + rightEnhancement, rectMoveY + height/2);
+          ctx.lineTo(rectMoveX + width/2 + rightEnhancement, rectMoveY - height/2 - topEnhancement);
+          ctx.lineTo(rectMoveX - width/2, rectMoveY - height/2 - topEnhancement);
+          ctx.lineTo(rectMoveX - width/2, rectMoveY - height/2);
+          ctx.lineTo(rectMoveX + width/2, rectMoveY - height/2);
+          ctx.fill();
+        }
+        if (mode == "bot-right-enhancement") {
+          ctx.beginPath();
+          ctx.moveTo(rectMoveX - width/2, rectMoveY + height/2);
+          ctx.lineTo(rectMoveX - width/2, rectMoveY + height/2 + botEnhancement);
+          ctx.lineTo(rectMoveX + width/2 + rightEnhancement, rectMoveY + height/2 + botEnhancement);
+          ctx.lineTo(rectMoveX + width/2 + rightEnhancement, rectMoveY - height/2);
+          ctx.lineTo(rectMoveX + width/2, rectMoveY - height/2);
+          ctx.lineTo(rectMoveX + width/2, rectMoveY + height/2);
+          ctx.fill();
+        }
+        if (mode == "bot-left-enhancement") {
+          ctx.beginPath();
+          ctx.moveTo(rectMoveX - width/2, rectMoveY - height/2);
+          ctx.lineTo(rectMoveX - width/2 - leftEnhancement, rectMoveY - height/2);
+          ctx.lineTo(rectMoveX - width/2 - leftEnhancement, rectMoveY + height/2 + botEnhancement);
+          ctx.lineTo(rectMoveX + width/2, rectMoveY + height/2 + botEnhancement);
+          ctx.lineTo(rectMoveX + width/2, rectMoveY + height/2);
+          ctx.lineTo(rectMoveX - width/2, rectMoveY + height/2);
+          ctx.fill();
+        }
+        if (mode == "bot-left-right-enhancement") {
+          ctx.beginPath();
+          ctx.moveTo(rectMoveX - width/2, rectMoveY - height/2);
+          ctx.lineTo(rectMoveX - width/2 - leftEnhancement, rectMoveY - height/2);
+          ctx.lineTo(rectMoveX - width/2 - leftEnhancement, rectMoveY + height/2 + botEnhancement);
+          ctx.lineTo(rectMoveX + width/2 + rightEnhancement, rectMoveY + height/2 + botEnhancement);
+          ctx.lineTo(rectMoveX + width/2 + rightEnhancement, rectMoveY - height/2);
+          ctx.lineTo(rectMoveX + width/2, rectMoveY - height/2);
+          ctx.lineTo(rectMoveX + width/2, rectMoveY + height/2);
+          ctx.lineTo(rectMoveX - width/2, rectMoveY + height/2);
           ctx.fill();
         }
       }
@@ -752,6 +1422,56 @@ INPUT_ROWS.addEventListener("click", (function (e) {
           ctx.lineWidth = 3;
           ctx.stroke();
         }
+        if (mode == "top-right-enhancement") {
+          ctx.beginPath();
+          ctx.moveTo(rectMoveX + width/2, rectMoveY + height/2);
+          ctx.lineTo(rectMoveX + width/2 + rightEnhancement, rectMoveY + height/2);
+          ctx.lineTo(rectMoveX + width/2 + rightEnhancement, rectMoveY - height/2 - topEnhancement);
+          ctx.lineTo(rectMoveX - width/2, rectMoveY - height/2 - topEnhancement);
+          ctx.lineTo(rectMoveX - width/2, rectMoveY - height/2);
+          ctx.lineTo(rectMoveX + width/2, rectMoveY - height/2);
+          ctx.strokeStyle = "rgb(16,56,125)";
+          ctx.lineWidth = 3;
+          ctx.stroke();
+        }
+        if (mode == "bot-right-enhancement") {
+          ctx.beginPath();
+          ctx.moveTo(rectMoveX - width/2, rectMoveY + height/2);
+          ctx.lineTo(rectMoveX - width/2, rectMoveY + height/2 + botEnhancement);
+          ctx.lineTo(rectMoveX + width/2 + rightEnhancement, rectMoveY + height/2 + botEnhancement);
+          ctx.lineTo(rectMoveX + width/2 + rightEnhancement, rectMoveY - height/2);
+          ctx.lineTo(rectMoveX + width/2, rectMoveY - height/2);
+          ctx.lineTo(rectMoveX + width/2, rectMoveY + height/2);
+          ctx.strokeStyle = "rgb(16,56,125)";
+          ctx.lineWidth = 3;
+          ctx.stroke();
+        }
+        if (mode == "bot-left-enhancement") {
+          ctx.beginPath();
+          ctx.moveTo(rectMoveX - width/2, rectMoveY - height/2);
+          ctx.lineTo(rectMoveX - width/2 - leftEnhancement, rectMoveY - height/2);
+          ctx.lineTo(rectMoveX - width/2 - leftEnhancement, rectMoveY + height/2 + botEnhancement);
+          ctx.lineTo(rectMoveX + width/2, rectMoveY + height/2 + botEnhancement);
+          ctx.lineTo(rectMoveX + width/2, rectMoveY + height/2);
+          ctx.lineTo(rectMoveX - width/2, rectMoveY + height/2);
+          ctx.strokeStyle = "rgb(16,56,125)";
+          ctx.lineWidth = 3;
+          ctx.stroke();
+        }
+        if (mode == "bot-left-right-enhancement") {
+          ctx.beginPath();
+          ctx.moveTo(rectMoveX - width/2, rectMoveY - height/2);
+          ctx.lineTo(rectMoveX - width/2 - leftEnhancement, rectMoveY - height/2);
+          ctx.lineTo(rectMoveX - width/2 - leftEnhancement, rectMoveY + height/2 + botEnhancement);
+          ctx.lineTo(rectMoveX + width/2 + rightEnhancement, rectMoveY + height/2 + botEnhancement);
+          ctx.lineTo(rectMoveX + width/2 + rightEnhancement, rectMoveY - height/2);
+          ctx.lineTo(rectMoveX + width/2, rectMoveY - height/2);
+          ctx.lineTo(rectMoveX + width/2, rectMoveY + height/2);
+          ctx.lineTo(rectMoveX - width/2, rectMoveY + height/2);
+          ctx.strokeStyle = "rgb(16,56,125)";
+          ctx.lineWidth = 3;
+          ctx.stroke();
+        }
       }
     }
     function fill_circle(x, y, radius) {
@@ -772,9 +1492,9 @@ INPUT_ROWS.addEventListener("click", (function (e) {
       length = Math.cos(45 * Math.PI / 180) * diameter;
       return length;
     }
-    function get_circNum(sideLength) {
+    function get_circNum(sideLength, firstLength, secondLength) {
       const FB = 120/152;
-      var between = sideLength-2*length;
+      var between = sideLength-firstLength-secondLength;
       if (between > 0) {
         circNum = Math.ceil((sideLength/diameter)/FB);
         circStep = between/circNum;
@@ -797,9 +1517,9 @@ INPUT_ROWS.addEventListener("click", (function (e) {
           if ((i>=1)&&(j>=1)) {
             var circStepMin = between/(circNum+1);
             var circStepMax = between/(circNum-1);
-            circStepMinRes = Math.abs((circStepMin/scalar)- ((diameter/scalar)*FB));
-            circStepRes = Math.abs((circStep/scalar)- ((diameter/scalar)*FB));
-            circStepMaxRes = Math.abs((circStepMax/scalar)- ((diameter/scalar)*FB));
+            circStepMinRes = Math.abs((circStepMin/scalar) - ((diameter/scalar)*FB));
+            circStepRes = Math.abs((circStep/scalar) - ((diameter/scalar)*FB));
+            circStepMaxRes = Math.abs((circStepMax/scalar) - ((diameter/scalar)*FB));
             minRes = Math.min(circStepMinRes, circStepRes, circStepMaxRes);
             switch (minRes) {
               case circStepRes:
@@ -812,6 +1532,10 @@ INPUT_ROWS.addEventListener("click", (function (e) {
                 --circNum;
                 circStep = between/circNum;
                 break;
+            }
+            if (circStep > diameter*0.98) {
+              ++circNum;
+              circStep = between/circNum;
             }
             break;
           }
@@ -1108,20 +1832,45 @@ INPUT_ROWS.addEventListener("click", (function (e) {
       y = 250 + (new_height);
       draw_circle(x, y, radius);
     }
+    function Path(xStart, yStart, x, y) {
+      this.xStart = xStart;
+      this.yStart = yStart;
+      this.x = x;
+      this.y = y;
+    }
+    function fillCirclesByPath (path) {
+      var xCoord = path.xStart;
+      var yCoord = path.yStart;
+      fill_circle(xCoord, yCoord, radius);
+      for (let i = 0; (i < path.x.length); i++) {
+        xCoord += path.x[i];
+        yCoord += path.y[i];
+        fill_circle(xCoord, yCoord, radius);
+      }
+    }
+    function drawCirclesByPath (path) {
+      var xCoord = path.xStart;
+      var yCoord = path.yStart;
+      draw_circle(xCoord, yCoord, radius);
+      for (let i = 0; (i < path.x.length); i++) {
+        xCoord += path.x[i];
+        yCoord += path.y[i];
+        draw_circle(xCoord, yCoord, radius);
+      }
+    }
     function scale_enhancement_input(scale=0.8) {
       shortest = Math.min(c.width, c.height);
       if ((leftEnhancement > 0)&&(rightEnhancement > 0))
-        maxWidth = parseFloat(width) + 2*leftEnhancement + 2*rightEnhancement;
+        maxWidth = parseFloat(width) + leftEnhancement + rightEnhancement;
       else if ((leftEnhancement <= 0) || (rightEnhancement <= 0))
         maxWidth = parseFloat(width) + leftEnhancement + rightEnhancement;
       if ((topEnhancement > 0)&&(botEnhancement > 0))
-        maxHeight = parseFloat(height) + 2*topEnhancement + 2*botEnhancement;
+        maxHeight = parseFloat(height) + topEnhancement + botEnhancement;
       else if ((topEnhancement <= 0) || (botEnhancement <= 0))
         maxHeight = parseFloat(height) + topEnhancement + botEnhancement;
       longest_side = Math.max(maxWidth, maxHeight, diameter)
       max_length = shortest*scale;
       scalar = max_length/longest_side;
-      console.log("scalar: " + scalar);
       width = width*scalar;
       height = height*scalar;
       diameter = diameter*scalar;
@@ -1131,6 +1880,27 @@ INPUT_ROWS.addEventListener("click", (function (e) {
       leftEnhancement = leftEnhancement*scalar;
       rightEnhancement = rightEnhancement*scalar;
     }
+    function errorAlert () {
+        window.alert("Выбранный диаметр не применим для заданного вида работ. Рекомендуем выбрать диаметр не более длины, на которую будет расширен проем");
+        curINPUT.getElementsByTagName("select")["diameter"].classList.add("highlight");
+        setTimeout(function() {
+          curINPUT.getElementsByTagName("select")["diameter"].classList.remove("highlight");
+        }, 14000);
+        error = true;
+        fill_rectangle("rgb(243,255,253)");
+        var minSide = Math.min(topEnhancement/scalar, leftEnhancement/scalar);
+        var diameters = curINPUT.querySelector("select");
+        var dif = minSide;
+        var diameterSelected = "";
+        for (let i=0; (i<diameters.childElementCount); i++) {
+          let difValue = Math.abs(diameters.children[i].value-minSide);
+          if (difValue < dif) {
+            dif = difValue;
+            diameterSelected = i;
+          }
+        }
+        curINPUT.getElementsByTagName("select")["diameter"].options.selectedIndex = diameterSelected;
+      }
     function get_input(a) {
       a = a ? parseFloat(a) : 0;
       return a;
@@ -1147,11 +1917,17 @@ INPUT_ROWS.addEventListener("click", (function (e) {
       holesDistHorTopToBot2 = widthCircStep/scalar;
       holesDistHorTopToBot2 = Math.trunc(widthCircStep/scalar) + holesDistHorTopToBot2.toString().slice(holesDistHorTopToBot2.toString().indexOf("."), (holesDistHorTopToBot2.toString().indexOf(".")+3));
     }
+    function collect_third_Nums() {
+      holesDistVertLeftToRight3 = heightCircStep/scalar;
+      holesDistVertLeftToRight3 = Math.trunc(heightCircStep/scalar) + holesDistVertLeftToRight2.toString().slice(holesDistVertLeftToRight2.toString().indexOf("."), (holesDistVertLeftToRight2.toString().indexOf(".")+3));
+      holesDistHorTopToBot3 = widthCircStep/scalar;
+      holesDistHorTopToBot3 = Math.trunc(widthCircStep/scalar) + holesDistHorTopToBot2.toString().slice(holesDistHorTopToBot2.toString().indexOf("."), (holesDistHorTopToBot2.toString().indexOf(".")+3));
+    }
     /* CanvasInfo */
-    var canvasInfo = document.querySelector(".canvasInfo");
-    canvasInfo
+    // var canvasInfo = document.querySelector(".canvasInfo");
+    // canvasInfo
   }
-}));
+}), false);
 // function Embrasure(width, height, depth, diameter, selectBitOrSaw, quantity, material, job, waste, wasteWeightLimit, concreteWeight, elevation, water, holesNum, holesDistHor, holesDistVert, cutNum, cutLengthHor, cutLengthVert, cutLengthTotal, coringPrice, coringMoney, cuttingPrice, cuttingMoney) {
 //   this.width = width;
 //   this.height = height;
