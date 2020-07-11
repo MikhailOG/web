@@ -48,7 +48,7 @@ INPUT_ROWS.addEventListener("click", (function (e) {
         enhancementSides.forEach((inputId) => {curINPUT.getElementsByTagName("input")[inputId].classList.add("highlight");});
         setTimeout(function() {
           enhancementSides.forEach((inputId) => {curINPUT.getElementsByTagName("input")[inputId].classList.remove("highlight")});
-        }, 4000);
+        }, 3000);
         error = true;
       }
       else {
@@ -997,32 +997,23 @@ INPUT_ROWS.addEventListener("click", (function (e) {
             break;
           }
           rectMoveY = 250 - botEnhancement/2;
-          var heightCircNum = get_circNum(height + botEnhancement, length, length).circNum;
-          var heightCircStep = get_circNum(height + botEnhancement, length, length).circStep;
-          var widthCircNum = get_circNum(leftEnhancement, length, length).circNum;
-          var widthCircStep = get_circNum(leftEnhancement, length, length).circStep;
+          // var heightCircNum = get_circNum(height + botEnhancement, length, length).circNum;
+          // var heightCircStep = get_circNum(height + botEnhancement, length, length).circStep;
+          // var widthCircNum = get_circNum(leftEnhancement, length, length).circNum;
+          // var widthCircStep = get_circNum(leftEnhancement, length, length).circStep;
           collect_first_Nums();
           fill_rectangle("rgb(223,222,227)");
           if ((diameter < botEnhancement) && (diameter < leftEnhancement) && (diameter < rightEnhancement)) {
             x = rectMoveX - width/2 - length;
             y = rectMoveY - height/2 + length;
             var path = new Path(x, y,
-            [(-leftEnhancement + 2 * length), 0, (leftEnhancement + width + rightEnhancement - 2 * length), 0, (-rightEnhancement + 2* length)],
-            [0, (height + botEnhancement - 2 * length), 0, (-botEnhancement - height + 2 * length), 0]);
+            [-leftEnhancement + 2 * length, 0, leftEnhancement + width + rightEnhancement - 2 * length, 0, -rightEnhancement + 2* length],
+            [0, height + botEnhancement - 2 * length, 0, -botEnhancement - height + 2 * length, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0]
+            );
             fill_enhancement_rectangle("bot-left-right-enhancement");
-            fillCirclesByPath(path);
-            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "true", "true", rectMoveX - width/2 - leftEnhancement + length, rectMoveY - height/2 + length, rightEnhancement + width + leftEnhancement - 2 * length);
-            widthCircNum = get_circNum(rightEnhancement, length, length).circNum;
-            widthCircStep = get_circNum(rightEnhancement, length, length).circStep;
-            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "false", "true", rectMoveX + width/2 + length, rectMoveY - height/2 + length);
-            collect_second_Nums();
-            widthCircNum = get_circNum(leftEnhancement + width + rightEnhancement, length, length).circNum;
-            widthCircStep = get_circNum(leftEnhancement + width + rightEnhancement, length, length).circStep;
-            heightCircNum = 0;
-            heightCircStep = 0;
-            collect_third_Nums();
-            drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", "false", "true", rectMoveX - width/2 - leftEnhancement + length, rectMoveY + height/2 + botEnhancement - length);
-            drawCirclesByPath(path);
+            circlesByPath(path);
           }
           else if ((diameter >= botEnhancement) && (diameter < leftEnhancement) && (diameter < rightEnhancement) && (diameter < botEnhancement+height)) {
             x = rectMoveX - width/2 - length;
@@ -1145,6 +1136,214 @@ INPUT_ROWS.addEventListener("click", (function (e) {
           else 
             errorAlert();
           draw_polyline("bot-left-right-enhancement");
+        }
+        else if ((topEnhancement > 0) && (botEnhancement <= 0) && (leftEnhancement > 0) && (rightEnhancement > 0)) {
+          //complete
+          switch (longest_side) {
+            case maxWidth:
+              rectMoveX = 50 + leftEnhancement + width/2;
+              break;
+            case maxHeight:
+              rectMoveX = (500 - leftEnhancement - width - rightEnhancement)/2 + leftEnhancement + width/2;
+            break;
+          }
+          rectMoveY = 250 + topEnhancement/2;
+          fill_rectangle("rgb(223,222,227)");
+          if ((diameter < topEnhancement) && (diameter < leftEnhancement) && (diameter < rightEnhancement)) {
+            x = rectMoveX - width/2 - leftEnhancement + length;
+            y = rectMoveY - height/2 - topEnhancement + length;
+            var path = new Path(x, y,
+            [0, leftEnhancement - 2*length, width + 2*length, rightEnhancement - 2*length, 0],
+            [topEnhancement + height - 2*length, 0, 0, 0, -height - topEnhancement + 2*length],
+            [0, 0, 1, 0, 0],
+            [0, 0, 0, 0, 0]);
+            fill_enhancement_rectangle("top-left-right-enhancement");
+            circlesByPath(path);
+          }
+          else if ((diameter >= topEnhancement) && (diameter < leftEnhancement) && (diameter < rightEnhancement) && (diameter < topEnhancement+height)) {
+            x = rectMoveX - width/2 - leftEnhancement + length;
+            y = rectMoveY - height/2 - topEnhancement/2;
+            var path = new Path(x, y,
+            [0, leftEnhancement - 2*length, width + 2*length, rightEnhancement - 2*length, 0],
+            [topEnhancement/2 + height - length, 0, 0, 0, -height - topEnhancement/2 + length],
+            [0, 0, 1, 0, 0],
+            [0, 0, 0, 0, 0]);
+            fill_enhancement_rectangle("top-left-right-enhancement");
+            circlesByPath(path);
+          }
+          else if ((diameter >= topEnhancement) && (diameter >= leftEnhancement) && (diameter < rightEnhancement) && (diameter < topEnhancement+height)) {
+            x = rectMoveX - width/2 - leftEnhancement/2;
+            y = rectMoveY - height/2 - topEnhancement/2;
+            var path = new Path(x, y,
+            [0, leftEnhancement/2 + width + length, rightEnhancement - 2*length, 0],
+            [topEnhancement/2 + height - length, 0, 0, -height - topEnhancement/2 + length],
+            [0, 1, 0, 0],
+            [0, 0, 0, 0]);
+            fill_enhancement_rectangle("top-left-right-enhancement");
+            circlesByPath(path);
+          }
+          else if ((diameter >= topEnhancement) && (diameter >= leftEnhancement) && (diameter >= rightEnhancement) && ((diameter < leftEnhancement+width) || (diameter < rightEnhancement+width)) && (diameter < topEnhancement+height)) {
+            x = rectMoveX - width/2 - leftEnhancement/2;
+            y = rectMoveY - height/2 - topEnhancement/2;
+            var path = new Path(x, y,
+            [0, leftEnhancement/2 + width + rightEnhancement/2, 0],
+            [topEnhancement/2 + height - length, 0, -height - topEnhancement/2 + length],
+            [0, 1, 0],
+            [0, 0, 0]);
+            fill_enhancement_rectangle("top-left-right-enhancement");
+            circlesByPath(path);
+          }
+          else if ((diameter < topEnhancement) && (diameter < leftEnhancement) && (diameter >= rightEnhancement)) {
+            x = rectMoveX - width/2 - leftEnhancement + length;
+            y = rectMoveY - height/2 - topEnhancement + length;
+            var path = new Path(x, y,
+            [0, leftEnhancement - 2*length, width + length + rightEnhancement/2, 0],
+            [topEnhancement + height - 2*length, 0, 0, -height - topEnhancement + 2*length],
+            [0, 0, 1, 0],
+            [0, 0, 0, 0]);
+            fill_enhancement_rectangle("top-left-right-enhancement");
+            circlesByPath(path);
+          }
+          else if ((diameter < topEnhancement) && (diameter >= leftEnhancement) && (diameter >= rightEnhancement) && ((diameter < leftEnhancement+width) || (diameter < rightEnhancement+width))) {
+            x = rectMoveX - width/2 - leftEnhancement/2;
+            y = rectMoveY - height/2 - topEnhancement + length;
+            var path = new Path(x, y,
+            [0, width + leftEnhancement/2 + rightEnhancement/2, 0],
+            [topEnhancement + height - 2*length, 0, -height - topEnhancement + 2*length],
+            [0, 1, 0],
+            [0, 0, 0]);
+            fill_enhancement_rectangle("top-left-right-enhancement");
+            circlesByPath(path);
+          }
+          else if ((diameter >= topEnhancement) && (diameter < leftEnhancement) && (diameter >= rightEnhancement)) {
+            x = rectMoveX - width/2 - leftEnhancement + length;
+            y = rectMoveY - height/2 - topEnhancement/2;
+            var path = new Path(x, y,
+            [0, width + leftEnhancement + rightEnhancement/2 - length, 0],
+            [topEnhancement/2 + height - length, 0, -height - topEnhancement/2 + length],
+            [0, 1, 0],
+            [0, 0, 0]);
+            fill_enhancement_rectangle("top-left-right-enhancement");
+            circlesByPath(path);
+          }
+          else if ((diameter < topEnhancement) && (diameter >= leftEnhancement) && (diameter < rightEnhancement)) {
+            x = rectMoveX - width/2 - leftEnhancement/2;
+            y = rectMoveY - height/2 - topEnhancement + length;
+            var path = new Path(x, y,
+            [0, leftEnhancement/2 + width + length, rightEnhancement - 2*length, 0],
+            [topEnhancement + height - 2*length, 0, 0, -height - topEnhancement + 2*length],
+            [0, 1, 0, 0],
+            [0, 0, 0, 0]);
+            fill_enhancement_rectangle("top-left-right-enhancement");
+            circlesByPath(path);
+          }
+          else 
+            errorAlert();
+          draw_polyline("top-left-right-enhancement");
+        }
+        else if ((topEnhancement > 0) && (botEnhancement > 0) && (leftEnhancement <= 0) && (rightEnhancement > 0)) {
+          // complete
+          switch (longest_side) {
+            case maxWidth:
+              rectMoveY = 500 - rightEnhancement - width/2;
+              break;
+            case maxHeight:
+              rectMoveY = (500 - topEnhancement - height - botEnhancement)/2 + topEnhancement + width/2;
+            break;
+          }
+          rectMoveX = 250 - rightEnhancement/2;
+          fill_rectangle("rgb(223,222,227)");
+          if ((diameter < topEnhancement) && (diameter < botEnhancement) && (diameter < rightEnhancement)) {
+            x = rectMoveX - width/2 + length;
+            y = rectMoveY - height/2 - topEnhancement + length;
+            var path = new Path(x, y,
+            [0, 0, 0, width + rightEnhancement - 2*length, 0],
+            [topEnhancement - 2*length, height + 2*length, botEnhancement - 2*length, 0, -botEnhancement -height - topEnhancement + 2*length],
+            [0, 0, 0, 0, 0],
+            [0, 1, 0, 0, 0]);
+            fill_enhancement_rectangle("top-bot-right-enhancement");
+            circlesByPath(path);
+          }
+          else if ((diameter >= topEnhancement) && (diameter < botEnhancement) && (diameter < rightEnhancement)) {
+            x = rectMoveX - width/2 + length;
+            y = rectMoveY - height/2 - topEnhancement/2;
+            var path = new Path(x, y,
+            [0, 0, width + rightEnhancement - 2*length, 0],
+            [height + topEnhancement/2 + length, botEnhancement - 2*length, 0, -botEnhancement -height - topEnhancement/2 + length],
+            [0, 0, 0, 0],
+            [1, 0, 0, 0]);
+            fill_enhancement_rectangle("top-bot-right-enhancement");
+            circlesByPath(path);
+          }
+          else if ((diameter >= topEnhancement) && (diameter >= botEnhancement) && (diameter < rightEnhancement) && (diameter < botEnhancement+height)) {
+            x = rectMoveX - width/2 + length;
+            y = rectMoveY - height/2 - topEnhancement/2;
+            var path = new Path(x, y,
+            [0, width + rightEnhancement - 2*length, 0],
+            [height + topEnhancement/2 + botEnhancement/2, 0, -botEnhancement/2 -height - topEnhancement/2],
+            [0, 0, 0],
+            [1, 0, 0]);
+            fill_enhancement_rectangle("top-bot-right-enhancement");
+            circlesByPath(path);
+          }
+          else if ((diameter >= topEnhancement) && (diameter >= botEnhancement) && (diameter >= rightEnhancement) && ((diameter < botEnhancement+height) || (diameter < topEnhancement+height)) && (diameter < rightEnhancement+width)) {
+            x = rectMoveX - width/2 + length;
+            y = rectMoveY - height/2 - topEnhancement/2;
+            var path = new Path(x, y,
+            [0, width + rightEnhancement/2 - length, 0],
+            [height + topEnhancement/2 + botEnhancement/2, 0, -botEnhancement/2 -height - topEnhancement/2],
+            [0, 0, 0],
+            [1, 0, 0]);
+            fill_enhancement_rectangle("top-bot-right-enhancement");
+            circlesByPath(path);
+          }
+          else if ((diameter >= topEnhancement) && (diameter < botEnhancement) && (diameter >= rightEnhancement) && (diameter < rightEnhancement+width)) {
+            x = rectMoveX - width/2 + length;
+            y = rectMoveY - height/2 - topEnhancement/2;
+            var path = new Path(x, y,
+            [0, 0, width + rightEnhancement/2 - length, 0],
+            [height + topEnhancement/2 + length, botEnhancement - 2*length, 0, -botEnhancement -height - topEnhancement/2 + length],
+            [0, 0, 0, 0],
+            [1, 0, 0, 0]);
+            fill_enhancement_rectangle("top-bot-right-enhancement");
+            circlesByPath(path);
+          }
+          else if ((diameter < topEnhancement) && (diameter >= botEnhancement) && (diameter >= rightEnhancement) && (diameter < rightEnhancement+width)) {
+            x = rectMoveX - width/2 + length;
+            y = rectMoveY - height/2 - topEnhancement + length;
+            var path = new Path(x, y,
+            [0, 0, width + rightEnhancement/2 - length, 0],
+            [topEnhancement - 2*length, height + botEnhancement/2 + length, 0, -botEnhancement/2 -height - topEnhancement + length],
+            [0, 0, 0, 0],
+            [0, 1, 0, 0]);
+            fill_enhancement_rectangle("top-bot-right-enhancement");
+            circlesByPath(path);
+          }
+          else if ((diameter < topEnhancement) && (diameter < botEnhancement) && (diameter >= rightEnhancement) && (diameter < rightEnhancement+width)) {
+            x = rectMoveX - width/2 + length;
+            y = rectMoveY - height/2 - topEnhancement + length;
+            var path = new Path(x, y,
+            [0, 0, 0, leftEnhancement + width + rightEnhancement/2 - length, 0],
+            [topEnhancement - 2*length, height + 2*length, botEnhancement - 2*length, 0, -botEnhancement - height - topEnhancement + 2*length],
+            [0, 0, 0, 0, 0],
+            [0, 1, 0, 0, 0]);
+            fill_enhancement_rectangle("top-bot-right-enhancement");
+            circlesByPath(path);
+          }
+          else if ((diameter < topEnhancement) && (diameter >= botEnhancement) && (diameter < rightEnhancement)) {
+            x = rectMoveX - width/2 + length;
+            y = rectMoveY - height/2 - topEnhancement + length;
+            var path = new Path(x, y,
+            [0, 0, leftEnhancement + width + rightEnhancement - 2*length, 0],
+            [topEnhancement - 2*length, height + botEnhancement/2 + length, 0, -botEnhancement/2 - height - topEnhancement + length],
+            [0, 0, 0, 0],
+            [0, 1, 0, 0]);
+            fill_enhancement_rectangle("top-bot-right-enhancement");
+            circlesByPath(path);
+          }
+          else 
+            errorAlert();
+          draw_polyline("top-bot-right-enhancement");
         }
       }
       draw_rectangle(width, height, "standart");
@@ -1311,22 +1510,22 @@ INPUT_ROWS.addEventListener("click", (function (e) {
           var yUpperLeft = rectMoveY - (height/2) - topEnhancement;
           ctx.fillRect(xUpperLeft, yUpperLeft, width, topEnhancement);
         }
-        if (mode == "bot-enhancement") {
+        else if (mode == "bot-enhancement") {
           var xUpperLeft = rectMoveX - (width/2);
           var yUpperLeft = rectMoveY + (height/2);
           ctx.fillRect(xUpperLeft, yUpperLeft, width, botEnhancement);
         }
-        if (mode == "left-enhancement") {
+        else if (mode == "left-enhancement") {
           var xUpperLeft = rectMoveX - (width/2) - leftEnhancement;
           var yUpperLeft = rectMoveY - (height/2);
           ctx.fillRect(xUpperLeft, yUpperLeft, leftEnhancement, height);
         }
-        if (mode == "right-enhancement") {
+        else if (mode == "right-enhancement") {
           var xUpperLeft = rectMoveX + (width/2);
           var yUpperLeft = rectMoveY - (height/2);
           ctx.fillRect(xUpperLeft, yUpperLeft, rightEnhancement, height);
         }
-        if (mode == "top-left-enhancement") {
+        else if (mode == "top-left-enhancement") {
           ctx.beginPath();
           ctx.moveTo(rectMoveX + width/2, rectMoveY - height/2);
           ctx.lineTo(rectMoveX + width/2, rectMoveY - height/2 - topEnhancement);
@@ -1336,7 +1535,7 @@ INPUT_ROWS.addEventListener("click", (function (e) {
           ctx.lineTo(rectMoveX - width/2, rectMoveY - height/2);
           ctx.fill();
         }
-        if (mode == "top-right-enhancement") {
+        else if (mode == "top-right-enhancement") {
           ctx.beginPath();
           ctx.moveTo(rectMoveX + width/2, rectMoveY + height/2);
           ctx.lineTo(rectMoveX + width/2 + rightEnhancement, rectMoveY + height/2);
@@ -1346,7 +1545,7 @@ INPUT_ROWS.addEventListener("click", (function (e) {
           ctx.lineTo(rectMoveX + width/2, rectMoveY - height/2);
           ctx.fill();
         }
-        if (mode == "bot-right-enhancement") {
+        else if (mode == "bot-right-enhancement") {
           ctx.beginPath();
           ctx.moveTo(rectMoveX - width/2, rectMoveY + height/2);
           ctx.lineTo(rectMoveX - width/2, rectMoveY + height/2 + botEnhancement);
@@ -1356,7 +1555,7 @@ INPUT_ROWS.addEventListener("click", (function (e) {
           ctx.lineTo(rectMoveX + width/2, rectMoveY + height/2);
           ctx.fill();
         }
-        if (mode == "bot-left-enhancement") {
+        else if (mode == "bot-left-enhancement") {
           ctx.beginPath();
           ctx.moveTo(rectMoveX - width/2, rectMoveY - height/2);
           ctx.lineTo(rectMoveX - width/2 - leftEnhancement, rectMoveY - height/2);
@@ -1366,7 +1565,7 @@ INPUT_ROWS.addEventListener("click", (function (e) {
           ctx.lineTo(rectMoveX - width/2, rectMoveY + height/2);
           ctx.fill();
         }
-        if (mode == "bot-left-right-enhancement") {
+        else if (mode == "bot-left-right-enhancement") {
           ctx.beginPath();
           ctx.moveTo(rectMoveX - width/2, rectMoveY - height/2);
           ctx.lineTo(rectMoveX - width/2 - leftEnhancement, rectMoveY - height/2);
@@ -1376,6 +1575,30 @@ INPUT_ROWS.addEventListener("click", (function (e) {
           ctx.lineTo(rectMoveX + width/2, rectMoveY - height/2);
           ctx.lineTo(rectMoveX + width/2, rectMoveY + height/2);
           ctx.lineTo(rectMoveX - width/2, rectMoveY + height/2);
+          ctx.fill();
+        }
+        else if (mode == "top-left-right-enhancement") {
+          ctx.beginPath();
+          ctx.moveTo(rectMoveX - width/2, rectMoveY - height/2);
+          ctx.lineTo(rectMoveX - width/2, rectMoveY + height/2);
+          ctx.lineTo(rectMoveX - width/2 - leftEnhancement, rectMoveY + height/2);
+          ctx.lineTo(rectMoveX - width/2 - leftEnhancement, rectMoveY - height/2 - topEnhancement);
+          ctx.lineTo(rectMoveX + width/2 + rightEnhancement, rectMoveY - height/2 - topEnhancement);
+          ctx.lineTo(rectMoveX + width/2 + rightEnhancement, rectMoveY + height/2);
+          ctx.lineTo(rectMoveX + width/2, rectMoveY + height/2);
+          ctx.lineTo(rectMoveX + width/2, rectMoveY - height/2);
+          ctx.fill();
+        }
+        else if (mode == "top-bot-right-enhancement") {
+          ctx.beginPath();
+          ctx.moveTo(rectMoveX - width/2, rectMoveY - height/2);
+          ctx.lineTo(rectMoveX - width/2, rectMoveY - height/2 - topEnhancement);
+          ctx.lineTo(rectMoveX + width/2 + rightEnhancement, rectMoveY - height/2 - topEnhancement);
+          ctx.lineTo(rectMoveX + width/2 + rightEnhancement, rectMoveY + height/2 + botEnhancement);
+          ctx.lineTo(rectMoveX - width/2, rectMoveY + height/2 + botEnhancement);
+          ctx.lineTo(rectMoveX - width/2, rectMoveY + height/2);
+          ctx.lineTo(rectMoveX + width/2, rectMoveY + height/2);
+          ctx.lineTo(rectMoveX + width/2, rectMoveY - height/2);
           ctx.fill();
         }
       }
@@ -1422,7 +1645,7 @@ INPUT_ROWS.addEventListener("click", (function (e) {
           ctx.lineWidth = 3;
           ctx.stroke();
         }
-        if (mode == "top-right-enhancement") {
+        else if (mode == "top-right-enhancement") {
           ctx.beginPath();
           ctx.moveTo(rectMoveX + width/2, rectMoveY + height/2);
           ctx.lineTo(rectMoveX + width/2 + rightEnhancement, rectMoveY + height/2);
@@ -1434,7 +1657,7 @@ INPUT_ROWS.addEventListener("click", (function (e) {
           ctx.lineWidth = 3;
           ctx.stroke();
         }
-        if (mode == "bot-right-enhancement") {
+        else if (mode == "bot-right-enhancement") {
           ctx.beginPath();
           ctx.moveTo(rectMoveX - width/2, rectMoveY + height/2);
           ctx.lineTo(rectMoveX - width/2, rectMoveY + height/2 + botEnhancement);
@@ -1446,7 +1669,7 @@ INPUT_ROWS.addEventListener("click", (function (e) {
           ctx.lineWidth = 3;
           ctx.stroke();
         }
-        if (mode == "bot-left-enhancement") {
+        else if (mode == "bot-left-enhancement") {
           ctx.beginPath();
           ctx.moveTo(rectMoveX - width/2, rectMoveY - height/2);
           ctx.lineTo(rectMoveX - width/2 - leftEnhancement, rectMoveY - height/2);
@@ -1458,7 +1681,7 @@ INPUT_ROWS.addEventListener("click", (function (e) {
           ctx.lineWidth = 3;
           ctx.stroke();
         }
-        if (mode == "bot-left-right-enhancement") {
+        else if (mode == "bot-left-right-enhancement") {
           ctx.beginPath();
           ctx.moveTo(rectMoveX - width/2, rectMoveY - height/2);
           ctx.lineTo(rectMoveX - width/2 - leftEnhancement, rectMoveY - height/2);
@@ -1468,6 +1691,34 @@ INPUT_ROWS.addEventListener("click", (function (e) {
           ctx.lineTo(rectMoveX + width/2, rectMoveY - height/2);
           ctx.lineTo(rectMoveX + width/2, rectMoveY + height/2);
           ctx.lineTo(rectMoveX - width/2, rectMoveY + height/2);
+          ctx.strokeStyle = "rgb(16,56,125)";
+          ctx.lineWidth = 3;
+          ctx.stroke();
+        }
+        else if (mode == "top-left-right-enhancement") {
+          ctx.beginPath();
+          ctx.moveTo(rectMoveX - width/2, rectMoveY - height/2);
+          ctx.lineTo(rectMoveX - width/2, rectMoveY + height/2);
+          ctx.lineTo(rectMoveX - width/2 - leftEnhancement, rectMoveY + height/2);
+          ctx.lineTo(rectMoveX - width/2 - leftEnhancement, rectMoveY - height/2 - topEnhancement);
+          ctx.lineTo(rectMoveX + width/2 + rightEnhancement, rectMoveY - height/2 - topEnhancement);
+          ctx.lineTo(rectMoveX + width/2 + rightEnhancement, rectMoveY + height/2);
+          ctx.lineTo(rectMoveX + width/2, rectMoveY + height/2);
+          ctx.lineTo(rectMoveX + width/2, rectMoveY - height/2);
+          ctx.strokeStyle = "rgb(16,56,125)";
+          ctx.lineWidth = 3;
+          ctx.stroke();
+        }
+        else if (mode == "top-bot-right-enhancement") {
+          ctx.beginPath();
+          ctx.moveTo(rectMoveX - width/2, rectMoveY - height/2);
+          ctx.lineTo(rectMoveX - width/2, rectMoveY - height/2 - topEnhancement);
+          ctx.lineTo(rectMoveX + width/2 + rightEnhancement, rectMoveY - height/2 - topEnhancement);
+          ctx.lineTo(rectMoveX + width/2 + rightEnhancement, rectMoveY + height/2 + botEnhancement);
+          ctx.lineTo(rectMoveX - width/2, rectMoveY + height/2 + botEnhancement);
+          ctx.lineTo(rectMoveX - width/2, rectMoveY + height/2);
+          ctx.lineTo(rectMoveX + width/2, rectMoveY + height/2);
+          ctx.lineTo(rectMoveX + width/2, rectMoveY - height/2);
           ctx.strokeStyle = "rgb(16,56,125)";
           ctx.lineWidth = 3;
           ctx.stroke();
@@ -1550,7 +1801,7 @@ INPUT_ROWS.addEventListener("click", (function (e) {
         circNum: circNum,
     };
     }
-    function drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, i, mode, vert, hor, xStart, yStart, xLength, yLength) {
+    function drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, i, mode, vert, hor, xStart, yStart, xLength, yLength, xDirection, yDirection) {
       var k = i;
       for (i; i<heightCircNum; i++) {
         if (mode == "standart") {
@@ -1605,10 +1856,10 @@ INPUT_ROWS.addEventListener("click", (function (e) {
           fill_circle(x, y, radius);
         }
         if ((mode == "free") && (vert === "true")) {
-          y = yStart + heightCircStep*i;
+          (yDirection === "true")?(y = yStart - heightCircStep*i):(y = yStart + heightCircStep*i);
           fill_circle(xStart, y, radius);
           if (xLength > 0) {
-            y = yStart + heightCircStep*i;
+            (yDirection === "true")?(y = yStart - heightCircStep*i):(y = yStart + heightCircStep*i);
             fill_circle(xStart+xLength, y, radius);
           }
         }
@@ -1669,10 +1920,10 @@ INPUT_ROWS.addEventListener("click", (function (e) {
           fill_circle(x, y, radius);
         }
         if ((mode == "free") && (hor === "true")) {
-          x = xStart + widthCircStep*i;
+          (xDirection === "true")?(x = xStart - widthCircStep*i):(x = xStart + widthCircStep*i);
           fill_circle(x, yStart, radius);
           if (yLength > 0) {
-            x = xStart + widthCircStep*i;
+            (xDirection === "true")?(x = xStart - widthCircStep*i):(x = xStart + widthCircStep*i);
             fill_circle(x, yStart+yLength, radius);
           }
         }
@@ -1731,10 +1982,10 @@ INPUT_ROWS.addEventListener("click", (function (e) {
           draw_circle(x, y, radius);
         }
         if ((mode == "free") && (vert === "true")) {
-          y = yStart + heightCircStep*i;
+          (yDirection === "true")?(y = yStart - heightCircStep*i):(y = yStart + heightCircStep*i);
           draw_circle(xStart, y, radius);
           if (xLength > 0) {
-            y = yStart + heightCircStep*i;
+            (yDirection === "true")?(y = yStart - heightCircStep*i):(y = yStart + heightCircStep*i);
             draw_circle(xStart+xLength, y, radius);
           }
         }
@@ -1795,10 +2046,10 @@ INPUT_ROWS.addEventListener("click", (function (e) {
           draw_circle(x, y, radius);
         }
         if ((mode == "free") && (hor === "true")) {
-          x = xStart + widthCircStep*i;
+          (xDirection === "true")?(x = xStart - widthCircStep*i):(x = xStart + widthCircStep*i);
           draw_circle(x, yStart, radius);
           if (yLength > 0) {
-            x = xStart + widthCircStep*i;
+            (xDirection === "true")?(x = xStart - widthCircStep*i):(x = xStart + widthCircStep*i);
             draw_circle(x, yStart+yLength, radius);
           }
         }
@@ -1832,13 +2083,49 @@ INPUT_ROWS.addEventListener("click", (function (e) {
       y = 250 + (new_height);
       draw_circle(x, y, radius);
     }
-    function Path(xStart, yStart, x, y) {
+    function Path(xStart, yStart, x, y, skipX, skipY) {
       this.xStart = xStart;
       this.yStart = yStart;
       this.x = x;
       this.y = y;
+      this.skipX = (function() {
+        if (skipX === undefined) {
+          var skip = [];
+          for (i=0; i < x.length; i++) {
+            skip.push("0");
+          }
+          return skip;
+        }
+        else
+          return skipX;
+      })();
+      this.skipY = (function() {
+        if (skipY === undefined) {
+          var skip = [];
+          for (i=0; i < y.length; i++) {
+            skip.push("0");
+          }
+          return skip;
+        }
+        else
+          return skipY;
+      })();
     }
-    function fillCirclesByPath (path) {
+    // function fillCirclesByPath (path) {
+    //   var xCoord = path.xStart;
+    //   var yCoord = path.yStart;
+    //   fill_circle(xCoord, yCoord, radius);
+    //   for (let i = 0; (i < path.x.length); i++) {
+    //     xCoord += path.x[i];
+    //     yCoord += path.y[i];
+    //     fill_circle(xCoord, yCoord, radius);
+    //   }
+    // }
+    function HolesDist() {
+      this.holesDistVertLeftToRight = [];
+      this.holesDistHorTopToBot = [];
+    }
+    function circlesByPath(path) {
       var xCoord = path.xStart;
       var yCoord = path.yStart;
       fill_circle(xCoord, yCoord, radius);
@@ -1847,17 +2134,96 @@ INPUT_ROWS.addEventListener("click", (function (e) {
         yCoord += path.y[i];
         fill_circle(xCoord, yCoord, radius);
       }
-    }
-    function drawCirclesByPath (path) {
-      var xCoord = path.xStart;
-      var yCoord = path.yStart;
+      var holesDist = new HolesDist();
+      xCoord = path.xStart;
+      yCoord = path.yStart;
+      var v = 0;
+      var h = 0;
+      for (let i = 0; (i <= path.x.length); i++) {
+        var xDirection = "false";
+        var yDirection = "false";
+        var hor = "false";
+        var vert = "false";
+        if (i < path.x.length) {
+          if (path.skipY[i] == "0") {
+            heightCircNum = get_circNum(Math.abs(path.y[i]), 0, 0).circNum;
+            heightCircStep = get_circNum(Math.abs(path.y[i]), 0, 0).circStep;
+            if ((yCoord + path.y[i]) > yCoord) {
+              getHolesVert();
+            }
+            else if ((yCoord + path.y[i]) < yCoord) {
+              getHolesVert();
+              yDirection = "true";
+            }
+          }
+          if (path.skipX[i] == "0") {
+            widthCircNum = get_circNum(Math.abs(path.x[i]), 0, 0).circNum;
+            widthCircStep = get_circNum(Math.abs(path.x[i]), 0, 0).circStep;
+            if ((xCoord + path.x[i]) > xCoord) {
+              getHolesHor();
+            }
+            else if ((xCoord + path.x[i]) < xCoord) {
+              getHolesHor();
+              xDirection = "true";
+            }
+          }
+        }
+        else {
+          if (checkY() === "true") {
+            widthCircNum = get_circNum(Math.abs(xCoord - path.xStart), 0, 0).circNum;
+            widthCircStep = get_circNum(Math.abs(xCoord - path.xStart), 0, 0).circStep;
+            if ((xCoord - path.xStart) < 0) {
+              getHolesHor();
+            }
+            else if ((xCoord - path.xStart) > 0) {
+              getHolesHor();
+              xDirection = "true";
+            }
+          }
+        }
+          drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", vert, hor, xCoord, yCoord, 0, 0, xDirection, yDirection);
+        if (i < path.x.length) {
+          xCoord += path.x[i];
+          yCoord += path.y[i];
+        }
+      }
+      xCoord = path.xStart;
+      yCoord = path.yStart;
       draw_circle(xCoord, yCoord, radius);
       for (let i = 0; (i < path.x.length); i++) {
         xCoord += path.x[i];
         yCoord += path.y[i];
         draw_circle(xCoord, yCoord, radius);
       }
+      function getHolesHor() {
+        hor = "true";
+        holesDist.holesDistHorTopToBot[h] = Math.trunc(heightCircStep/scalar) + (heightCircStep/scalar).toString().slice((heightCircStep/scalar).toString().indexOf("."), ((heightCircStep/scalar).toString().indexOf(".")+3));
+        h++;
+      }
+      function getHolesVert() {
+        vert = "true";
+        holesDist.holesDistVertLeftToRight[v] = Math.trunc(heightCircStep/scalar) + (heightCircStep/scalar).toString().slice((heightCircStep/scalar).toString().indexOf("."), ((heightCircStep/scalar).toString().indexOf(".")+3));
+        v++;
+      }
+      function checkY() {
+        let yC = Math.trunc(yCoord) + (yCoord).toString().slice((yCoord).toString().indexOf("."), ((yCoord).toString().indexOf(".")+3))
+        let y = Math.trunc(path.yStart) + (path.yStart).toString().slice((path.yStart).toString().indexOf("."), ((path.yStart).toString().indexOf(".")+3))
+        if ((parseFloat(yC) === parseFloat(y)) && (topEnhancement>0))
+          return "true";
+        else 
+          return "false";
+      }
     }
+    // function drawCirclesByPath (path) {
+    //   var xCoord = path.xStart;
+    //   var yCoord = path.yStart;
+    //   draw_circle(xCoord, yCoord, radius);
+    //   for (let i = 0; (i < path.x.length); i++) {
+    //     xCoord += path.x[i];
+    //     yCoord += path.y[i];
+    //     draw_circle(xCoord, yCoord, radius);
+    //   }
+    // }
     function scale_enhancement_input(scale=0.8) {
       shortest = Math.min(c.width, c.height);
       if ((leftEnhancement > 0)&&(rightEnhancement > 0))
@@ -1885,10 +2251,20 @@ INPUT_ROWS.addEventListener("click", (function (e) {
         curINPUT.getElementsByTagName("select")["diameter"].classList.add("highlight");
         setTimeout(function() {
           curINPUT.getElementsByTagName("select")["diameter"].classList.remove("highlight");
-        }, 14000);
+        }, 3000);
         error = true;
         fill_rectangle("rgb(243,255,253)");
-        var minSide = Math.min(topEnhancement/scalar, leftEnhancement/scalar);
+        var enhancementSides = ["enhancement-top", "enhancement-bot", "enhancement-left", "enhancement-right"];
+        var sides = [];
+        enhancementSides.forEach((inputId) => {
+          if (curINPUT.getElementsByTagName("input")[inputId].value > 0)
+            sides.push(curINPUT.getElementsByTagName("input")[inputId].value);
+        });
+        var minSide = sides[0];
+        for (let i=1; i<sides.length; i++) {
+          if (sides[i]<minSide)
+            minSide = sides[i];
+        } 
         var diameters = curINPUT.querySelector("select");
         var dif = minSide;
         var diameterSelected = "";
