@@ -313,6 +313,28 @@ h3 {
   max-height: 0;
   transition: max-height 0.15s ease-in-out;
 }
+/* Side menu */
+.side-menu {
+  grid-area: 1 / 1 / 2 / 4;
+  margin-right: 5rem;
+  /* background: #B9D6F2; */
+  /* border: 3px solid magenta; */
+}
+.diamond-coring, .diamond-wire, .diamond-saw {
+  border-top: 3px solid #10387d;
+  border-bottom: 3px solid #10387d;
+  border-right: 3px solid #10387d;
+  border-bottom-right-radius: 15%;
+  border-top-right-radius: 15%;
+  margin-top: -3px;
+}
+.selected {
+  background: #f3fffd;
+}
+.services {
+  border-top: 3px solid #10387d;
+  border-bottom: 3px solid #10387d;
+}
 /* First line */
 .signs {
   align-self: center;
@@ -460,8 +482,6 @@ button {
   align-items: center;
   justify-content: space-between;
   padding: 0.5rem 0;
-  /* border-right: 2px solid #993955;
-  border-left: 2px solid #993955; */
   max-width: 15%;
 }
 .elevation-check-answers, .water-check-answers, .settings-check-answers {
