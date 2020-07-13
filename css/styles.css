@@ -21,21 +21,33 @@ html {
 *, *:before, *:after {
   box-sizing: inherit;
 }
+:root {
+  --headerColor: #B9D6F2;
+  --mainBackgroundColor: #E3D7FF;
+  --hoverLinkColor: #6E44FF;
+  --mainTextColor: #10387d;
+  --bodyBackgroundColor: #ABA9BF;
+  --whiteColor: #f3fffd;
+  --modeColor: #966B9D;
+  --redButtonTextColor: #DDFFF7;
+  --redButtonBackgroundColor: #993955;
+  --redButtonBorderColor: #4A4063;
+}
 .grid-container {
   display: grid;
   grid-template-columns: [first] 25% [second] 25% [third] 25% [fourth] 25% [end];
   grid-template-rows: [header-start] 8.4375rem [header-end nav-start] auto [nav-end main-start] auto [main-end footer-start] auto [footer-end];
   align-items: center;
-  background: #E3D7FF;
-  color: #10387d;
+  background: var(--mainBackgroundColor);
+  color: var(--mainTextColor);
 }
 a {
-  color: #10387d;
+  color: var(--mainTextColor);
   font-size: 1.25rem;
   font-weight: 600;
 }
 a:hover {
-  color: #6E44FF;
+  color: var(--hoverLinkColor);
   /*font-size: 30px;*/
 }
 /*---Header---*/
@@ -49,8 +61,8 @@ header {
   grid-template-columns: 7.8125rem 1fr 1fr;
   grid-template-rows: 8.4375rem;
   align-items: center;
-  background: #B9D6F2;
-  color: #10387d;
+  background: var(--headerColor);
+  color: var(--mainTextColor);
 }
 header figure {
   grid-column: 1;
@@ -67,7 +79,7 @@ h1 {
   font-size: 3.125rem;
   text-align: center;
   margin: 0;
-  border-bottom: 3px solid #10387d;
+  border-bottom: 3px solid var(--mainTextColor);
 }
 header p {
 font-size: 1.5625rem;
@@ -92,9 +104,9 @@ font-size: 1.5625rem;
 /*---Body---*/
 body {
   font-family: 'Vollkorn', serif;
-  background: #ABA9BF;
+  background: var(--bodyBackgroundColor);
   margin: 0;
-  color: #10387d;
+  color: var(--mainTextColor);
 }
 h2 {
   font-family: 'Philosopher', sans-serif;
@@ -103,6 +115,9 @@ h2 {
   text-align: center;
   align-self: center;
   flex-grow: 1;
+  background: -webkit-linear-gradient(#eee, #333);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 h3 {
   font-family: 'Philosopher', sans-serif;
@@ -119,23 +134,23 @@ h3 {
   display: flex;
   flex-direction: row;
   align-items: stretch;
-  border-top: 3px solid #10387d;
-  border-bottom: 3px solid #10387d;
+  border-top: 3px solid var(--mainTextColor);
+  border-bottom: 3px solid var(--mainTextColor);
   position: sticky;
   top: 0;
   width: 100%;
 }
 .nav a {
   padding: 0.625rem;
-  background: #f3fffd;
-  color: #10387d;
+  background: var(--whiteColor);
+  color: var(--mainTextColor);
   width: 25%;
   text-decoration: none;
 }
 .nav a:hover {
   text-shadow: none;
-  background: #966B9D;
-  color: #f3fffd;
+  background: var(--modeColor);
+  color: var(--whiteColor);
 }
 /*-------main---------*/
 .main-container {
@@ -153,9 +168,9 @@ h3 {
   grid-area: 5 / 1 / 6 / 13;
   display: flex;
   place-items: center;
-  border-top: 3px solid #10387d;
-  border-bottom: 3px solid #10387d;
-  background: #f3fffd;
+  border-top: 3px solid var(--mainTextColor);
+  border-bottom: 3px solid var(--mainTextColor);
+  background: var(--whiteColor);
 }
 .secondSection h2 {
   margin: 0.6125rem 0 1.09rem 0;
@@ -182,7 +197,7 @@ h3 {
   /* column-gap: 0.3rem; */
   justify-content: center;
   align-items: center;
-  background: #f3fffd;
+  background: var(--whiteColor);
   margin-bottom: 1rem;
 }
 .price1 {
@@ -201,8 +216,8 @@ h3 {
   justify-self: stretch;
   align-self: stretch;
   text-align: center;
-  color: #f3fffd;
-  background: #10387d;
+  color: var(--whiteColor);
+  background: var(--mainTextColor);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -211,18 +226,18 @@ h3 {
   justify-self: stretch;
   align-self: stretch;
   text-align: center;
-  color: #10387d;
-  background: #f3fffd;
+  color: var(--mainTextColor);
+  background: var(--whiteColor);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0.7rem 0;
-  border-bottom: 1px solid #10387d;
+  border-bottom: 1px solid var(--mainTextColor);
 }
 .price div:first-child {
   grid-area: 1 / 2 / 2 / 5;
   padding: 1rem 0 0.5rem 0;
-  border-bottom: 1px solid #f3fffd;
+  border-bottom: 1px solid var(--whiteColor);
 }
 .price div:nth-last-child(-n+4) {
   border: none;
@@ -255,9 +270,9 @@ h3 {
   grid-area: 15 / 1 / 16 / 13;
   display: flex;
   place-items: center;
-  border-top: 3px solid #10387d;
-  border-bottom: 3px solid #10387d;
-  background: #f3fffd;
+  border-top: 3px solid var(--mainTextColor);
+  border-bottom: 3px solid var(--mainTextColor);
+  background: var(--whiteColor);
 }
 .thirdSection h2 {
   margin: 0.6125rem 0 1.09rem 0;
@@ -272,8 +287,8 @@ h3 {
 .input {
   display: flex;
   flex-direction: column;
-  background: #f3fffd;
-  color: #10387d;
+  background: var(--whiteColor);
+  color: var(--mainTextColor);
   margin-top: -3px;
 }
 .input-mod {
@@ -282,10 +297,10 @@ h3 {
   display: flex;
   justify-content: flex-start;
   margin-top: -3px;
-  border-top: 3px solid #10387d;
-  border-bottom: 3px solid #10387d;
-  background: #966B9D;
-  color: #f3fffd;
+  border-top: 3px solid var(--mainTextColor);
+  border-bottom: 3px solid var(--mainTextColor);
+  background: var(--modeColor);
+  color: var(--whiteColor);
   padding: 0.3125rem 0 0.3125rem 0.3125rem;
   text-shadow: none;
   height: 3rem;
@@ -294,8 +309,8 @@ h3 {
 .first-line, .second-line, .third-line{
   display: flex;
   justify-content: flex-start;
-  border-top: 3px solid #10387d;
-  border-bottom: 3px solid #10387d;
+  border-top: 3px solid var(--mainTextColor);
+  border-bottom: 3px solid var(--mainTextColor);
   padding: 0.625rem 0px 0.625rem 0.3125rem;
   margin-top: -3px;
   height: 8rem;
@@ -345,16 +360,16 @@ h3 {
   font-size: 2.1875rem;
 }
 .input .signs i:hover, .cart i:hover, .count i:hover, .fa-cog:hover {
-  color: #966B9D;
+  color: var(--modeColor);
   transition: color 0.5s linear 0s;
 }
 .input-mod i:hover, .input-mod .signs i:hover {
-  color: #10387D;
+  color: var(--mainTextColor);
   transition: color 0.5s linear 0s;
 }
 .count p {
   padding: 2px 0.625rem;
-  border: 3px solid #10387d;
+  border: 3px solid var(--mainTextColor);
   margin: 0.3125rem;
 }
 .add-to-cart {
@@ -367,11 +382,11 @@ h3 {
 }
 [type=text], select {
   font-family: 'Vollkorn', serif;
-  color: #10387d;
+  color: var(--mainTextColor);
   width: 50%;
   font-size: 1.125rem;
-  border: 2px solid #10387d;
-  background: #f3fffd;
+  border: 2px solid var(--mainTextColor);
+  background: var(--whiteColor);
   align-self: center;
 }
 p {
@@ -411,40 +426,40 @@ p {
 }
 button {
  font-family: 'Vollkorn', serif;
- color: #10387d;
+ color: var(--mainTextColor);
  width: 8.125rem;
  height: 5rem;
  padding: 0.625rem;
  margin: 0.625rem;
- background: #f3fffd;
+ background: var(--whiteColor);
  font-size: 1.125rem;
  font-weight: 600;
- border: 2px solid #10387d;
+ border: 2px solid var(--mainTextColor);
  transition: all 0.5s ease-out 0s;
 }
 .button:hover {
   transition: all 0.5s linear 0s;
-  background: #966B9D;
-  color: #f3fffd;
+  background: var(--modeColor);
+  color: var(--whiteColor);
 }
 .redButton {
   font-family: 'Vollkorn', serif;
   transition: all 0.5s ease-out 0s;
-  background: #966B9D;
-  color: #f3fffd;
+  background: var(--modeColor);
+  color: var(--whiteColor);
   width: 80%;
   height: 5rem;
   padding: 0.625rem;
   margin: 0.625rem;
   font-size: 1.125rem;
   font-weight: 600;
-  border: 2px solid #10387d;
+  border: 2px solid var(--mainTextColor);
  }
  .redButton:hover {
   transition: all 0.5s linear 0s;
-  color: #DDFFF7;
-  background: #993955;
-  border: 2px solid #4A4063;
+  color: var(--redButtonTextColor);
+  background: var(--redButtonBackgroundColor);
+  border: 2px solid var(--redButtonBorderColor);
  }
 /* Second line */
 .second-line p, .third-line p{
@@ -539,7 +554,7 @@ i p {
   margin-left: -3rem;
 }
 .wire-formula {
-  border: 2px solid #10387d;
+  border: 2px solid var(--mainTextColor);
   padding: 0.5rem 1rem;
   margin-bottom: 0.5rem;
 }
@@ -561,28 +576,28 @@ canvas {
   grid-column: 5 / 13;
   grid-row: 4 / 5;
   justify-self: center;
-  background: #f3fffd;
-  border:3px solid #10387d;
+  background: var(--whiteColor);
+  border:3px solid var(--mainTextColor);
   margin: 3rem 0;
 }
 .canvasInfo {
   grid-column: 1 / 5;
   grid-row: 4 / 5;
   justify-self: center;
-  background: #f3fffd;
-  border:3px solid #10387d;
+  background: var(--whiteColor);
+  border:3px solid var(--mainTextColor);
   margin: 3rem 0;
 }
 body>.content-wrap {
-  background: #f3fffd;
+  background: var(--whiteColor);
   width: 40%;
   min-width: 34.375rem;
 }
 /* footer */
 footer {
   grid-area: -2 / first / -1 / end;
-  background: #B9D6F2;
-  border-top: 3px solid #10387d;
+  background: var(--headerColor);
+  border-top: 3px solid var(--mainTextColor);
   text-align: center;
   display: flex;
   flex-flow: column wrap;
