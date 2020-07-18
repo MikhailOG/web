@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,700;1,700&family=Vollkorn:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
     <script src="scripts/jquery-3.4.1.js"></script>
+    <script src="scripts/vue.min.js"></script>
   </head>
   <body>
     <div class="grid-container">
@@ -31,15 +32,72 @@
         <a href="#contacts"><i class="far fa-address-card"></i> Контакты</a>
       </div>
       <div class="main-container">    
-        <div class="diamond-coring fill"></div>
-        <div class="diamond-saw fill"></div>
-        <div class="diamond-wire fill"></div>
-        <button class="btn diamond-coring">Алмазное бурение</button>
-        <button class="btn diamond-saw">Алмазная резка</button>
-        <button class="btn diamond-wire">Канатная резка</button>
-        <div class="diamond-coring services"></div>
-        <div class="diamond-saw services"></div>
-        <div class="diamond-wire services"></div>
+        <div class="menu" @mousemove="updateCoordinates">
+          <div class="diamond-coring titles"
+          @mouseenter="mouseTitleEvt"
+          @mouseleave="mouseTitleEvt"
+          :class="fillFunc('diamond-coring')">
+            <button class="btn diamond-coring"
+            @mouseenter="mouseEvt"
+            @mouseleave="mouseEvt"
+            @click="clickEvt"
+            :class="buttonFunc('diamond-coring')">
+            Алмазное бурение</button>
+          </div>
+          <div class="diamond-saw titles"
+          @mouseenter="mouseTitleEvt"
+          @mouseleave="mouseTitleEvt"
+          :class="fillFunc('diamond-saw')">
+            <button class="btn diamond-saw"
+            @mouseenter="mouseEvt"
+            @mouseleave="mouseEvt"
+            @click="clickEvt"
+            :class="buttonFunc('diamond-saw')">
+            Алмазная резка</button>
+          </div>
+          <div class="diamond-wire titles"
+          @mouseenter="mouseTitleEvt"
+          @mouseleave="mouseTitleEvt"
+          :class="fillFunc('diamond-wire')">
+            <button class="btn diamond-wire"
+            @mouseenter="mouseEvt"
+            @mouseleave="mouseEvt"
+            @click="clickEvt"
+            :class="buttonFunc('diamond-wire')">
+            Канатная резка</button>
+          </div>
+          <div class="enforcement titles"
+          @mouseenter="mouseTitleEvt"
+          @mouseleave="mouseTitleEvt"
+          :class="fillFunc('enforcement')">
+            <button class="btn enforcement"
+            @mouseenter="mouseEvt"
+            @mouseleave="mouseEvt"
+            @click="clickEvt"
+            :class="buttonFunc('enforcement')">
+            Усиление проема</button>
+          </div>
+          <div class="diamond-coring services"
+          @mouseenter="mouseAtServisesEvt"
+          @mouseleave="mouseAtServisesEvt"
+          :class="fillFunc('diamond-coring')"
+          v-html="getServices('diamond-coring')"></div>
+          <div class="diamond-saw services"
+          @mouseenter="mouseAtServisesEvt"
+          @mouseleave="mouseAtServisesEvt"
+          :class="fillFunc('diamond-saw')"
+          v-html="getServices('diamond-saw')"></div>
+          <div class="diamond-wire services"
+          @mouseenter="mouseAtServisesEvt"
+          @mouseleave="mouseAtServisesEvt"
+          :class="fillFunc('diamond-wire')"
+          v-html="getServices('diamond-wire')"></div>
+          <div class="enforcement services"
+          @mouseenter="mouseAtServisesEvt"
+          @mouseleave="mouseAtServisesEvt"
+          :class="fillFunc('enforcement')"
+          v-html="getServices('enforcement')"></div>
+        </div>
         <!-- <h2 class="firstSection" id="calculator">Расчет требуемого количества<br> отверстий в проеме</h2> -->
         <div class="input-rows">
           <div class="input">

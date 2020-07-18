@@ -15,7 +15,8 @@ font-family: 'Philosopher', sans-serif;
 font-family: 'Vollkorn', serif;
 ---------------------------------------*/
 /* SASS variables */
-$unit: calc(100%/12);
+$unit: repeat(12, calc(100%/12));
+$menuWidth: calc(100% - 30px) / 4;
 /*btn*/
 
 /*colors*/
@@ -163,7 +164,7 @@ h3 {
 .main-container {
   grid-area: main-start / first / main-end / end;
   display: grid;
-  grid-template-columns: repeat(12, $unit);
+  grid-template-columns: $unit;
   grid-template-rows: auto;
   font-size: 1.125rem;
   font-weight: 600;
@@ -355,52 +356,60 @@ h3 {
 //   grid-area: 1/2/2/12;
 //   margin: 2rem 0.5rem;
 // }
-.fill {
-  background: $redButtonBorderColor;
+.menu {
+  grid-area: 1 / 2 / 3 / 12;
+  display: grid;
+  grid-column-gap: 10px;
+  grid-template-columns: repeat(4, $menuWidth);
+  grid-template-rows: auto 35vh;
+}
+.titles {
   margin-top: .7rem;
   border-top-left-radius:5px;
   border-top-right-radius:5px;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
   &.diamond-coring {
-    grid-area: 1/2/2/5;
+    grid-area: 1/1/2/2;
   }
   &.diamond-saw {
-    grid-area: 1/5/2/9;
-    margin-left: 3vw;
-    margin-right: 3vw;
+    grid-area: 1/2/2/3;
   }
-  &.diamond-wire{
-    grid-area: 1/9/2/12;
+  &.diamond-wire {
+    grid-area: 1/3/2/4;
+  }
+  &.enforcement {
+    grid-area: 1/4/2/5;
   }
 }
-.btn{
-  &.diamond-coring {
-    grid-area: 1/2/2/5;
-  }
-  &.diamond-saw {
-    grid-area: 1/5/2/9;
-    margin-left: calc(100vw/24);
-    margin-right: calc(100vw/24);
-  }
-  &.diamond-wire{
-    grid-area: 1/9/2/12;
-  }
+.fill {
+  background: $redButtonBorderColor;
 }
 .services {
-  background: $redButtonBorderColor;
   margin-top: 0;
-  margin-bottom: 3rem;
+  margin-bottom: 1rem;
   border-bottom-left-radius:5px;
   border-bottom-right-radius:5px;
   &.diamond-coring {
-    grid-area: 2/2/3/5;
+    grid-area: 2/1/3/2;
   }
   &.diamond-saw {
-    grid-area: 2/5/3/9;
-    margin-left: 3vw;
-    margin-right: 3vw;
+    grid-area: 2/2/3/3;
   }
-  &.diamond-wire{
-    grid-area: 2/9/3/12;
+  &.diamond-wire {
+    grid-area: 2/3/3/4;
+  }
+  &.enforcement {
+    grid-area: 2/4/3/5;
+  }
+  & h3 {
+    // text-shadow: 0 0 10px $whiteColor, 2px 2px 2px rgba(206,89,55,0);
+    color: $whiteColor;
+  }
+  & h3:hover {
+    cursor: pointer;
+    text-shadow: 0 0 10px $whiteColor, 2px 2px 2px rgba(206,89,55,0);
   }
 }
 /* BUTTONS */
@@ -416,7 +425,7 @@ $timing-function: ease-in-out;
   color:$text-color;
   height: auto;
   width: auto;
-  padding: 1rem 0.5rem;
+  padding: 1rem ;
   margin-top: 2rem;
   // margin-bottom: 3rem;
   background: linear-gradient(to bottom,
@@ -426,7 +435,7 @@ $timing-function: ease-in-out;
   border-radius:5px;
   border:1px solid $headerColor;
   transition:all ($button-speed + s) $timing-function;
-  &:hover {
+  &.hover {
     background:lighten(saturate($mainTextColor,5%),$lighten-on-hover);
     // background: linear-gradient(to bottom,
     // saturate(lighten($mainTextColor,15%),35%) 0%,
