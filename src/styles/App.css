@@ -1,0 +1,239 @@
+/* Color palette--------------------------
+PALE LAVENDER
+#E3D7FF
+SILVER CHALICE
+#ABA9BF
+DARK CERULEAN
+#10387D
+MINT CREAM
+#f3fffd
+MOUNTBATTEN PINK
+#966B9D
+----------------------------------------*/
+/* Fonts --------------------------------
+font-family: 'Philosopher', sans-serif;
+font-family: 'Vollkorn', serif;
+---------------------------------------*/
+/* SASS variables */
+/*btn*/
+/*colors*/
+/*-------------------------------------*/
+html {
+  box-sizing: border-box;
+  font-size: calc(0.7em + 0.3vw);
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+.web {
+  align-items: center;
+  background: #E3D7FF;
+  color: #10387d;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: [first] 25% [second] 25% [third] 25% [fourth] 25% [end];
+  grid-template-rows: [header-start] 8.4375rem [header-end nav-start] auto [nav-end];
+}
+.grid-container header {
+  grid-area: header-start/first/header-end/end;
+}
+.grid-container header p {
+  font-size: 1.5625rem;
+}
+.grid-container header .header-cont {
+  font-family: "Philosopher", sans-serif;
+  display: grid;
+  grid-template-columns: 7.8125rem 1fr 1fr;
+  grid-template-rows: 8.4375rem;
+  background: #B9D6F2;
+}
+.grid-container header .header-cont figure {
+  grid-column: 1;
+  grid-row: 1;
+  margin-block-start: 0.625rem;
+  margin-block-end: 0.625rem;
+  margin-inline-start: 0.625rem;
+  margin-inline-end: 0;
+}
+.grid-container header .header-cont figure #logo, .grid-container header .header-cont figure #gear {
+  width: 7.1875rem;
+  position: absolute;
+  top: 0.625rem;
+  left: 0.625rem;
+}
+.grid-container header .header-cont figure #gear {
+  animation: App-gear-spin infinite 20s linear;
+}
+.grid-container header .header-cont .first-name {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: start;
+  justify-self: start;
+  text-align: center;
+  margin: 0.625rem 0 0 0.625rem;
+}
+.grid-container header .header-cont .first-name h1 {
+  font-size: 3.125rem;
+  margin: 0;
+  border-bottom: 3px solid #10387d;
+}
+.grid-container header .header-cont .first-name p {
+  margin-top: 0.625rem;
+}
+.grid-container header .header-cont .telefone {
+  grid-column: 3;
+  grid-row: 1;
+  text-align: right;
+  margin: 0.625rem 1.5625rem 0 0.625rem;
+}
+.grid-container .nav {
+  grid-area: nav-start/first/nav-end/end;
+  text-align: center;
+  margin: 0;
+  display: flex;
+  align-items: stretch;
+  border-top: 3px solid #10387d;
+  border-bottom: 3px solid #10387d;
+  position: sticky;
+  top: 0;
+  width: 100%;
+}
+.grid-container .nav a {
+  padding: 0.625rem;
+  background: #f3fffd;
+  width: 25%;
+  text-decoration: none;
+}
+.grid-container .nav a:hover {
+  background: #966B9D;
+  color: #f3fffd;
+  text-shadow: 1px 1px #10387d;
+}
+
+.main-container {
+  grid-template-columns: repeat(12, calc(100%/12));
+  grid-template-rows: auto;
+  display: grid;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+.main-container .menu {
+  grid-area: 1/2/3/12;
+  display: grid;
+  grid-column-gap: 10px;
+  grid-template-columns: repeat(4, calc(100% - 30px)/4);
+  grid-template-rows: auto 20rem;
+}
+.main-container .menu .btnBed {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  margin-top: 2rem;
+}
+.main-container .menu .btnBed.diamond-coring {
+  grid-area: 1/1/2/2;
+}
+.main-container .menu .btnBed.diamond-saw {
+  grid-area: 1/2/2/3;
+}
+.main-container .menu .btnBed.diamond-wire {
+  grid-area: 1/3/2/4;
+}
+.main-container .menu .btnBed.enforcement {
+  grid-area: 1/4/2/5;
+}
+.main-container .menu .btnBed .btn {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  text-shadow: 1px 1px 5px #f3fffd;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #10387d;
+  height: auto;
+  width: 100%;
+  padding: 1rem;
+  margin-top: 2rem;
+  background: linear-gradient(to bottom, #dba3e5 0%, #ebf4fd 26%, #966B9D 100%);
+  border-radius: 5px;
+  border: 1px solid #B9D6F2;
+  transition: all 0.5s ease-in-out;
+}
+.main-container .menu .btnBed .btn:hover, .main-container .menu .btnBed .btn.hover {
+  border-left: 1px solid #4A4063;
+  border-right: 1px solid #4A4063;
+  background: #0e3d8e;
+  color: #f3fffd;
+  text-shadow: 1px 1px 5px #4A4063;
+  transform: translate(0, -10%);
+}
+.main-container .menu .services.enforcement, .main-container .menu .services.diamond-wire, .main-container .menu .services.diamond-saw, .main-container .menu .services.diamond-coring {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  text-align: center;
+}
+.main-container .menu .services {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  background: #4A4063;
+}
+.main-container .menu .services.diamond-coring {
+  grid-area: 2/1/3/2;
+}
+.main-container .menu .services.diamond-saw {
+  grid-area: 2/2/3/3;
+}
+.main-container .menu .services.diamond-wire {
+  grid-area: 2/3/3/4;
+}
+.main-container .menu .services.enforcement {
+  grid-area: 2/4/3/5;
+}
+.main-container .menu .services h3 {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  color: #f3fffd;
+  font-family: "Philosopher", sans-serif;
+  font-size: 1.5rem;
+}
+.main-container .menu .services h3:hover {
+  cursor: pointer;
+  text-shadow: 0 0 10px #f3fffd, 2px 2px 2px rgba(206, 89, 55, 0);
+}
+
+a {
+  color: #10387d;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+a:hover {
+  color: #6E44FF;
+}
+
+.hide {
+  display: none;
+}
+
+@keyframes App-gear-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/*# sourceMappingURL=App.css.map */
