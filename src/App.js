@@ -4,6 +4,7 @@ import Header from './Header/Header';
 import Nav from './Nav/Nav';
 import Btn from './Btn/Btn';
 import Services from './Btn/Services';
+import {DiamondCoringNew} from './CalculationRibbon/diamondCoringNew';
 class App extends Component {
   state = {
     currentServiceClass: null,
@@ -68,8 +69,7 @@ class App extends Component {
         this.setState({serviceList: <React.Fragment>
                                       <h3 type="service">Расчет нового проема</h3>
                                       <h3 type="service">Расчет расширения проема</h3>
-                                      <h3 type="service">Расчет по длине резки</h3>
-                                      <h3 type="service">Расчет по площади резки</h3>
+                                      <h3 type="service">Расчет по длине/площади резки</h3>
                                     </React.Fragment>});
         break;
       case "diamond-wire":
@@ -106,12 +106,16 @@ class App extends Component {
               hover={this.state.hoverIndex}
               currentClass={this.state.currentServiceClass}
               serviceTitle={service.serviceTitle} 
-              key={service.serviceClass}/>
+              key={service.serviceClass}
+              clicked={this.state.btnClicked}
+              />
               })}
             <Services 
             serviceClass = {this.state.currentServiceClass} 
             serviceList={this.state.serviceList}/>
           </div>
+          {this.state.btnClicked?<DiamondCoringNew/>:null}
+
         </div>
       </div>
 
