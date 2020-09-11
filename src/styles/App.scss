@@ -31,6 +31,11 @@ $redButtonTextColor: #DDFFF7;
 $redButtonBackgroundColor: #993955;
 $redButtonBorderColor: #4A4063;
 /*-------------------------------------*/
+/*shared*/
+%button-border-shared {
+  border-radius:15px;
+  border:3px solid $mainTextColor;
+}
 html {
   box-sizing: border-box;
   font-size: calc(0.7em + 0.3vw);
@@ -135,20 +140,18 @@ html {
     display: grid;
     grid-column-gap: 10px;
     grid-template-columns: repeat(4, $menuWidth);
-    grid-template-rows: auto 20rem;
-
+    grid-template-rows: auto 25rem;
     $depth:50vw;
     $text-color:$mainTextColor;
     $lighten-on-hover:3%;
-    $button-speed:.5;
+    $button-speed:.3;
     $timing-function: ease-in-out;
     .btnBed {
       display: flex;
       justify-content: center;
-      // align-items: stretch;
       border-top-left-radius:15px;
       border-top-right-radius:15px;
-      margin-top: 2rem;
+      margin-top: 0.3rem;
       &.diamond-coring { 
         grid-area: 1/1/2/2;
       }
@@ -161,25 +164,20 @@ html {
       &.enforcement {
         grid-area: 1/4/2/5;
       }
-      .btn {
 
+      .btn {
         display: flex;
         justify-content: center;
-        // align-items: stretch;
         text-shadow: 1px 1px 5px $whiteColor;
         font-size:2rem;
         font-weight:bold;
         color:$text-color;
-        height: 2wh;
+        height: auto;
         width: 85%;
         padding: 1rem ;
         margin-top: 2rem;
-        background: linear-gradient(to bottom,
-          saturate(lighten($modeColor,25%),35%) 0%,
-          saturate(lighten($headerColor,12%),15%) 26%,
-          $modeColor 100%);
-        border-radius:15px;
-        border:1px solid $headerColor;
+        background-color: $mainBackgroundColor;
+        @extend %button-border-shared;
         transition:all ($button-speed + s) $timing-function;
         &:hover, &.hover{
           background: $modeColor;
@@ -199,10 +197,11 @@ html {
     %menu-services-shared {
       display: flex;
       flex-direction: column;
-      justify-content: space-evenly;
+      justify-content: flex-start;
       text-align: center;
     }
     .services {
+      z-index: 1000;
       margin-top: 0;
       margin-bottom: 1rem;
       border-bottom-left-radius:15px;
@@ -229,18 +228,63 @@ html {
       & h3 {
         margin-left: 0.5rem;
         margin-right: 0.5rem;
-        color: $redButtonBorderColor;
-        text-shadow: 0 0 10px $whiteColor, 2px 2px 2px rgb(218, 218, 219);
+        color: $whiteColor;
+        text-shadow: 1px 2px 100px $hoverLinkColor, 2px 1px 4px $redButtonBorderColor;
         font-family: 'Philosopher', sans-serif;
         font-size: 1.5rem;
       }
       & h3:hover {
         cursor: pointer;
-        color: $text-color;
+        color: $mainTextColor;
+        text-shadow: 1px 1px 2px $whiteColor, 2px 2px 2px rgb(218, 218, 219);
+      }
+    }
+  }
+  .input-rows {
+    margin-top: 1rem;
+    grid-area: 2 / 1 / 3 / 5;
+    align-self: start;
+    display: flex;
+    flex-flow: column;
+    background-color: $mainBackgroundColor;
+    @extend %button-border-shared;
+
+    .input {
+      // padding: 0 7.5px;
+      margin: 15px 12.5px 0 12.5px;
+      @extend %button-border-shared;
+      display: flex;
+      flex-direction: column;
+      background: $whiteColor;
+      color: $mainTextColor;
+
+      %lines-shared {
+        display: flex;
+        // border-top: 3px solid $mainTextColor;
+        // border-bottom: 3px solid $mainTextColor;
+        margin-top: -3px;
+      }
+      .first-line {
+        @extend %lines-shared;
+        justify-content: flex-start;
+        padding: 0.625rem 0px 0.625rem 0.3125rem;
+        height: 8rem;
+        transition: height 0.15s ease-out;
+        .signs {
+          align-self: center;
+          font-size: 2.1875rem;
+          i:last-of-type {
+            margin: 0 0.625rem;
+          }
+          p:first-child{
+            display:flex;
+          }
+        }
       }
     }
   }
 }
+
 a {
   color: $mainTextColor;
   font-size: 1.25rem;

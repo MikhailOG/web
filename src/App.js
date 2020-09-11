@@ -4,7 +4,7 @@ import Header from './Header/Header';
 import Nav from './Nav/Nav';
 import Btn from './Btn/Btn';
 import Services from './Btn/Services';
-import {DiamondCoringNew} from './CalculationRibbon/diamondCoringNew';
+import InputRows from './CalculationRibbon/InputRows';
 class App extends Component {
   state = {
     currentServiceClass: null,
@@ -13,10 +13,10 @@ class App extends Component {
     btnClicked: false
   }
   services= [
-    { serviceClass: 'diamond-coring', serviceTitle: 'Алмазное бурение'},
-    { serviceClass: 'diamond-saw', serviceTitle: 'Алмазная резка'},
-    { serviceClass: 'diamond-wire', serviceTitle: 'Канатная резка'},
-    { serviceClass: 'enforcement', serviceTitle: 'Усиление проема'},
+    { serviceClass: 'diamond-coring', serviceTitle: ['Алмазное', 'бурение']},
+    { serviceClass: 'diamond-saw', serviceTitle: ['Алмазная', 'резка']},
+    { serviceClass: 'diamond-wire', serviceTitle: ['Канатная', 'резка']},
+    { serviceClass: 'enforcement', serviceTitle: ['Усиление', 'проема']},
   ];
   currentCursorPosition = {
     el: null,
@@ -113,8 +113,9 @@ class App extends Component {
             <Services 
             serviceClass = {this.state.currentServiceClass} 
             serviceList={this.state.serviceList}/>
+            <InputRows/>
           </div>
-          {this.state.btnClicked?<DiamondCoringNew/>:null}
+
 
         </div>
       </div>
