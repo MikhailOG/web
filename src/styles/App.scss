@@ -257,7 +257,102 @@ html {
       flex-direction: column;
       background: $whiteColor;
       color: $mainTextColor;
-
+      .signs i:hover, .cart i:hover, .count i:hover, .fa-cog:hover {
+        color: $modeColor;
+        transition: color 0.5s linear 0s;
+      }
+      .input-mod i:hover, .input-mod .signs i:hover {
+        color: $mainTextColor;
+        transition: color 0.5s linear 0s;
+      }
+      .add-to-cart {
+        margin-right: 0.5rem;
+        display: flex;
+        flex-direction: row;
+        .count {
+          align-content:center;
+          display: flex;
+          flex-direction: column;
+          justify-content:space-evenly;
+          text-align: center;
+          margin-left: 1.25rem;
+          input {
+            text-align: center;
+            width: 2.5rem;
+          }
+          p {
+            padding: 2px 0.625rem;
+            border: 3px solid $mainTextColor;
+            margin: 0.3125rem;
+          }
+        }
+        .cart {
+          display: flex;
+          i {
+            margin-left: 0.625rem;
+            align-self:center;
+            font-size: 2.1875rem;
+          }
+        }
+      }
+      .input-width, .input-height, .input-depth, .input-diameter {
+        align-self:center;
+      }
+      [type=text], select {
+        font-family: 'Philosopher', sans-serif;
+        color: $mainTextColor;
+        width: 50%;
+        font-size: 1.125rem;
+        border: 2px solid $mainTextColor;
+        background: $whiteColor;
+        align-self: center;
+        outline: none;
+      }
+      p {
+        display: inline-block;
+        margin: 0;
+      }
+      .width, .height, .depth {
+        justify-self: start;
+      }
+      #diameter {
+        width: auto;
+        justify-self: start;
+      }
+      .buttons, .cog {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        flex-grow: 1;
+        text-align: right;
+      }
+      .cog {
+        font-size: 2.5rem;
+      }
+      .select {
+        margin-left: 1rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+      }
+      button {
+        font-family: 'Vollkorn', serif;
+        color: $mainTextColor;
+        width: 8.125rem;
+        height: 5rem;
+        padding: 0.625rem;
+        margin: 0.625rem;
+        background: $mainBackgroundColor;
+        font-size: 1.125rem;
+        font-weight: 600;
+        @extend %button-border-shared;
+        transition: all 0.5s ease-out 0s;
+      }
+      .button:hover {
+        transition: all 0.5s linear 0s;
+        background: $modeColor;
+        color: $whiteColor;
+      }
       %lines-shared {
         display: flex;
         // border-top: 3px solid $mainTextColor;

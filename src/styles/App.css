@@ -19,7 +19,7 @@ font-family: 'Vollkorn', serif;
 /*colors*/
 /*-------------------------------------*/
 /*shared*/
-.main-container .input-rows .input, .main-container .input-rows, .main-container .menu .btnBed .btn {
+.main-container .input-rows .input button, .main-container .input-rows .input, .main-container .input-rows, .main-container .menu .btnBed .btn {
   border-radius: 15px;
   border: 3px solid #10387d;
 }
@@ -235,6 +235,101 @@ html {
   flex-direction: column;
   background: #f3fffd;
   color: #10387d;
+}
+.main-container .input-rows .input .signs i:hover, .main-container .input-rows .input .cart i:hover, .main-container .input-rows .input .count i:hover, .main-container .input-rows .input .fa-cog:hover {
+  color: #966B9D;
+  transition: color 0.5s linear 0s;
+}
+.main-container .input-rows .input .input-mod i:hover, .main-container .input-rows .input .input-mod .signs i:hover {
+  color: #10387d;
+  transition: color 0.5s linear 0s;
+}
+.main-container .input-rows .input .add-to-cart {
+  margin-right: 0.5rem;
+  display: flex;
+  flex-direction: row;
+}
+.main-container .input-rows .input .add-to-cart .count {
+  align-content: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  text-align: center;
+  margin-left: 1.25rem;
+}
+.main-container .input-rows .input .add-to-cart .count input {
+  text-align: center;
+  width: 2.5rem;
+}
+.main-container .input-rows .input .add-to-cart .count p {
+  padding: 2px 0.625rem;
+  border: 3px solid #10387d;
+  margin: 0.3125rem;
+}
+.main-container .input-rows .input .add-to-cart .cart {
+  display: flex;
+}
+.main-container .input-rows .input .add-to-cart .cart i {
+  margin-left: 0.625rem;
+  align-self: center;
+  font-size: 2.1875rem;
+}
+.main-container .input-rows .input .input-width, .main-container .input-rows .input .input-height, .main-container .input-rows .input .input-depth, .main-container .input-rows .input .input-diameter {
+  align-self: center;
+}
+.main-container .input-rows .input [type=text], .main-container .input-rows .input select {
+  font-family: "Philosopher", sans-serif;
+  color: #10387d;
+  width: 50%;
+  font-size: 1.125rem;
+  border: 2px solid #10387d;
+  background: #f3fffd;
+  align-self: center;
+  outline: none;
+}
+.main-container .input-rows .input p {
+  display: inline-block;
+  margin: 0;
+}
+.main-container .input-rows .input .width, .main-container .input-rows .input .height, .main-container .input-rows .input .depth {
+  justify-self: start;
+}
+.main-container .input-rows .input #diameter {
+  width: auto;
+  justify-self: start;
+}
+.main-container .input-rows .input .buttons, .main-container .input-rows .input .cog {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-grow: 1;
+  text-align: right;
+}
+.main-container .input-rows .input .cog {
+  font-size: 2.5rem;
+}
+.main-container .input-rows .input .select {
+  margin-left: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.main-container .input-rows .input button {
+  font-family: "Vollkorn", serif;
+  color: #10387d;
+  width: 8.125rem;
+  height: 5rem;
+  padding: 0.625rem;
+  margin: 0.625rem;
+  background: #E3D7FF;
+  font-size: 1.125rem;
+  font-weight: 600;
+  transition: all 0.5s ease-out 0s;
+}
+.main-container .input-rows .input .button:hover {
+  transition: all 0.5s linear 0s;
+  background: #966B9D;
+  color: #f3fffd;
 }
 .main-container .input-rows .input .first-line {
   display: flex;

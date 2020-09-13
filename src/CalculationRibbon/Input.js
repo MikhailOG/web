@@ -1,12 +1,18 @@
 import React from 'react'
-import WidthLengthDepth from './WidthLengthDepth'
-const input = () => {
+import NewCoring from './Input Components/NewCoring'
+import EnhancementCoring from './Input Components/EnhancementCoring'
+const Input = (props) => {
+    // const input = (id) => {
+    //     switch (id):
+        
+    // }
     return(
         <div className="input">
-            <WidthLengthDepth/>
+            <NewCoring/>
+
         </div>
     );
 
 }
 
-export default input;
+export default React.memo(Input);

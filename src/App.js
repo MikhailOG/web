@@ -8,9 +8,9 @@ import InputRows from './CalculationRibbon/InputRows';
 class App extends Component {
   state = {
     currentServiceClass: null,
-    serviceList: null,
     hoverIndex: null,
-    btnClicked: false
+    btnClicked: false,
+    selectedService: null
   }
   services= [
     { serviceClass: 'diamond-coring', serviceTitle: ['Алмазное', 'бурение']},
@@ -33,7 +33,7 @@ class App extends Component {
       if (((cursorPosition.el === "submit") && !(cursorPosition.rendered)) || ((cursorPosition.el === "submit") && (cursorPosition.index !== this.currentCursorPosition.index))) {
         cursorPosition.rendered = true;
         this.currentCursorPosition = cursorPosition;
-        this.getServices(cursorPosition.index)
+        // this.getServices(cursorPosition.index)
         this.setState({currentServiceClass: this.services[cursorPosition.index].serviceClass, btnClicked: false, hoverIndex: this.currentCursorPosition.index})
       }
     }
@@ -43,7 +43,7 @@ class App extends Component {
   }
   clearServices = () => {
     if (!this.state.btnClicked){
-      this.setState({currentServiceClass: null, serviceList: null, hoverIndex: null, btnClicked: false})
+      this.setState({currentServiceClass: null, hoverIndex: null, btnClicked: false})
       this.currentCursorPosition = {
         el: null,
         index: null,
@@ -51,43 +51,15 @@ class App extends Component {
       }
     } 
   }
-  serviceClickedHandler = () => {
+  serviceButtonClickedHandler = () => {
     let btnClicked = {...this.state.btnClicked};
     btnClicked = !this.state.btnClicked;
     this.setState({btnClicked: btnClicked});
   }
-  getServices = (index) => {
-    switch (this.services[index].serviceClass) {
-      case "diamond-coring":
-        this.setState({serviceList: <React.Fragment>
-                                      <h3 type="service">Расчет нового проема</h3>
-                                      <h3 type="service">Расчет расширения проема</h3>
-                                      <h3 type="service">Расчет одиночных отверстий</h3>
-                                    </React.Fragment>})
-        break;
-      case "diamond-saw":
-        this.setState({serviceList: <React.Fragment>
-                                      <h3 type="service">Расчет нового проема</h3>
-                                      <h3 type="service">Расчет расширения проема</h3>
-                                      <h3 type="service">Расчет по длине/площади резки</h3>
-                                    </React.Fragment>});
-        break;
-      case "diamond-wire":
-        this.setState({serviceList: <React.Fragment>
-                                      <h3 type="service">Расчет нового проема</h3>
-                                      <h3 type="service">Расчет по площади резки</h3>
-                                    </React.Fragment>});
-        break;
-      case "enforcement":
-        this.setState({serviceList: <React.Fragment>
-                                      <h3 type="service">Усиление проема</h3>
-                                      <h3 type="service">Обрамление проема</h3>
-                                    </React.Fragment>});
-        break;
-      default:
-          return null
-    }
+  serviceClickedHandler = (event) => {
+    this.setState({ selectedService: event.target.id }, () => console.log(this.state.selectedService));
   }
+
 
   render() {
     return (
@@ -97,10 +69,10 @@ class App extends Component {
           <Nav/>
         </div>
         <div className="main-container">
-          <div onMouseMove = {(event) => this.getElement(event)} onMouseLeave={this.clearServices} className="menu">
+          <div onMouseMove = {this.getElement} onMouseLeave={this.clearServices} className="menu">
             {this.services.map((service, index) => {
               return <Btn 
-              click={this.serviceClickedHandler}
+              click={this.serviceButtonClickedHandler}
               serviceClass={service.serviceClass} 
               index={index}
               hover={this.state.hoverIndex}
@@ -111,9 +83,13 @@ class App extends Component {
               />
               })}
             <Services 
+            click={this.serviceClickedHandler}
+            index={this.currentCursorPosition.index}
             serviceClass = {this.state.currentServiceClass} 
-            serviceList={this.state.serviceList}/>
-            <InputRows/>
+            services={this.services}/>
+            <InputRows
+              selectedService={this.state.selectedService}
+            />
           </div>
 
 

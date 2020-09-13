@@ -5,7 +5,7 @@ const addToCart = () => {
         <div className="add-to-cart">
             <div className="count">
                 <i className="fas fa-plus"></i>
-                <input type="number" id="qty" defaultValue="1"/>
+                <input type="text" id="qty" defaultValue="1"/>
                 <i className="fas fa-minus"></i>
             </div>
             <div className="cart">
