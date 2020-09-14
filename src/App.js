@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './styles/App.css';
-import Header from './Header/Header';
-import Nav from './Nav/Nav';
+import Layout from './Layout/Layout';
 import Btn from './Btn/Btn';
 import Services from './Btn/Services';
 import InputRows from './CalculationRibbon/InputRows';
@@ -22,6 +21,9 @@ class App extends Component {
     el: null,
     index: null,
     rendered: false
+  }
+  selected = {
+    id: null
   }
   getElement = (event) => {
     if (event.target.hasAttribute("type")) {
@@ -59,43 +61,31 @@ class App extends Component {
   serviceClickedHandler = (event) => {
     this.setState({ selectedService: event.target.id }, () => console.log(this.state.selectedService));
   }
-
-
   render() {
     return (
-      <div className="web">
-        <div className="grid-container">
-          <Header title="Тепловые Линии Мск" titleText="Алмазная резка и алмазное бурение" telefone="+7 (926) 932 68 40"/>
-          <Nav/>
-        </div>
-        <div className="main-container">
-          <div onMouseMove = {this.getElement} onMouseLeave={this.clearServices} className="menu">
-            {this.services.map((service, index) => {
-              return <Btn 
-              click={this.serviceButtonClickedHandler}
-              serviceClass={service.serviceClass} 
-              index={index}
-              hover={this.state.hoverIndex}
-              currentClass={this.state.currentServiceClass}
-              serviceTitle={service.serviceTitle} 
-              key={service.serviceClass}
-              clicked={this.state.btnClicked}
-              />
-              })}
-            <Services 
-            click={this.serviceClickedHandler}
-            index={this.currentCursorPosition.index}
-            serviceClass = {this.state.currentServiceClass} 
-            services={this.services}/>
-            <InputRows
-              selectedService={this.state.selectedService}
-            />
-          </div>
-
-
-        </div>
+    <Layout>
+      <div 
+      onMouseMove = {this.getElement} 
+      onMouseLeave={this.clearServices} 
+      className="menu">
+      {this.services.map((service, index) => {
+        return <Btn 
+        click={this.serviceButtonClickedHandler}
+        serviceClass={service.serviceClass} 
+        index={index}
+        hover={this.state.hoverIndex}
+        currentClass={this.state.currentServiceClass}
+        serviceTitle={service.serviceTitle} 
+        key={service.serviceClass}
+        clicked={this.state.btnClicked}/>})}
+        <Services 
+        click={this.serviceClickedHandler}
+        index={this.currentCursorPosition.index}
+        serviceClass = {this.state.currentServiceClass} 
+        services={this.services}/>
+        <InputRows selectedService={this.state.selectedService}/>
       </div>
-
+    </Layout>
     );
   }
 }

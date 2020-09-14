@@ -39,6 +39,7 @@ $redButtonBorderColor: #4A4063;
 html {
   box-sizing: border-box;
   font-size: calc(0.7em + 0.3vw);
+  background-color: $bodyBackgroundColor;
 }
 *, *:before, *:after {
   box-sizing: inherit;
@@ -246,12 +247,12 @@ html {
     align-self: start;
     display: flex;
     flex-flow: column;
-    background-color: $mainBackgroundColor;
+    background-color: $bodyBackgroundColor;
     @extend %button-border-shared;
 
     .input {
       // padding: 0 7.5px;
-      margin: 15px 12.5px 0 12.5px;
+      margin: 15px 12.5px;
       @extend %button-border-shared;
       display: flex;
       flex-direction: column;

@@ -2,13 +2,21 @@ import React from 'react'
 import NewCoring from './Input Components/NewCoring'
 import EnhancementCoring from './Input Components/EnhancementCoring'
 const Input = (props) => {
-    // const input = (id) => {
-    //     switch (id):
-        
-    // }
+    let inputData = {};
+    const input = (id) => {
+        switch (id){
+            case 'newCoring':
+                inputData=<NewCoring/>;
+            break;
+            case 'enhancementCoring':
+                inputData=<EnhancementCoring/>;
+            break;
+        }
+        return(inputData);
+    }
     return(
         <div className="input">
-            <NewCoring/>
+            {input(props.id)}
 
         </div>
     );

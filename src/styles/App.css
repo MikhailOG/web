@@ -27,6 +27,7 @@ font-family: 'Vollkorn', serif;
 html {
   box-sizing: border-box;
   font-size: calc(0.7em + 0.3vw);
+  background-color: #ABA9BF;
 }
 
 *, *:before, *:after {
@@ -227,10 +228,10 @@ html {
   align-self: start;
   display: flex;
   flex-flow: column;
-  background-color: #E3D7FF;
+  background-color: #ABA9BF;
 }
 .main-container .input-rows .input {
-  margin: 15px 12.5px 0 12.5px;
+  margin: 15px 12.5px;
   display: flex;
   flex-direction: column;
   background: #f3fffd;
