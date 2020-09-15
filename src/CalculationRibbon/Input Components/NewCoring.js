@@ -7,11 +7,11 @@ import Signs from '../Interface Components/Signs'
 import Cog from '../Interface Components/Cog'
 import InputContext from '../../context/input-context'
 
-const NewCoring = () => {
+const NewCoring = (props) => {
     const inputContext = useContext(InputContext);
     return (
     <div className="first-line"> 
-        <Signs/>
+        <Signs plus={props.plus}/>
         <InputComponent id="width" default="500">Ширина, мм:</InputComponent>
         <InputComponent id="height" default="500">Высота, мм:</InputComponent>
         <InputComponent id="depth" default="250">Глубина, мм:</InputComponent>

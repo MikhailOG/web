@@ -6,17 +6,17 @@ const Input = (props) => {
     const input = (id) => {
         switch (id){
             case 'newCoring':
-                inputData=<NewCoring/>;
+                inputData=<NewCoring plus={props.plus}/>;
             break;
             case 'enhancementCoring':
-                inputData=<EnhancementCoring/>;
+                inputData=<EnhancementCoring plus={props.plus}/>;
             break;
         }
         return(inputData);
     }
     return(
-        <div className="input">
-            {input(props.id)}
+        <div idvalue={props.id} indexvalue={props.index} className="input">
+            {input(props.idvalue)}
 
         </div>
     );
