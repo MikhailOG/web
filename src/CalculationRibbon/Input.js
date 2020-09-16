@@ -15,12 +15,11 @@ const Input = (props) => {
         return(inputData);
     }
     return(
-        <div idvalue={props.id} indexvalue={props.index} className="input">
+        <div idvalue={props.idvalue} indexvalue={props.indexvalue} className="input">
             {input(props.idvalue)}
-
         </div>
     );
 
 }
 
-export default React.memo(Input);
+export default Input;

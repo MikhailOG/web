@@ -59,7 +59,7 @@ class App extends Component {
     this.setState({btnClicked: btnClicked});
   }
   serviceClickedHandler = (event) => {
-    this.setState({ selectedService: event.target.id }, () => console.log(this.state.selectedService));
+    this.setState({ selectedService: event.target.id}, () => {this.serviceButtonClickedHandler(); this.setState({hoverIndex:null})});
   }
   render() {
     return (
@@ -79,6 +79,7 @@ class App extends Component {
         key={service.serviceClass}
         clicked={this.state.btnClicked}/>})}
         <Services 
+        showServices={this.state.btnClicked}
         click={this.serviceClickedHandler}
         index={this.currentCursorPosition.index}
         serviceClass = {this.state.currentServiceClass} 

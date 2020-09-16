@@ -145,7 +145,7 @@ html {
     $depth:50vw;
     $text-color:$mainTextColor;
     $lighten-on-hover:3%;
-    $button-speed:.3;
+    $button-speed:.15;
     $timing-function: ease-in-out;
     .btnBed {
       display: flex;
@@ -177,19 +177,25 @@ html {
         width: 85%;
         padding: 1rem ;
         margin-top: 2rem;
-        background-color: $mainBackgroundColor;
+        background-color: $whiteColor;
         @extend %button-border-shared;
         transition:all ($button-speed + s) $timing-function;
+        backface-visibility: hidden;
         &:hover, &.hover{
-          background: $modeColor;
+          background: $mainBackgroundColor;
+          // color: $whiteColor;
+          // text-shadow: 1px 1px 5px $redButtonBorderColor;
+          transform: translateY(-1.3rem);
+
+          backface-visibility: hidden;
+        }
+        // &.hover {
+        //   border: 3px solid $whiteColor;
+        // }
+        &.clicked {
           color: $whiteColor;
           text-shadow: 1px 1px 5px $redButtonBorderColor;
-          transform: translate(0, -10%);
-        }
-        &.hover {
           border: 3px solid $whiteColor;
-        }
-        &.clicked {
           background-color: $redButtonBorderColor;
         }
       }
@@ -230,7 +236,7 @@ html {
         margin-left: 0.5rem;
         margin-right: 0.5rem;
         color: $whiteColor;
-        text-shadow: 1px 2px 100px $hoverLinkColor, 2px 1px 4px $redButtonBorderColor;
+        text-shadow: 2px 1px 4px $redButtonBorderColor,  1px 2px 5px $mainTextColor;
         font-family: 'Philosopher', sans-serif;
         font-size: 1.5rem;
       }

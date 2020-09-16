@@ -1,7 +1,7 @@
 import React from 'react';
 
 const btn = (props) => {
-    const hoverStyle = {
+    const clickedStyle = {
         background: "#E3D7FF",
         border: '3px solid #f3fffd',
         borderBottom: 'none'
@@ -12,7 +12,7 @@ const btn = (props) => {
     const noOutLine = {
         outline: "none"
     }
-    return ( <div type="bed" className={props.serviceClass + " btnBed"} style={(props.hover === props.index) ? hoverStyle:style}>
+    return ( <div type="bed" className={props.serviceClass + " btnBed"} style={((props.hover === props.index) && (props.clicked)) ? clickedStyle:style}>
                 <button type="submit"
                 style={noOutLine}
                 onClick={props.click}

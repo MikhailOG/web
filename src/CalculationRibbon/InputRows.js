@@ -1,14 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Input from './Input'
 import InputContext from '../context/input-context'
 const InputRows = (props) => {
     const [ inputState, setInputState] = useState({
         input: [
-            {id: null, index: 0}
+            {id: null, index: null}
         ],
         rowNum: 0
     });
-    
+    useEffect(()=>{     
+            setInputState({
+                input: [
+                    {id: props.selectedService, index: 0}
+                ],
+                rowNum: 1
+            });
+    }, [props.selectedService]);
     
     // const addFirstRowHandler = (id) => {
     //     setInputState({
@@ -18,26 +25,32 @@ const InputRows = (props) => {
     //     })
     // }
     const addRowHandler = (event) => {
+        const newInputState = [...inputState.input];
+        let newIndex = inputState.input[event.target.parentElement.parentElement.parentElement.parentElement.attributes.indexvalue.value].index;
+        newIndex++;
+
+        newInputState.splice(newIndex, 0, {id:event.target.parentElement.parentElement.parentElement.parentElement.attributes.idvalue.value, index: newIndex});
+        // console.log(newInputState)
         setInputState({
-            input: inputState.input.splice(event.target.attributes.indexvalue, 0, {id:event.target.parentElement.parentElement.parentElement.parentElement.attributes.idvalue, index: event.target.parentElement.parentElement.parentElement.parentElement.attributes.indexvalue+1}),
+            input: newInputState,
             rowNum: inputState.rowNum+1
         });
-        console.log(inputState)
     }
     
     return (
+        
         <InputContext.Provider value={{diameters:[42, 52, 62, 72, 82, 92, 102, 112, 122, 132, 142, 152, 162, 172, 182, 192, 200, 250, 300, 350]}}>
             <div className="input-rows">
                 {(props.selectedService)?
                     <Input 
                     idvalue={props.selectedService}
-                    indexvalue={0}
+                    indexvalue="0"
                     plus={addRowHandler}
                     />:null}
-                {
-                    (inputState.rowNum > 0)?
-                    inputState.input.map(service => {
-                        return(<Input idvalue={service.id} indexvalue={service.index} plus={addRowHandler}/>);
+                
+                    {(inputState.rowNum > 1)?
+                    inputState.input.map((service) => {
+                        return <Input  idvalue={service.id} indexvalue={service.index} plus={addRowHandler}/>;
                     }):null
                 }
             </div>

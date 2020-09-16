@@ -41,7 +41,7 @@ const services = (props) => {
       return(serviceList);
     }
   return ( 
-              props.serviceClass ?
+              (props.serviceClass && props.showServices) ?
                   <div type="list"
                   className={props.serviceClass + " services"} >
                       {getServices(props.index)}

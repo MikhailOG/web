@@ -166,19 +166,19 @@ html {
   width: 85%;
   padding: 1rem;
   margin-top: 2rem;
-  background-color: #E3D7FF;
-  transition: all 0.3s ease-in-out;
+  background-color: #f3fffd;
+  transition: all 0.15s ease-in-out;
+  backface-visibility: hidden;
 }
 .main-container .menu .btnBed .btn:hover, .main-container .menu .btnBed .btn.hover {
-  background: #966B9D;
-  color: #f3fffd;
-  text-shadow: 1px 1px 5px #4A4063;
-  transform: translate(0, -10%);
-}
-.main-container .menu .btnBed .btn.hover {
-  border: 3px solid #f3fffd;
+  background: #E3D7FF;
+  transform: translateY(-1.3rem);
+  backface-visibility: hidden;
 }
 .main-container .menu .btnBed .btn.clicked {
+  color: #f3fffd;
+  text-shadow: 1px 1px 5px #4A4063;
+  border: 3px solid #f3fffd;
   background-color: #4A4063;
 }
 .main-container .menu .services.enforcement, .main-container .menu .services.diamond-wire, .main-container .menu .services.diamond-saw, .main-container .menu .services.diamond-coring {
@@ -213,7 +213,7 @@ html {
   margin-left: 0.5rem;
   margin-right: 0.5rem;
   color: #f3fffd;
-  text-shadow: 1px 2px 100px #6E44FF, 2px 1px 4px #4A4063;
+  text-shadow: 2px 1px 4px #4A4063, 1px 2px 5px #10387d;
   font-family: "Philosopher", sans-serif;
   font-size: 1.5rem;
 }
