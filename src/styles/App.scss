@@ -353,6 +353,7 @@ html {
         font-size: 1.125rem;
         font-weight: 600;
         @extend %button-border-shared;
+        outline: "none";
         transition: all 0.5s ease-out 0s;
       }
       .button:hover {

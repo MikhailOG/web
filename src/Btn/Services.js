@@ -1,7 +1,7 @@
 import React, {Fragment} from 'react';
 
 const services = (props) => {
-    
+  console.log('[services.js] is rendering...')
   const getServices = (index) => {
       let serviceList = {};
       switch (props.services[index].serviceClass) {

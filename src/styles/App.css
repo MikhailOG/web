@@ -325,6 +325,7 @@ html {
   background: #E3D7FF;
   font-size: 1.125rem;
   font-weight: 600;
+  outline: "none";
   transition: all 0.5s ease-out 0s;
 }
 .main-container .input-rows .input .button:hover {

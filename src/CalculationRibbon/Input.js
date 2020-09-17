@@ -11,6 +11,7 @@ const Input = (props) => {
             case 'enhancementCoring':
                 inputData=<EnhancementCoring plus={props.plus}/>;
             break;
+            default: ;
         }
         return(inputData);
     }

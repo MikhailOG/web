@@ -2,21 +2,24 @@ import React, { useState, useEffect } from 'react';
 import Input from './Input'
 import InputContext from '../context/input-context'
 const InputRows = (props) => {
+    const [keysState, setKeysState] = useState({
+        keys: ['first-element']
+    });
     const [ inputState, setInputState] = useState({
         input: [
-            {id: null, index: null}
+            {key: null, id: props.selectedService, index: 0}
         ],
-        rowNum: 0
+        rowNum: 1
     });
     useEffect(()=>{     
             setInputState({
                 input: [
-                    {id: props.selectedService, index: 0}
+                    {key: keysState.keys[0], id: props.selectedService, index: 0}
                 ],
                 rowNum: 1
             });
     }, [props.selectedService]);
-    
+    // const keyGenerator = (id) => (id+" "+Math.sqrt(Math.random()*Math.random()*100));
     // const addFirstRowHandler = (id) => {
     //     setInputState({
     //         input: [
@@ -35,23 +38,29 @@ const InputRows = (props) => {
             input: newInputState,
             rowNum: inputState.rowNum+1
         });
+        let keys = [...keysState.keys];
+        keys.push(100*Math.random()*Math.sqrt(Math.random()*Math.random()*100000000))
+        setKeysState({
+            keys: keys
+        })
     }
     
     return (
         
         <InputContext.Provider value={{diameters:[42, 52, 62, 72, 82, 92, 102, 112, 122, 132, 142, 152, 162, 172, 182, 192, 200, 250, 300, 350]}}>
             <div className="input-rows">
-                {(props.selectedService)?
+                {/* {(props.selectedService)?
                     <Input 
+                    key='first-element'
                     idvalue={props.selectedService}
                     indexvalue="0"
                     plus={addRowHandler}
-                    />:null}
+                    />:null} */}
                 
-                    {(inputState.rowNum > 1)?
-                    inputState.input.map((service) => {
-                        return <Input  idvalue={service.id} indexvalue={service.index} plus={addRowHandler}/>;
-                    }):null
+                    {
+                    inputState.input.map((service, index) => {
+                        return <Input key={keysState.keys[index]} idvalue={service.id} indexvalue={service.index} plus={addRowHandler}/>;
+                    })
                 }
             </div>
         </InputContext.Provider>

@@ -1,6 +1,7 @@
 import React from 'react';
 
 const btn = (props) => {
+    console.log('[btn.js] is rendering...')
     const clickedStyle = {
         background: "#E3D7FF",
         border: '3px solid #f3fffd',

@@ -5,6 +5,10 @@ import Btn from './Btn/Btn';
 import Services from './Btn/Services';
 import InputRows from './CalculationRibbon/InputRows';
 class App extends Component {
+  constructor(props) {
+    super(props);
+    console.log('[App.js] constructor');
+  }
   state = {
     currentServiceClass: null,
     hoverIndex: null,
@@ -25,6 +29,13 @@ class App extends Component {
   selected = {
     id: null
   }
+  static getDerivedStateFromProps(props, state) {
+    console.log('[App.js] getDerivedStateFrom props', props);
+    return state; 
+  };
+  componentDidMount() {
+    console.log('[App.js] componentDidMount')
+  }
   getElement = (event) => {
     if (event.target.hasAttribute("type")) {
       const cursorPosition = {...this.currentCursorPosition};
@@ -35,7 +46,6 @@ class App extends Component {
       if (((cursorPosition.el === "submit") && !(cursorPosition.rendered)) || ((cursorPosition.el === "submit") && (cursorPosition.index !== this.currentCursorPosition.index))) {
         cursorPosition.rendered = true;
         this.currentCursorPosition = cursorPosition;
-        // this.getServices(cursorPosition.index)
         this.setState({currentServiceClass: this.services[cursorPosition.index].serviceClass, btnClicked: false, hoverIndex: this.currentCursorPosition.index})
       }
     }
@@ -44,13 +54,13 @@ class App extends Component {
     }
   }
   clearServices = () => {
-    if (!this.state.btnClicked){
-      this.setState({currentServiceClass: null, hoverIndex: null, btnClicked: false})
+    if ((!this.state.btnClicked) && (!(this.currentCursorPosition.el === null) || !(this.currentCursorPosition.index === null) || !(this.currentCursorPosition.rendered === false) || !(this.state.btnClicked === false) || !(this.state.currentServiceClass === null) || !(this.state.hoverIndex === null))){
       this.currentCursorPosition = {
         el: null,
         index: null,
         rendered: false
       }
+      this.setState({currentServiceClass: null, hoverIndex: null, btnClicked: false})
     } 
   }
   serviceButtonClickedHandler = () => {
@@ -62,6 +72,7 @@ class App extends Component {
     this.setState({ selectedService: event.target.id}, () => {this.serviceButtonClickedHandler(); this.setState({hoverIndex:null})});
   }
   render() {
+    console.log('[App.js] render')
     return (
     <Layout>
       <div 
@@ -84,7 +95,7 @@ class App extends Component {
         index={this.currentCursorPosition.index}
         serviceClass = {this.state.currentServiceClass} 
         services={this.services}/>
-        <InputRows selectedService={this.state.selectedService}/>
+        {(this.state.selectedService)?<InputRows selectedService={this.state.selectedService}/>:null}
       </div>
     </Layout>
     );
