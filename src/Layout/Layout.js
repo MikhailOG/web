@@ -1,6 +1,6 @@
 import React from 'react';
-import Header from '../Header/Header';
-import Nav from '../Nav/Nav';
+import Header from '../components/Header/Header';
+import Nav from '../components/Nav/Nav';
 const layout = (props) => {
     return(
         <div className="web">

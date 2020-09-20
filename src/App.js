@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import './styles/App.css';
 import Layout from './Layout/Layout';
-import Btn from './Btn/Btn';
-import Services from './Btn/Services';
-import InputRows from './CalculationRibbon/InputRows';
+import Btn from './components/Btn/Btn';
+import Services from './components/Btn/Services';
+import InputRows from './components/CalculationRibbon/InputRows';
 class App extends Component {
   constructor(props) {
     super(props);

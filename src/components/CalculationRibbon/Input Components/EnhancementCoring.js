@@ -5,7 +5,7 @@ import AddToCart from '../Interface Components/AddToCart'
 import DrawButton from '../Interface Components/DrawButton'
 import Signs from '../Interface Components/Signs'
 import Cog from '../Interface Components/Cog'
-import InputContext from '../../context/input-context'
+import InputContext from '../../../context/input-context'
 
 const EnhancementCoring = (props) => {
     const inputContext = useContext(InputContext);

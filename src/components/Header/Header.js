@@ -1,6 +1,6 @@
 import React from 'react';
-import logo from "../images/logo.png"
-import gear from "../images/gear.svg"
+import logo from "../../images/logo.png"
+import gear from "../../images/gear.svg"
 const header = (props) => {
     return ( 
         <header>

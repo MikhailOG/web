@@ -73,7 +73,7 @@ html {
   left: 0.625rem;
 }
 .grid-container header .header-cont figure #gear {
-  animation: App-gear-spin infinite 20s linear;
+  animation: App-gear-spin infinite 1.5s linear;
 }
 .grid-container header .header-cont .first-name {
   grid-column: 2;
@@ -308,6 +308,10 @@ html {
 }
 .main-container .input-rows .input .cog {
   font-size: 2.5rem;
+}
+.main-container .input-rows .input .cog .slow-spin {
+  -webkit-animation: fa-spin 3s infinite linear;
+  animation: fa-spin 3s infinite linear;
 }
 .main-container .input-rows .input .select {
   margin-left: 1rem;
