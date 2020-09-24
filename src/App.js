@@ -59,7 +59,7 @@ class App extends Component {
         el: null,
         index: null,
         rendered: false
-      }
+      };
       this.setState({currentServiceClass: null, hoverIndex: null, btnClicked: false})
     } 
   }
@@ -71,10 +71,20 @@ class App extends Component {
   serviceClickedHandler = (event) => {
     this.setState({ selectedService: event.target.id}, () => {this.serviceButtonClickedHandler(); this.setState({hoverIndex:null})});
   }
+  clickRemoveHandler = (event) => {
+    if ((!event.target.hasAttribute("type")) && (this.state.btnClicked)) {
+      this.currentCursorPosition = {
+        el: null,
+        index: null,
+        rendered: false
+      };
+      this.setState({currentServiceClass: null, hoverIndex: null, btnClicked: false})
+    }
+  }
   render() {
     console.log('[App.js] render')
     return (
-    <Layout>
+    <Layout click = {this.clickRemoveHandler}>
       <div 
       onMouseMove = {this.getElement} 
       onMouseLeave={this.clearServices} 
