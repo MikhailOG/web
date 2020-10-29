@@ -11,6 +11,7 @@ const InputRows = (props) => {
                 id: props.selectedService, 
                 index: 0, 
                 qty:1, 
+                mode: true
             }
         ],
         rowNum: 1
@@ -18,7 +19,7 @@ const InputRows = (props) => {
     useEffect(()=>{     
             setInputState({
                 input: [
-                    {id: props.selectedService, index: 0, qty:1}
+                    {id: props.selectedService, index: 0, qty:1, mode: true}
                 ],
                 rowNum: 1
             });
@@ -85,7 +86,15 @@ const InputRows = (props) => {
             },
             hideRowHandler: (event) => {
                 const input = event.target.parentElement.parentElement.parentElement.parentElement;
-                console.log(input);
+                if (input.hasAttributes('keyvalue')){
+                    const index = keysState.keys.findIndex((key) => key === parseFloat(input.getAttribute('keyvalue')));
+                    const newInputState = [...inputState.input];
+                    newInputState[index].mode = !newInputState[index].mode;
+                    setInputState({
+                        input: newInputState,
+                        rowNum: inputState.rowNum
+                    })
+                }
             }
         }}>
             <div className="input-rows">               
@@ -94,8 +103,10 @@ const InputRows = (props) => {
                         return <Input 
                                 key={keysState.keys[index]} 
                                 keyvalue={keysState.keys[index]} 
+                                mode={service.mode}
                                 idvalue={service.id} 
                                 indexvalue={service.index} 
+                                qty={service.qty}
                                 />;
                     })
                 }

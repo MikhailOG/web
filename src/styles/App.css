@@ -24,6 +24,11 @@ font-family: 'Vollkorn', serif;
   border: 3px solid #10387d;
 }
 
+.main-container .input-rows .input [type=text], .main-container .input-rows .input select {
+  border-radius: 5px;
+  border: 2px solid #10387d;
+}
+
 html {
   box-sizing: border-box;
   font-size: calc(0.7em + 0.3vw);
@@ -283,7 +288,6 @@ html {
   color: #10387d;
   width: 50%;
   font-size: 1.125rem;
-  border: 2px solid #10387d;
   background: #f3fffd;
   align-self: center;
   outline: none;
@@ -356,6 +360,26 @@ html {
 }
 .main-container .input-rows .input .first-line .signs p:first-child {
   display: flex;
+}
+.main-container .input-rows .input .second-line .input-enhancement {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.main-container .input-rows .input .second-line .enhancement-sides {
+  margin: 0.5rem 0;
+  display: flex;
+  flex-direction: row;
+}
+.main-container .input-rows .input .second-line .enhancement-sides .input-enhancement-top, .main-container .input-rows .input .second-line .enhancement-sides .input-enhancement-bot, .main-container .input-rows .input .second-line .enhancement-sides .input-enhancement-left, .main-container .input-rows .input .second-line .enhancement-sides .input-enhancement-right {
+  display: flex;
+  flex-direction: column;
+}
+.main-container .input-rows .input .second-line .enhancement-sides .input-enhancement-top input, .main-container .input-rows .input .second-line .enhancement-sides .input-enhancement-bot input, .main-container .input-rows .input .second-line .enhancement-sides .input-enhancement-left input, .main-container .input-rows .input .second-line .enhancement-sides .input-enhancement-right input {
+  width: 40%;
+}
+.main-container .input-rows .input .second-line .enhancement-sides .input-enhancement-top *, .main-container .input-rows .input .second-line .enhancement-sides .input-enhancement-bot *, .main-container .input-rows .input .second-line .enhancement-sides .input-enhancement-left *, .main-container .input-rows .input .second-line .enhancement-sides .input-enhancement-right * {
+  text-align: center;
 }
 
 a {

@@ -36,6 +36,10 @@ $redButtonBorderColor: #4A4063;
   border-radius:15px;
   border:3px solid $mainTextColor;
 }
+%input-border-shared {
+  border-radius:5px;
+  border:2px solid $mainTextColor;
+}
 html {
   box-sizing: border-box;
   font-size: calc(0.7em + 0.3vw);
@@ -309,7 +313,7 @@ html {
         color: $mainTextColor;
         width: 50%;
         font-size: 1.125rem;
-        border: 2px solid $mainTextColor;
+        @extend %input-border-shared;
         background: $whiteColor;
         align-self: center;
         outline: none;
@@ -385,6 +389,36 @@ html {
           p:first-child{
             display:flex;
           }
+        }
+      }
+      .second-line {
+        .input-enhancement {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+        .enhancement-sides {
+          margin: 0.5rem 0;
+          display:flex;
+          flex-direction: row;
+          .input-enhancement-top, .input-enhancement-bot, .input-enhancement-left, .input-enhancement-right {
+            display: flex;
+            flex-direction: column;
+            input {
+              width:40%;
+            }
+            * {
+              text-align: center;
+            }
+          }
+          // .enhancement-top, .enhancement-bot, .enhancement-left, .enhancement-right {
+          //   display: flex;
+          //   align-items: center;
+          // }
+          // * {
+          //   display:flex;
+          //   align-items: center;
+          // }
         }
       }
     }

@@ -48,7 +48,7 @@ const Input = (props) => {
     const input = (id) => {
         switch (id){
             case 'newCoring':
-                inputData=<NewCoring width={rowState.width} height={rowState.height} depth={rowState.depth}/>;
+                inputData=<NewCoring qty={props.qty} mode={props.mode} width={rowState.width} height={rowState.height} depth={rowState.depth} diameter={rowState.diameter}/>;
             break;
             case 'enhancementCoring':
                 inputData=<EnhancementCoring/>;
