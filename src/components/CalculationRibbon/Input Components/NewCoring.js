@@ -6,14 +6,15 @@ import DrawButton from '../Interface Components/DrawButton'
 import Signs from '../Interface Components/Signs'
 import Cog from '../Interface Components/Cog'
 import RowContext from '../../../context/row-context'
-const NewCoring = (props) => {
+const NewCoring = () => {
     const rowContext = useContext(RowContext);
     const firstLineModified = (
     <div className="first-line"> 
         <Signs/>
-        <p>Новый проем {props.width}x{props.height}x{props.depth} - {props.qty} шт. Диаметр коронки {props.diameter} мм</p>
-        <Cog/>
-        <AddToCart/>
+        <div className='text'>
+        <p>Новый проем {rowContext.width}x{rowContext.height}x{rowContext.depth} - {rowContext.qty} шт.</p> 
+        <p>Диаметр коронки {rowContext.diameter} мм</p>
+        </div>
         <DrawButton/>
     </div>);
     const firstLine = (
@@ -29,7 +30,7 @@ const NewCoring = (props) => {
         </div>);
 
     return (
-        (props.mode)?firstLine:firstLineModified
+        (rowContext.mode)?firstLine:firstLineModified
     );
 }
 export default NewCoring;

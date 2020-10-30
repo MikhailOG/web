@@ -48,7 +48,7 @@ const Input = (props) => {
     const input = (id) => {
         switch (id){
             case 'newCoring':
-                inputData=<NewCoring qty={props.qty} mode={props.mode} width={rowState.width} height={rowState.height} depth={rowState.depth} diameter={rowState.diameter}/>;
+                inputData=<NewCoring/>;
             break;
             case 'enhancementCoring':
                 inputData=<EnhancementCoring/>;
@@ -57,14 +57,18 @@ const Input = (props) => {
         }
         return(inputData);
     }
+    const mainClass = props.mode?"input":"input-mod";
     return(
-        <div keyvalue={props.keyvalue} idvalue={props.idvalue} indexvalue={props.indexvalue} className="input">
+        <div keyvalue={props.keyvalue} idvalue={props.idvalue} indexvalue={props.indexvalue} className={mainClass + " " + props.lastrow}>
             <RowContext.Provider value={{
                 diameters:[42, 52, 62, 72, 82, 92, 102, 112, 122, 132, 142, 152, 162, 172, 182, 192, 200, 250, 300, 350],
                 width: rowState.width,
                 height: rowState.height,
                 depth: rowState.depth,
                 diameter: rowState.diameter,
+                qty: props.qty,
+                mode: props.mode,
+                deleteButton: props.deleteButton,
                 inputChangedHandler: (event) => {
                     const id = event.target.getAttribute('id');
                     let newRowState = {...rowState};

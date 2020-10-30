@@ -19,7 +19,7 @@ font-family: 'Vollkorn', serif;
 /*colors*/
 /*-------------------------------------*/
 /*shared*/
-.main-container .input-rows .input button, .main-container .input-rows .input, .main-container .input-rows, .main-container .menu .btnBed .btn {
+.main-container .input-rows .input button, .main-container .input-rows .input, .main-container .input-rows .input-mod, .main-container .input-rows, .main-container .menu .btnBed .btn {
   border-radius: 15px;
   border: 3px solid #10387d;
 }
@@ -29,6 +29,17 @@ font-family: 'Vollkorn', serif;
   border: 2px solid #10387d;
 }
 
+.main-container .input-rows .input .first-line, .main-container .input-rows .input-mod .first-line {
+  display: flex;
+}
+
+.main-container .input-rows .input, .main-container .input-rows .input-mod {
+  margin-top: 15px;
+  margin-left: 12.5px;
+  margin-right: 12.5px;
+}
+
+/*---------------------------------*/
 html {
   box-sizing: border-box;
   font-size: calc(0.7em + 0.3vw);
@@ -235,19 +246,49 @@ html {
   flex-flow: column;
   background-color: #ABA9BF;
 }
-.main-container .input-rows .input {
-  margin: 15px 12.5px;
+.main-container .input-rows .last-row {
+  margin-bottom: 15px;
+}
+.main-container .input-rows .input-mod {
+  background: #966B9D;
+  color: #f3fffd;
+  text-shadow: 1px 1px 3px #10387d, 0px 2px 10px #4A4063;
+  transition: height 0.15s ease-in, background-color 0.3s ease-in 0.01s;
+}
+.main-container .input-rows .input-mod .first-line {
+  justify-content: flex-start;
+  padding: 0.625rem 0px 0.625rem 0.3125rem;
+  height: 4rem;
+  transition: height 0.15s ease-out;
+}
+.main-container .input-rows .input-mod .first-line .signs {
+  align-self: center;
+  font-size: 2.1875rem;
+  text-shadow: 0px 2px 10px #4A4063;
+}
+.main-container .input-rows .input-mod .first-line .signs i:last-of-type {
+  margin: 0 0.625rem;
+}
+.main-container .input-rows .input-mod .first-line .text {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+}
+.main-container .input-rows .input-mod .first-line .text p {
+  display: inline-block;
+  margin: 0;
+}
+.main-container .input-rows .input-mod i:hover, .main-container .input-rows .input-mod .signs i:hover {
+  color: #10387d;
+  text-shadow: 0px 0px 10px #f3fffd;
+  transition: color 0.5s linear 0s;
+}
+.main-container .input-rows .input {
   background: #f3fffd;
   color: #10387d;
 }
 .main-container .input-rows .input .signs i:hover, .main-container .input-rows .input .cart i:hover, .main-container .input-rows .input .count i:hover, .main-container .input-rows .input .fa-cog:hover {
   color: #966B9D;
-  transition: color 0.5s linear 0s;
-}
-.main-container .input-rows .input .input-mod i:hover, .main-container .input-rows .input .input-mod .signs i:hover {
-  color: #10387d;
   transition: color 0.5s linear 0s;
 }
 .main-container .input-rows .input .add-to-cart {
@@ -333,17 +374,13 @@ html {
   background: #E3D7FF;
   font-size: 1.125rem;
   font-weight: 600;
-  outline: "none";
+  outline: none;
   transition: all 0.5s ease-out 0s;
 }
 .main-container .input-rows .input .button:hover {
   transition: all 0.5s linear 0s;
   background: #966B9D;
   color: #f3fffd;
-}
-.main-container .input-rows .input .first-line {
-  display: flex;
-  margin-top: -3px;
 }
 .main-container .input-rows .input .first-line {
   justify-content: flex-start;

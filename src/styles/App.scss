@@ -40,6 +40,16 @@ $redButtonBorderColor: #4A4063;
   border-radius:5px;
   border:2px solid $mainTextColor;
 }
+%lines-shared {
+  display: flex;
+}
+%input-shared {
+  margin-top: 15px;
+  margin-left: 12.5px;
+  margin-right: 12.5px;
+}
+
+/*---------------------------------*/
 html {
   box-sizing: border-box;
   font-size: calc(0.7em + 0.3vw);
@@ -169,7 +179,6 @@ html {
       &.enforcement {
         grid-area: 1/4/2/5;
       }
-
       .btn {
         display: flex;
         justify-content: center;
@@ -259,20 +268,53 @@ html {
     flex-flow: column;
     background-color: $bodyBackgroundColor;
     @extend %button-border-shared;
-
-    .input {
-      margin: 15px 12.5px;
+    .last-row {
+      margin-bottom: 15px;
+    }
+    .input-mod{
+      @extend %input-shared;
       @extend %button-border-shared;
-      display: flex;
-      flex-direction: column;
+      background: $modeColor;
+      color: $whiteColor;
+      text-shadow: 1px 1px 3px $mainTextColor, 0px 2px 10px $redButtonBorderColor; 
+      transition: height 0.15s ease-in, background-color 0.3s ease-in 0.01s;
+      .first-line {
+        @extend %lines-shared;
+        justify-content: flex-start;
+        padding: 0.625rem 0px 0.625rem 0.3125rem;
+        height: 4rem;
+        transition: height 0.15s ease-out;
+        .signs {
+          align-self: center;
+          font-size: 2.1875rem;
+          text-shadow: 0px 2px 10px $redButtonBorderColor;
+          i:last-of-type {
+            margin: 0 0.625rem;
+          }
+        }
+        .text {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          p {
+            display: inline-block;
+            margin: 0;
+          }
+        }
+      }
+      i:hover, .signs i:hover {
+        color: $mainTextColor;
+        text-shadow: 0px 0px 10px $whiteColor;
+        transition: color 0.5s linear 0s;
+      }
+    }
+    .input {
+      @extend %input-shared;
+      @extend %button-border-shared;
       background: $whiteColor;
       color: $mainTextColor;
       .signs i:hover, .cart i:hover, .count i:hover, .fa-cog:hover {
         color: $modeColor;
-        transition: color 0.5s linear 0s;
-      }
-      .input-mod i:hover, .input-mod .signs i:hover {
-        color: $mainTextColor;
         transition: color 0.5s linear 0s;
       }
       .add-to-cart {
@@ -360,19 +402,13 @@ html {
         font-size: 1.125rem;
         font-weight: 600;
         @extend %button-border-shared;
-        outline: "none";
+        outline: none;
         transition: all 0.5s ease-out 0s;
       }
       .button:hover {
         transition: all 0.5s linear 0s;
         background: $modeColor;
         color: $whiteColor;
-      }
-      %lines-shared {
-        display: flex;
-        // border-top: 3px solid $mainTextColor;
-        // border-bottom: 3px solid $mainTextColor;
-        margin-top: -3px;
       }
       .first-line {
         @extend %lines-shared;
