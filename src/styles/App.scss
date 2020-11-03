@@ -428,6 +428,17 @@ html {
         }
       }
       .second-line {
+        @extend %lines-shared;
+        font-size: 1rem;
+        height: auto;
+        max-height: 15rem;
+        justify-content: space-between;
+        padding: 0 0 0 0.3125rem;
+        transition: max-height 0.15s ease-out;
+        .second-line-transition, .third-line-transition {
+          max-height: 0;
+          transition: max-height 0.15s ease-in-out;
+        }
         .input-enhancement {
           display: flex;
           flex-direction: column;

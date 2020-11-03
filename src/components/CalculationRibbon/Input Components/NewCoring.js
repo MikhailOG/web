@@ -23,7 +23,7 @@ const NewCoring = () => {
             <InputComponent id="width">Ширина, мм:</InputComponent>
             <InputComponent id="height">Высота, мм:</InputComponent>
             <InputComponent id="depth">Глубина, мм:</InputComponent>
-            <SelectComponent id="diameter" values={rowContext.diameters}>Диаметр коронки:</SelectComponent>
+            <SelectComponent id="diameter" values={rowContext.diameters} value={rowContext.diameter}>Диаметр коронки:</SelectComponent>
             <Cog/>
             <AddToCart/>
             <DrawButton/>

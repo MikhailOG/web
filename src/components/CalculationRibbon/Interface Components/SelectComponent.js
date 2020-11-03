@@ -4,13 +4,13 @@ const SelectComponent = (props) => {
     const rowContext = useContext(RowContext);
     return(
         <div className={"input-"+props.id}>
-        <p>{props.children}</p>
-        <div className={props.id}>
-            <select name={props.id} id={props.id} value={rowContext.diameter} onChange={rowContext.inputChangedHandler}>
-                {rowContext.diameters.map(value => <option key={value} value={value}>{value+" мм"}</option>)}
-            </select>
+            <p>{props.children}</p>
+            <div className={props.id}>
+                <select name={props.id} id={props.id} value={props.value} onChange={rowContext.inputChangedHandler}>
+                    {props.values.map(value => <option key={value[0]} value={value[0]}>{value[1]}</option>)}
+                </select>
+            </div>
         </div>
-    </div>
     );
 } 
 

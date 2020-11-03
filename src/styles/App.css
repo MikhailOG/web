@@ -29,7 +29,7 @@ font-family: 'Vollkorn', serif;
   border: 2px solid #10387d;
 }
 
-.main-container .input-rows .input .first-line, .main-container .input-rows .input-mod .first-line {
+.main-container .input-rows .input .second-line, .main-container .input-rows .input .first-line, .main-container .input-rows .input-mod .first-line {
   display: flex;
 }
 
@@ -397,6 +397,18 @@ html {
 }
 .main-container .input-rows .input .first-line .signs p:first-child {
   display: flex;
+}
+.main-container .input-rows .input .second-line {
+  font-size: 1rem;
+  height: auto;
+  max-height: 15rem;
+  justify-content: space-between;
+  padding: 0 0 0 0.3125rem;
+  transition: max-height 0.15s ease-out;
+}
+.main-container .input-rows .input .second-line .second-line-transition, .main-container .input-rows .input .second-line .third-line-transition {
+  max-height: 0;
+  transition: max-height 0.15s ease-in-out;
 }
 .main-container .input-rows .input .second-line .input-enhancement {
   display: flex;
