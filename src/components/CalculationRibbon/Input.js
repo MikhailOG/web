@@ -94,7 +94,6 @@ const Input = (props) => {
                 qty: props.qty,
                 mode: props.mode,
                 deleteButton: props.deleteButton,
-                showPreferences: rowState.showPreferences,
                 inputChangedHandler: (event) => {
                     const id = event.target.getAttribute('id');
                     let newRowState = {...rowState};
@@ -118,7 +117,7 @@ const Input = (props) => {
                 }
             }}>
                 {input(props.idvalue).input}
-                <Preferences/>
+                <Preferences showPreferences={rowState.showPreferences}/>
             </RowContext.Provider>
         </div>
     );

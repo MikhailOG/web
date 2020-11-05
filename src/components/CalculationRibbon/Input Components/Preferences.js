@@ -1,13 +1,41 @@
-import React, {useContext} from 'react'
+import React, {useContext, useState, useEffect} from 'react'
 import SelectComponent from '../Interface Components/SelectComponent'
 import InputComponent from '../Interface Components/InputComponent'
 import YesNoSelect from '../Interface Components/YesNoSelect'
 import RowContext from '../../../context/row-context'
-const Preferences = () => {
-    const rowContext = useContext(RowContext);
+const Preferences = (props) => {
+  const rowContext = useContext(RowContext);
 
-    const secondLine = (
-    <div className="second-line">
+  const [secondLineState, setSecondLineState] = useState({
+    secondLine: null
+  });
+  const [styleState, setStyleState] = useState({
+    style: {
+      opacity: "0",
+      maxHeight: "0"
+    }
+  })
+
+  useEffect(() =>{
+    if (props.showPreferences === true) {
+      setStyleState({style: {opacity: "1", maxHeight: "15rem"}});
+      setSecondLineState({secondLine:secondLine});
+    }
+    else {
+      setStyleState({style: {opacity: "0", maxHeight: "15rem"}});
+      setTimeout(
+        () => {
+          setSecondLineState({secondLine:null});
+          setStyleState({style: {opacity: "0", maxHeight: "0"}});
+        },
+        150
+      );
+    }
+  }, [props.showPreferences]);
+
+
+  const secondLine = (
+    <div style={styleState.style} className={"second-line"}>
         <SelectComponent id="material" values={rowContext.materials} value={rowContext.material}>Материал стены<br />(перекрытия)</SelectComponent>
         <SelectComponent id="job" values={rowContext.jobs} value={rowContext.job}>Вид работ:</SelectComponent>
         <YesNoSelect id="waste" answers={rowContext.wasteAnswers} selectedIndex={rowContext.wasteSelectedIndex}>Вынос мусора</YesNoSelect>
@@ -15,12 +43,11 @@ const Preferences = () => {
         <InputComponent id="concreteWeight">Разделить проем<br />на части весом<br />не более, кг:</InputComponent>
         <YesNoSelect id="elevation" answers={rowContext.elevationAnswers} selectedIndex={rowContext.elevationSelectedIndex}>Проем на высоте<br />более 3 м от пола</YesNoSelect>
         <YesNoSelect id="water" answers={rowContext.waterAnswers} selectedIndex={rowContext.waterSelectedIndex}>Требуется сбор воды<br />(помещение с отделкой)</YesNoSelect>
-        {/* <YesNoSelect id="preferences" answers={rowContext.waterAnswers} selectedIndex={rowContext.waterSelectedIndex}>Вынос мусора</YesNoSelect> */}
     </div>);
 
-    return (
-        (rowContext.showPreferences)?secondLine:null
-    );
+  return (
+      (props.showPreferences)?secondLine:secondLineState.secondLine
+  );
 }
 export default Preferences;
 

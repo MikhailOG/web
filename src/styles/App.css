@@ -406,10 +406,6 @@ html {
   padding: 0 0 0 0.3125rem;
   transition: max-height 0.15s ease-out;
 }
-.main-container .input-rows .input .second-line .second-line-transition, .main-container .input-rows .input .second-line .third-line-transition {
-  max-height: 0;
-  transition: max-height 0.15s ease-in-out;
-}
 .main-container .input-rows .input .second-line .input-enhancement {
   display: flex;
   flex-direction: column;
