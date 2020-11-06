@@ -29,13 +29,13 @@ class App extends Component {
   selected = {
     id: null
   }
-  static getDerivedStateFromProps(props, state) {
-    console.log('[App.js] getDerivedStateFrom props', props);
-    return state; 
-  };
-  componentDidMount() {
-    console.log('[App.js] componentDidMount')
-  }
+  // static getDerivedStateFromProps(props, state) {
+  //   console.log('[App.js] getDerivedStateFrom props', props);
+  //   return state; 
+  // };
+  // componentDidMount() {
+  //   console.log('[App.js] componentDidMount')
+  // }
   getElement = (event) => {
     if (event.target.hasAttribute("type")) {
       const cursorPosition = {...this.currentCursorPosition};
@@ -82,7 +82,7 @@ class App extends Component {
     }
   }
   render() {
-    console.log('[App.js] render')
+    // console.log('[App.js] render')
     return (
     <Layout click = {this.clickRemoveHandler}>
       <div 

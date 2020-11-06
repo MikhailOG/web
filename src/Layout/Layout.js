@@ -1,17 +1,46 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Header from '../components/Header/Header';
 import Nav from '../components/Nav/Nav';
-const layout = (props) => {
-    return(
-        <div onClick={props.click} className="web">
-        <div className="grid-container">
-            <Header title="Тепловые Линии Мск" titleText="Алмазная резка и алмазное бурение" telefone="+7 (926) 932 68 40"/>
-            <Nav/>
-        </div>
-        <div className="main-container">
-            {props.children}
-        </div>
-      </div>
-    );
+import LayoutContext from '../context/layout-context'
+class Layout extends Component {
+    state = {
+        innerWidth: 0,
+        innerHeight: 0
+    }
+    componentDidMount() {
+        window.addEventListener('resize', this.handleResize);
+    }
+    
+    componentWillUnmount(){
+        window.removeEventListener('resize', this.handleResize);
+    }
+    
+    handleResize = () => {
+        this.setState({
+            innerWidth: window.innerWidth,
+            innerHeight: window.innerHeight
+        });
+    };
+    render() {
+        return(
+            <div onClick={this.props.click} className="web">
+            <div className="grid-container">
+                <Header title="Тепловые Линии Мск" titleText="Алмазная резка и алмазное бурение" telefone="+7 (926) 932 68 40"/>
+                <Nav/>
+            </div>
+            <LayoutContext.Provider value={{
+                windowWidth: this.state.innerWidth,
+                windowHeight: this.state.innerHeight
+            }}>
+                <div className="main-container">
+                    {this.props.children}
+                </div>
+            </LayoutContext.Provider>
+            </div>
+
+
+        );
+    }
+
 }
-export default layout;
+export default Layout;

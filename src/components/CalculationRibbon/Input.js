@@ -117,7 +117,7 @@ const Input = (props) => {
                 }
             }}>
                 {input(props.idvalue).input}
-                <Preferences showPreferences={rowState.showPreferences}/>
+                <Preferences showPreferences={rowState.showPreferences} maxHeight="15rem"/>
             </RowContext.Provider>
         </div>
     );
