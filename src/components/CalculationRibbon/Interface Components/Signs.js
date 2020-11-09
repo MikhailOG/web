@@ -6,6 +6,7 @@ const Signs = () => {
     const inputContext = useContext(InputContext);
     const rowContext = useContext(RowContext);
     const caretType = rowContext.mode?"fa-caret-right":"fa-caret-down"
+
     return(
         <div className="signs">
             <p>

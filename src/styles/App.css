@@ -29,7 +29,7 @@ font-family: 'Vollkorn', serif;
   border: 2px solid #10387d;
 }
 
-.main-container .input-rows .input .second-line, .main-container .input-rows .input .first-line, .main-container .input-rows .input-mod .first-line {
+.main-container .input-rows .input .preferences, .main-container .input-rows .input .first-line, .main-container .input-rows .input-mod .first-line {
   display: flex;
 }
 
@@ -283,11 +283,14 @@ html {
   text-shadow: 0px 0px 10px #f3fffd;
   transition: color 0.5s linear 0s;
 }
+.main-container .input-rows .input-mod .second-line {
+  display: none;
+}
 .main-container .input-rows .input {
   background: #f3fffd;
   color: #10387d;
 }
-.main-container .input-rows .input .signs i:hover, .main-container .input-rows .input .cart i:hover, .main-container .input-rows .input .count i:hover, .main-container .input-rows .input .fa-cog:hover {
+.main-container .input-rows .input .signs i:hover, .main-container .input-rows .input .cart i:hover, .main-container .input-rows .input .count i:hover, .main-container .input-rows .input .fa-cog:hover, .main-container .input-rows .input .classic-hover:hover {
   color: #966B9D;
   transition: color 0.5s linear 0s;
 }
@@ -322,26 +325,31 @@ html {
   font-size: 2.1875rem;
 }
 .main-container .input-rows .input .input-width, .main-container .input-rows .input .input-height, .main-container .input-rows .input .input-depth, .main-container .input-rows .input .input-diameter {
-  align-self: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+  width: 15%;
 }
 .main-container .input-rows .input [type=text], .main-container .input-rows .input select {
   font-family: "Philosopher", sans-serif;
   color: #10387d;
-  width: 50%;
+  width: 70%;
   font-size: 1.125rem;
   background: #f3fffd;
   align-self: center;
   outline: none;
+  margin: 0;
 }
 .main-container .input-rows .input p {
   display: inline-block;
   margin: 0;
 }
-.main-container .input-rows .input .width, .main-container .input-rows .input .height, .main-container .input-rows .input .depth {
-  justify-self: start;
+.main-container .input-rows .input .width, .main-container .input-rows .input .height, .main-container .input-rows .input .depth, .main-container .input-rows .input .diameter {
+  margin-top: 0.5rem;
 }
 .main-container .input-rows .input #diameter {
-  width: auto;
+  width: 75%;
   justify-self: start;
 }
 .main-container .input-rows .input .buttons, .main-container .input-rows .input .cog {
@@ -352,17 +360,12 @@ html {
   text-align: right;
 }
 .main-container .input-rows .input .cog {
+  margin-left: 1rem;
   font-size: 2.5rem;
 }
 .main-container .input-rows .input .cog .slow-spin {
   -webkit-animation: fa-spin 3s infinite linear;
   animation: fa-spin 3s infinite linear;
-}
-.main-container .input-rows .input .select {
-  margin-left: 1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
 }
 .main-container .input-rows .input button {
   font-family: "Vollkorn", serif;
@@ -398,33 +401,21 @@ html {
 .main-container .input-rows .input .first-line .signs p:first-child {
   display: flex;
 }
-.main-container .input-rows .input .second-line {
+.main-container .input-rows .input .preferences {
   font-size: 1rem;
-  height: auto;
   max-height: 15rem;
-  justify-content: space-between;
   padding: 0 0 0 0.3125rem;
   transition: max-height 0.15s ease-out;
 }
-.main-container .input-rows .input .second-line .input-enhancement {
+.main-container .input-rows .input .preferences .input-material, .main-container .input-rows .input .preferences .input-job, .main-container .input-rows .input .preferences .input-wasteWeight, .main-container .input-rows .input .preferences .input-concreteWeight {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+  width: 15%;
 }
-.main-container .input-rows .input .second-line .enhancement-sides {
-  margin: 0.5rem 0;
-  display: flex;
-  flex-direction: row;
-}
-.main-container .input-rows .input .second-line .enhancement-sides .input-enhancement-top, .main-container .input-rows .input .second-line .enhancement-sides .input-enhancement-bot, .main-container .input-rows .input .second-line .enhancement-sides .input-enhancement-left, .main-container .input-rows .input .second-line .enhancement-sides .input-enhancement-right {
-  display: flex;
-  flex-direction: column;
-}
-.main-container .input-rows .input .second-line .enhancement-sides .input-enhancement-top input, .main-container .input-rows .input .second-line .enhancement-sides .input-enhancement-bot input, .main-container .input-rows .input .second-line .enhancement-sides .input-enhancement-left input, .main-container .input-rows .input .second-line .enhancement-sides .input-enhancement-right input {
-  width: 40%;
-}
-.main-container .input-rows .input .second-line .enhancement-sides .input-enhancement-top *, .main-container .input-rows .input .second-line .enhancement-sides .input-enhancement-bot *, .main-container .input-rows .input .second-line .enhancement-sides .input-enhancement-left *, .main-container .input-rows .input .second-line .enhancement-sides .input-enhancement-right * {
-  text-align: center;
+.main-container .input-rows .input .preferences .input-job p {
+  margin-bottom: 2.2667rem;
 }
 
 a {

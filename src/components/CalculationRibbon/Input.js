@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import NewCoring from './Input Components/NewCoring'
 import EnhancementCoring from './Input Components/EnhancementCoring'
 import RowContext from '../../context/row-context'
@@ -53,13 +53,45 @@ const Input = (props) => {
         wasteWeight: 100,
         concreteWeight: 2.4
     });
+    // const [styleState, setStyleState] = useState({
+    //     style: {color: "#10387d"}
+    // });
+
+    // useEffect(()=>{     
+    //     if (!props.mode) {
+    //         setStyleState({
+    //             style: {color: "#f3fffd"}
+    //         });
+    //     }
+    //     else {
+    //         setStyleState({
+    //             style: {color: "#f3fffd", opacity: "0.1" }
+    //         });
+    //         setTimeout( 
+    //             () => {
+    //             setStyleState({style: {color: "#10387d"}});
+    //             console.log("111")
+    //         }, 200) 
+    //     }
+        
+    // }, [props.mode]);
+    useEffect(() => {
+        if ((!props.mode) && (rowState.showPreferences)) {
+            let newRowState = {...rowState};
+            newRowState.showPreferences = false;
+            setRowstate(newRowState);
+        }
+    }, [props.mode])
+
+
     let inputData = {};
     const input = (id) => {
         switch (id){
             case 'newCoring':
                inputData = {
                     input: <NewCoring/>,
-                    jobs: [['wall', 'проем в стене'], ['floor', 'проем в перекрытии']]};
+                    jobs: [['wall', 'проем в стене'], ['floor', 'проем в перекрытии']]
+                };
             break;
             // case 'newCoring':
             //    inputData = {
@@ -74,7 +106,7 @@ const Input = (props) => {
     return(
         <div keyvalue={props.keyvalue} idvalue={props.idvalue} indexvalue={props.indexvalue} className={mainClass + " " + props.lastrow}>
             <RowContext.Provider value={{
-                diameters:[[42, '42 мм'], [52, '52 мм'], [62, '62 мм'], [72, '72 мм'], [82, '82 мм'], [92, '92 мм'], [102, '102 мм'], [112, '112 мм'], [122, '122 мм'], [132, '132 мм'], [142, '142 мм'], [152, '152 мм'], [162, '162 мм'], [172, '172 мм'], [182, '182 мм'], [192, '192 мм'], [200, '200 мм'], [250, '250 мм'], [300, '300 мм'], [350, '4350 мм']],
+                diameters:[[42, '42 мм'], [52, '52 мм'], [62, '62 мм'], [72, '72 мм'], [82, '82 мм'], [92, '92 мм'], [102, '102 мм'], [112, '112 мм'], [122, '122 мм'], [132, '132 мм'], [142, '142 мм'], [152, '152 мм'], [162, '162 мм'], [172, '172 мм'], [182, '182 мм'], [192, '192 мм'], [200, '200 мм'], [250, '250 мм'], [300, '300 мм'], [350, '350 мм']],
                 materials:[["reinforced-concrete", "железобетон"], ["concrete", "бетон"], ["brick", "кирпич"]],
                 wasteAnswers:[["waste-off", "вручную"], ["waste-on", "погрузчиком"]],
                 wasteSelectedIndex: rowState.waste[1],

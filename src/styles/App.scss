@@ -307,13 +307,16 @@ html {
         text-shadow: 0px 0px 10px $whiteColor;
         transition: color 0.5s linear 0s;
       }
+      .second-line {
+      display: none;
+      }
     }
     .input {
       @extend %input-shared;
       @extend %button-border-shared;
       background: $whiteColor;
       color: $mainTextColor;
-      .signs i:hover, .cart i:hover, .count i:hover, .fa-cog:hover {
+      .signs i:hover, .cart i:hover, .count i:hover, .fa-cog:hover, .classic-hover:hover {
         color: $modeColor;
         transition: color 0.5s linear 0s;
       }
@@ -348,27 +351,32 @@ html {
         }
       }
       .input-width, .input-height, .input-depth, .input-diameter {
-        align-self:center;
+        display:flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        margin-bottom: 1rem;
+        width: 15%;
       }
       [type=text], select {
         font-family: 'Philosopher', sans-serif;
         color: $mainTextColor;
-        width: 50%;
+        width: 70%;
         font-size: 1.125rem;
         @extend %input-border-shared;
         background: $whiteColor;
         align-self: center;
         outline: none;
+        margin:0;
       }
       p {
         display: inline-block;
         margin: 0;
       }
-      .width, .height, .depth {
-        justify-self: start;
+      .width, .height, .depth, .diameter {
+        margin-top: 0.5rem;
       }
       #diameter {
-        width: auto;
+        width: 75%;
         justify-self: start;
       }
       .buttons, .cog {
@@ -379,18 +387,19 @@ html {
         text-align: right;
       }
       .cog {
+        margin-left: 1rem;
         font-size: 2.5rem;
         .slow-spin {
           -webkit-animation: fa-spin 3s infinite linear;
           animation: fa-spin 3s infinite linear;
         }
       }
-      .select {
-        margin-left: 1rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-      }
+      // .select {
+      //   margin-left: 1rem;
+      //   display: flex;
+      //   flex-direction: column;
+      //   justify-content: space-around;
+      // }
       button {
         font-family: 'Vollkorn', serif;
         color: $mainTextColor;
@@ -427,35 +436,43 @@ html {
           }
         }
       }
-      .second-line {
+      .preferences {
         @extend %lines-shared;
         font-size: 1rem;
-        height: auto;
-        // width: 30%;
         max-height: 15rem;
-        justify-content: space-between;
+        // justify-content: space-between;
         padding: 0 0 0 0.3125rem;
         transition: max-height 0.15s ease-out;
-
-        .input-enhancement {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-        }
-        .enhancement-sides {
-          margin: 0.5rem 0;
+        .input-material, .input-job, .input-wasteWeight, .input-concreteWeight {
           display:flex;
-          flex-direction: row;
-          .input-enhancement-top, .input-enhancement-bot, .input-enhancement-left, .input-enhancement-right {
-            display: flex;
-            flex-direction: column;
-            input {
-              width:40%;
-            }
-            * {
-              text-align: center;
-            }
-          }
+          flex-direction: column;
+          justify-content: flex-end;
+          margin-bottom: 1rem;
+          width: 15%;
+        }
+        .input-job p {
+          margin-bottom: 2.2667rem;
+        }
+      }
+        // .input-enhancement {
+        //   display: flex;
+        //   flex-direction: column;
+        //   align-items: center;
+        // }
+        // .enhancement-sides {
+        //   margin: 0.5rem 0;
+        //   display:flex;
+        //   flex-direction: row;
+        //   .input-enhancement-top, .input-enhancement-bot, .input-enhancement-left, .input-enhancement-right {
+        //     display: flex;
+        //     flex-direction: column;
+        //     input {
+        //       width:40%;
+        //     }
+        //     * {
+        //       text-align: center;
+        //     }
+        //   }
           // .enhancement-top, .enhancement-bot, .enhancement-left, .enhancement-right {
           //   display: flex;
           //   align-items: center;
@@ -464,8 +481,7 @@ html {
           //   display:flex;
           //   align-items: center;
           // }
-        }
-      }
+        // }
       // .second-line-transition, .third-line-transition {
       //   max-height: 0;
       //   // height: 10rem;

@@ -9,7 +9,7 @@ import RowContext from '../../../context/row-context'
 const NewCoring = () => {
     const rowContext = useContext(RowContext);
     const firstLineModified = (
-    <div className="first-line"> 
+    <div className="first-line opacity-class"> 
         <Signs/>
         <div className='text'>
         <p>Новый проем {rowContext.width}x{rowContext.height}x{rowContext.depth} - {rowContext.qty} шт.</p> 

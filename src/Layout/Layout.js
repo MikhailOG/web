@@ -5,7 +5,17 @@ import LayoutContext from '../context/layout-context'
 class Layout extends Component {
     state = {
         innerWidth: 0,
-        innerHeight: 0
+        innerHeight: 0,
+        firstMount: false
+    }
+    componentWillMount() {
+        if (!this.state.firstMount) {
+            this.handleResize();
+            this.setState({
+                firstMount: true
+            });
+        }
+
     }
     componentDidMount() {
         window.addEventListener('resize', this.handleResize);
@@ -14,7 +24,7 @@ class Layout extends Component {
     componentWillUnmount(){
         window.removeEventListener('resize', this.handleResize);
     }
-    
+
     handleResize = () => {
         this.setState({
             innerWidth: window.innerWidth,

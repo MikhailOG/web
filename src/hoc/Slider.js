@@ -14,7 +14,10 @@ const Slider = (props) => {
 
   useEffect(() =>{
     if (props.show) {
-      setStyleState({style: {opacity: "1", maxHeight: props.maxHeight}});
+      setStyleState({style: {opacity: "0", maxHeight: props.maxHeight}})
+      setTimeout(
+        () => 
+      setStyleState({style: {opacity: "1", maxHeight: props.maxHeight}}), props.transitionTime)
       setLineState({slidingDiv:slidingDiv});
     }
     else {
