@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import NewCoring from './Input Components/NewCoring'
-import EnhancementCoring from './Input Components/EnhancementCoring'
+import Utilities from './Input Components/Utilities'
+import InputComponent from './Interface Components/InputComponent'
+import SelectComponent from './Interface Components/SelectComponent'
+import AddToCart from './Interface Components/AddToCart'
+import DrawButton from './Interface Components/DrawButton'
+import Signs from './Interface Components/Signs'
+import Cog from './Interface Components/Cog'
 import RowContext from '../../context/row-context'
 import Preferences from './Input Components/Preferences'
+
 const Input = (props) => {
     let title = '';
     switch (props.idvalue) {
@@ -53,35 +59,17 @@ const Input = (props) => {
         wasteWeight: 100,
         concreteWeight: 2.4
     });
-    // const [styleState, setStyleState] = useState({
-    //     style: {color: "#10387d"}
-    // });
+    const rowContext = {
+        diameters:[[42, '42 мм'], [52, '52 мм'], [62, '62 мм'], [72, '72 мм'], [82, '82 мм'], [92, '92 мм'], [102, '102 мм'], [112, '112 мм'], [122, '122 мм'], [132, '132 мм'], [142, '142 мм'], [152, '152 мм'], [162, '162 мм'], [172, '172 мм'], [182, '182 мм'], [192, '192 мм'], [200, '200 мм'], [250, '250 мм'], [300, '300 мм'], [350, '350 мм']]
+    };
 
-    // useEffect(()=>{     
-    //     if (!props.mode) {
-    //         setStyleState({
-    //             style: {color: "#f3fffd"}
-    //         });
+    // useEffect(() => {
+    //     if ((!props.mode) && (rowState.showPreferences)) {
+    //         let newRowState = {...rowState};
+    //         newRowState.showPreferences = false;
+    //         setRowstate(newRowState);
     //     }
-    //     else {
-    //         setStyleState({
-    //             style: {color: "#f3fffd", opacity: "0.1" }
-    //         });
-    //         setTimeout( 
-    //             () => {
-    //             setStyleState({style: {color: "#10387d"}});
-    //             console.log("111")
-    //         }, 200) 
-    //     }
-        
-    // }, [props.mode]);
-    useEffect(() => {
-        if ((!props.mode) && (rowState.showPreferences)) {
-            let newRowState = {...rowState};
-            newRowState.showPreferences = false;
-            setRowstate(newRowState);
-        }
-    }, [props.mode])
+    // }, [props.mode]) //moved to Signs.js
 
 
     let inputData = {};
@@ -89,7 +77,30 @@ const Input = (props) => {
         switch (id){
             case 'newCoring':
                inputData = {
-                    input: <NewCoring/>,
+                    input: <Utilities
+                        normalLine={
+                            <React.Fragment> 
+                                <Signs/>
+                                <InputComponent id="width">Ширина, мм:</InputComponent>
+                                <InputComponent id="height">Высота, мм:</InputComponent>
+                                <InputComponent id="depth">Глубина, мм:</InputComponent>
+                                <SelectComponent id="diameter" values={rowContext.diameters} value={rowState.diameter}>Диаметр коронки:</SelectComponent>
+                                <Cog/>
+                                <AddToCart/>
+                                <DrawButton/>
+                            </React.Fragment>
+                                }
+                        modifiedLine={
+                            <React.Fragment> 
+                                <Signs/>
+                                <div className='text'>
+                                <p>Новый проем {rowState.width}x{rowState.height}x{rowState.depth} - {rowState.qty} шт.</p> 
+                                <p>Диаметр коронки {rowState.diameter} мм</p>
+                                </div>
+                                <DrawButton/>
+                            </React.Fragment>
+                        }
+                    />,
                     jobs: [['wall', 'проем в стене'], ['floor', 'проем в перекрытии']]
                 };
             break;
@@ -146,6 +157,13 @@ const Input = (props) => {
                     let newRowState = {...rowState};
                     newRowState.showPreferences = !newRowState.showPreferences;
                     setRowstate(newRowState);
+                },
+                togglePreferencesHandle: () => {
+                    if ((rowState.showPreferences) && (!rowState.mode)) {
+                        let newRowState = {...rowState};
+                        newRowState.showPreferences = !newRowState.showPreferences;
+                        setRowstate(newRowState);
+                    }
                 }
             }}>
                 {input(props.idvalue).input}

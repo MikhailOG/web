@@ -21,11 +21,10 @@ const Slider = (props) => {
       setLineState({slidingDiv:slidingDiv});
     }
     else {
-      setStyleState({style: {opacity: "0", maxHeight: props.maxHeight}});
+      setStyleState({style: {opacity: "0", maxHeight: "0"}});
       setTimeout(
         () => {
           setLineState({slidingDiv:null});
-          setStyleState({style: {opacity: "0", maxHeight: "0"}});
         },
         props.transitionTime
       );

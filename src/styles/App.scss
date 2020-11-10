@@ -307,9 +307,6 @@ html {
         text-shadow: 0px 0px 10px $whiteColor;
         transition: color 0.5s linear 0s;
       }
-      .second-line {
-      display: none;
-      }
     }
     .input {
       @extend %input-shared;
@@ -356,6 +353,9 @@ html {
         justify-content: flex-end;
         margin-bottom: 1rem;
         width: 15%;
+      }
+      .input-diameter {
+        width: 20%;
       }
       [type=text], select {
         font-family: 'Philosopher', sans-serif;
@@ -435,6 +435,9 @@ html {
             display:flex;
           }
         }
+      }
+      .opacity-class {
+        opacity: 0;
       }
       .preferences {
         @extend %lines-shared;

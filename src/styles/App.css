@@ -283,9 +283,6 @@ html {
   text-shadow: 0px 0px 10px #f3fffd;
   transition: color 0.5s linear 0s;
 }
-.main-container .input-rows .input-mod .second-line {
-  display: none;
-}
 .main-container .input-rows .input {
   background: #f3fffd;
   color: #10387d;
@@ -330,6 +327,9 @@ html {
   justify-content: flex-end;
   margin-bottom: 1rem;
   width: 15%;
+}
+.main-container .input-rows .input .input-diameter {
+  width: 20%;
 }
 .main-container .input-rows .input [type=text], .main-container .input-rows .input select {
   font-family: "Philosopher", sans-serif;
@@ -400,6 +400,9 @@ html {
 }
 .main-container .input-rows .input .first-line .signs p:first-child {
   display: flex;
+}
+.main-container .input-rows .input .opacity-class {
+  opacity: 0;
 }
 .main-container .input-rows .input .preferences {
   font-size: 1rem;
