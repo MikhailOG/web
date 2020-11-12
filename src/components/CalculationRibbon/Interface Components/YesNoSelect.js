@@ -11,7 +11,7 @@ const YesNoSelect = (props) => {
                 {props.answers.map((answer, index) => <div onClick={(event) => rowContext.yesNoSelectChangedHandler(event, index)} id={answer[0]} key={answer[0]}>
                 <i className={answer[0] + " " + ((props.selectedIndex===index)?selected:unselected)}>
                     <p>
-                        {answer[1]}
+                        {" " + answer[1]}
                     </p>
                 </i>
                 </div>)}   

@@ -2,11 +2,12 @@ import React, { useContext} from 'react'
 import RowContext from '../../../context/row-context'
 const SelectComponent = (props) => {
     const rowContext = useContext(RowContext);
+    console.log("Select component porps value: " + props.value)
     return(
         <div className={"input-"+props.id}>
             <p>{props.children}</p>
             <div className={props.id}>
-                <select name={props.id} id={props.id} value={props.value} onChange={rowContext.inputChangedHandler}>
+                <select name={props.id} id={props.id} value={rowContext[props.id]} onChange={rowContext.inputChangedHandler}>
                     {props.values.map(value => <option key={value[0]} value={value[0]}>{value[1]}</option>)}
                 </select>
             </div>

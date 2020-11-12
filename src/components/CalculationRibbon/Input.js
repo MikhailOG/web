@@ -43,8 +43,8 @@ const Input = (props) => {
             title = "Устройство металлоконструкций: обрамление проема";
             break;
     }
-    console.log(title)
-    const [rowState, setRowstate] = useState({
+    //console.log(title)
+    const [rowState, setRowState] = useState({
         title: title,
         width: 500,
         height: 500,
@@ -76,54 +76,54 @@ const Input = (props) => {
     const input = (id) => {
         switch (id){
             case 'newCoring':
-               inputData = {
-                    input: <Utilities
-                        normalLine={
-                            <React.Fragment> 
-                                <Signs/>
-                                <InputComponent id="width">Ширина, мм:</InputComponent>
-                                <InputComponent id="height">Высота, мм:</InputComponent>
-                                <InputComponent id="depth">Глубина, мм:</InputComponent>
-                                <SelectComponent id="diameter" values={rowContext.diameters} value={rowState.diameter}>Диаметр коронки:</SelectComponent>
-                                <Cog/>
-                                <AddToCart/>
-                                <DrawButton/>
-                            </React.Fragment>
-                                }
-                        modifiedLine={
-                            <React.Fragment> 
-                                <Signs/>
-                                <div className='text'>
-                                <p>Новый проем {rowState.width}x{rowState.height}x{rowState.depth} - {rowState.qty} шт.</p> 
-                                <p>Диаметр коронки {rowState.diameter} мм</p>
-                                </div>
-                                <DrawButton/>
-                            </React.Fragment>
-                        }
-                    />,
+                inputData ={
+                    normalLine: (
+                        <React.Fragment> 
+                            <Signs/>
+                            <InputComponent id="width">Ширина, мм:</InputComponent>
+                            <InputComponent id="height">Высота, мм:</InputComponent>
+                            <InputComponent id="depth">Глубина, мм:</InputComponent>
+                            <SelectComponent id="diameter" values={rowContext.diameters}>Диаметр коронки:</SelectComponent>
+                            <Cog/>
+                            <AddToCart/>
+                            <DrawButton/>
+                        </React.Fragment>
+                    ), 
+                    modifiedLine: (
+                        <React.Fragment> 
+                            <Signs/>
+                            <div className='text'>
+                            <p>Новый проем {rowState.width}x{rowState.height}x{rowState.depth} - {props.qty} шт.</p> 
+                            <p>Диаметр коронки {rowState.diameter} мм</p>
+                            </div>
+                            <DrawButton/>
+                        </React.Fragment>
+                    ),
                     jobs: [['wall', 'проем в стене'], ['floor', 'проем в перекрытии']]
-                };
-            break;
+                }
+                break;
             // case 'newCoring':
             //    inputData = {
             //         input: <NewCoring/>,
             //         jobs: [['wall', 'проем в стене'], ['floor', 'проем в перекрытии']]};
             // break;
             default: ;
-        }
+        };
         return(inputData);
-    }
+        }
+        
+    
     const mainClass = props.mode?"input":"input-mod";
     return(
         <div keyvalue={props.keyvalue} idvalue={props.idvalue} indexvalue={props.indexvalue} className={mainClass + " " + props.lastrow}>
             <RowContext.Provider value={{
-                diameters:[[42, '42 мм'], [52, '52 мм'], [62, '62 мм'], [72, '72 мм'], [82, '82 мм'], [92, '92 мм'], [102, '102 мм'], [112, '112 мм'], [122, '122 мм'], [132, '132 мм'], [142, '142 мм'], [152, '152 мм'], [162, '162 мм'], [172, '172 мм'], [182, '182 мм'], [192, '192 мм'], [200, '200 мм'], [250, '250 мм'], [300, '300 мм'], [350, '350 мм']],
+                
                 materials:[["reinforced-concrete", "железобетон"], ["concrete", "бетон"], ["brick", "кирпич"]],
                 wasteAnswers:[["waste-off", "вручную"], ["waste-on", "погрузчиком"]],
                 wasteSelectedIndex: rowState.waste[1],
-                elevationAnswers:[["elevation-over-limit", "да"], ["elevation-under-limit", "нет"]],
+                elevationAnswers:[["elevation-over-limit", " да"], ["elevation-under-limit", " нет"]],
                 elevationSelectedIndex: rowState.elevation[1],
-                waterAnswers:[["water-on", "да"], ["water-off", "нет"]],
+                waterAnswers:[["water-on", " да"], ["water-off", " нет"]],
                 waterSelectedIndex: rowState.water[1],
                 jobs: input(props.idvalue).jobs,
                 width: rowState.width,
@@ -140,8 +140,17 @@ const Input = (props) => {
                 inputChangedHandler: (event) => {
                     const id = event.target.getAttribute('id');
                     let newRowState = {...rowState};
-                    isNaN(parseFloat(event.target.value))?newRowState[id] = event.target.value:newRowState[id] = parseFloat(event.target.value)
-                    setRowstate(newRowState);
+
+                    if (event.target.type === "select-one") {
+                        console.log("id: " + id);
+                        console.log("prev value: " + newRowState[id]);
+                        console.log("new value: " + event.target.value);
+                        newRowState[id] = event.target.value;
+                    }
+                    else if ((event.target.type === "text") && (!isNaN(event.target.value) && (event.target.value > 0))){
+                        newRowState[id] = event.target.value;
+                    }
+                    setRowState(newRowState);
                 },
                 yesNoSelectChangedHandler: (event, index) => {
                     const id = event.currentTarget.parentElement.classList[0];
@@ -150,23 +159,26 @@ const Input = (props) => {
                             let newRowState = {...rowState};
                             newRowState[id][0] = uniqueId;
                             newRowState[id][1] = index;
-                            setRowstate(newRowState);
+                            setRowState(newRowState);
                         }
                 },
                 gearHandler: () => {
                     let newRowState = {...rowState};
                     newRowState.showPreferences = !newRowState.showPreferences;
-                    setRowstate(newRowState);
+                    setRowState(newRowState);
                 },
                 togglePreferencesHandle: () => {
                     if ((rowState.showPreferences) && (!rowState.mode)) {
                         let newRowState = {...rowState};
                         newRowState.showPreferences = !newRowState.showPreferences;
-                        setRowstate(newRowState);
+                        setRowState(newRowState);
                     }
                 }
             }}>
-                {input(props.idvalue).input}
+                <Utilities 
+                    normalLine={input(props.idvalue).normalLine}
+                    modifiedLine={input(props.idvalue).modifiedLine}
+                />
                 <Preferences showPreferences={rowState.showPreferences} maxHeight="15rem"/>
             </RowContext.Provider>
         </div>
