@@ -3,6 +3,7 @@ import Header from '../components/Header/Header';
 import Nav from '../components/Nav/Nav';
 import LayoutContext from '../context/layout-context'
 import Backdrop from '../components/Backdrop/Backdrop'
+import Checkout from '../components/Checkout/Checkout'
 class Layout extends Component {
     state = {
         innerWidth: 0,
@@ -43,6 +44,7 @@ class Layout extends Component {
             }}>
                 <div className="main-container">
                         {this.props.children}
+                        <Checkout canvasSize={Math.min(this.state.innerWidth, this.state.innerHeight)*0.75*8/12}/>
                 </div>
             </LayoutContext.Provider>
             </div>

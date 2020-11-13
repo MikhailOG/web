@@ -166,19 +166,19 @@ const InputRows = (props) => {
             rowsQty: inputState.input.length 
         }}>
             <div className="input-rows">               
-                    {
-                    inputState.input.map((service, index) => {
-                        return <Input 
-                                deleteButton={service.deleteButton}
-                                lastrow={index===inputState.input.length-1?"last-row":""}
-                                key={keysState.keys[index]} 
-                                keyvalue={keysState.keys[index]} 
-                                mode={service.mode}
-                                idvalue={service.id} 
-                                indexvalue={service.index} 
-                                qty={service.qty}
-                                />;
-                    })
+                {
+                inputState.input.map((service, index) => {
+                    return <Input 
+                            deleteButton={service.deleteButton}
+                            lastrow={index===inputState.input.length-1?"last-row":""}
+                            key={keysState.keys[index]} 
+                            keyvalue={keysState.keys[index]} 
+                            mode={service.mode}
+                            idvalue={service.id} 
+                            indexvalue={service.index} 
+                            qty={service.qty}
+                            />;
+                })
                 }
             </div>
         </InputContext.Provider>

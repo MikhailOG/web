@@ -111,7 +111,7 @@ class App extends Component {
             services={this.services}/>
             {(this.state.selectedService)?<InputRows selectedService={this.state.selectedService}/>:null}
         </div>
-        <Checkout/>
+        
       </Layout>
     );
   }
