@@ -4,6 +4,7 @@ import Layout from './Layout/Layout';
 import Btn from './components/Btn/Btn';
 import Services from './components/Btn/Services';
 import InputRows from './components/CalculationRibbon/InputRows';
+import Checkout from './components/Checkout/Checkout';
 class App extends Component {
   constructor(props) {
     super(props);
@@ -84,30 +85,34 @@ class App extends Component {
   render() {
     // console.log('[App.js] render')
     return (
-    <Layout click = {this.clickRemoveHandler}>
-      <div 
-      onMouseMove = {this.getElement} 
-      onMouseLeave={this.clearServices} 
-      className="menu">
-      {this.services.map((service, index) => {
-        return <Btn 
-        click={this.serviceButtonClickedHandler}
-        serviceClass={service.serviceClass} 
-        index={index}
-        hover={this.state.hoverIndex}
-        currentClass={this.state.currentServiceClass}
-        serviceTitle={service.serviceTitle} 
-        key={service.serviceClass}
-        clicked={this.state.btnClicked}/>})}
-        <Services 
-        showServices={this.state.btnClicked}
-        click={this.serviceClickedHandler}
-        index={this.currentCursorPosition.index}
-        serviceClass = {this.state.currentServiceClass} 
-        services={this.services}/>
-        {(this.state.selectedService)?<InputRows selectedService={this.state.selectedService}/>:null}
-      </div>
-    </Layout>
+      <Layout click = {this.clickRemoveHandler}>
+        <div 
+          onMouseMove = {this.getElement} 
+          onMouseLeave={this.clearServices} 
+          className="menu">
+          {this.services.map((service, index) => {
+            return (
+              <Btn 
+                click={this.serviceButtonClickedHandler}
+                serviceClass={service.serviceClass} 
+                index={index}
+                hover={this.state.hoverIndex}
+                currentClass={this.state.currentServiceClass}
+                serviceTitle={service.serviceTitle} 
+                key={service.serviceClass}
+                clicked={this.state.btnClicked}/>
+            );
+          })}
+          <Services 
+            showServices={this.state.btnClicked}
+            click={this.serviceClickedHandler}
+            index={this.currentCursorPosition.index}
+            serviceClass = {this.state.currentServiceClass} 
+            services={this.services}/>
+            {(this.state.selectedService)?<InputRows selectedService={this.state.selectedService}/>:null}
+        </div>
+        <Checkout/>
+      </Layout>
     );
   }
 }
