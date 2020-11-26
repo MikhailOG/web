@@ -14,26 +14,20 @@ class Layout extends Component {
         showBackdrop: false,
         showCheckout: false // ===showBackdrop?
     };
-    componentWillMount() {
+
+    componentDidMount() {
         if (!this.state.firstMount) {
-            this.handleResize();
+            this.props.onResize();
             this.setState({
                 firstMount: true
             });
         }
-    };
-    componentDidMount() {
-        window.addEventListener('resize', this.handleResize);
+        window.addEventListener('resize', this.props.onResize);
     };
     componentWillUnmount(){
-        window.removeEventListener('resize', this.handleResize);
+        window.removeEventListener('resize', this.props.onResize);
     };
-    handleResize = () => {
-        this.setState({
-            innerWidth: window.innerWidth,
-            innerHeight: window.innerHeight
-        });
-    };
+
     hideBackdrop() {
         this.setState({showBackdrop: false})
     };
@@ -43,7 +37,7 @@ class Layout extends Component {
     render() {
         return(
             <div onClick={this.props.click} className="web">
-            <Backdrop showBackdrop={this.state.showBackdrop}></Backdrop>
+            <Backdrop showBackdrop={this.props.showBackdrop}></Backdrop>
             <div className="grid-container">
                 <Header title="Тепловые Линии Мск" titleText="Алмазная резка и алмазное бурение" telefone="+7 (926) 932 68 40"/>
                 <Nav/>
@@ -55,8 +49,8 @@ class Layout extends Component {
                 <div className="main-container">
                         {this.props.children}
                         <Checkout 
-                        showCheckout={this.state.showCheckout}
-                        canvasSize={Math.min(this.state.innerWidth, this.state.innerHeight)*0.75*8/12}/>
+                        showCheckout={this.props.showBackdrop}
+                        canvasSize={Math.min(this.props.innerWidth, this.props.innerHeight)*0.75*8/12}/>
                 </div>
             </LayoutContext.Provider>
             </div>
@@ -68,8 +62,16 @@ class Layout extends Component {
 
 const mapStateToProps = state => {
     return {
-
+        innerWidth: state.layout.innerWidth,
+        innerHeight: state.layout.innerHeight,
+        showBackdrop: state.layout.showBackdrop
     };
+};
+
+const mapDispatchToPros = dispatch => {
+    return {
+        onResize: () => dispatch( {type: 'WINDOW_RESIZE', innerWidth: window.innerWidth, innerHeight: window.innerHeight })
+    }
 }
 
-export default connect(mapStateToProps)(Layout);
+export default connect(mapStateToProps, mapDispatchToPros)(Layout);

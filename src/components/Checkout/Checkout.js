@@ -82,5 +82,8 @@ render () {
     );
 }
 }
+// const mapStateToProps = state => {
+
+// }
 
 export default connect()(Checkout);
