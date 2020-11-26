@@ -4,7 +4,7 @@ import Layout from './Layout/Layout';
 import Btn from './components/Btn/Btn';
 import Services from './components/Btn/Services';
 import InputRows from './components/CalculationRibbon/InputRows';
-import Checkout from './components/Checkout/Checkout';
+
 class App extends Component {
   constructor(props) {
     super(props);

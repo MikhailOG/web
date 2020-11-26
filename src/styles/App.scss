@@ -299,7 +299,7 @@ html {
         //background: radial-gradient(circle at top right, transparent 39.5%, $whiteColor 39.5%);
         background-size: 280% 280%;
         @extend %button-border-shared;
-        //animation: gradientBG 1s linear 1 0.2s;
+        transition: background-color 0.4s ease-in, border-color 0.35s ease-in;
       }
       .escape {
         width: 2rem;
