@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import Input from './Input'
-import InputContext from '../../context/input-context'
+import Input from './Input';
+import InputContext from '../../context/input-context';
+//redux
+import { connect } from 'react-redux';
+
 const InputRows = (props) => {
     const [keysState, setKeysState] = useState({
         keys: [1]
@@ -184,5 +187,21 @@ const InputRows = (props) => {
         </InputContext.Provider>
     );
 }
+const mapStateToProps = state => {
+    return {
+        id: state.inputRows., 
+        index: 0, 
+        qty:1,
+        innerWidth: state.layout.innerWidth,
+        innerHeight: state.layout.innerHeight,
+        showBackdrop: state.layout.showBackdrop
+    };
+};
 
-export default InputRows;
+const mapDispatchToPros = dispatch => {
+    return {
+        onResize: () => dispatch( {type: 'WINDOW_RESIZE', innerWidth: window.innerWidth, innerHeight: window.innerHeight })
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToPros)(InputRows);
