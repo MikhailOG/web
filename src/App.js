@@ -4,17 +4,20 @@ import Layout from './Layout/Layout';
 import Btn from './components/Btn/Btn';
 import Services from './components/Btn/Services';
 import InputRows from './components/CalculationRibbon/InputRows';
+import { connect } from 'react-redux';
+import { addRow } from './store/actions/actions';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    console.log('[App.js] constructor');
-  }
+  // constructor(props) {
+  //   super(props);
+  //   console.log('[App.js] constructor');
+  // }
   state = {
     currentServiceClass: null,
     hoverIndex: null,
     btnClicked: false,
-    selectedService: null
+    selectedService: null,
+    rowNum: null
   }
   services= [
     { serviceClass: 'diamond-coring', serviceTitle: ['Алмазное', 'бурение']},
@@ -34,9 +37,9 @@ class App extends Component {
   //   console.log('[App.js] getDerivedStateFrom props', props);
   //   return state; 
   // };
-  // componentDidMount() {
-  //   console.log('[App.js] componentDidMount')
-  // }
+  componentDidMount() {
+    console.log('[App.js] componentDidMount');
+  }
   getElement = (event) => {
     if (event.target.hasAttribute("type")) {
       const cursorPosition = {...this.currentCursorPosition};
@@ -70,7 +73,14 @@ class App extends Component {
     this.setState({btnClicked: btnClicked});
   }
   serviceClickedHandler = (event) => {
-    this.setState({ selectedService: event.target.id}, () => {this.serviceButtonClickedHandler(); this.setState({hoverIndex:null})});
+    this.setState({ selectedService: event.target.id}
+      , () => {
+        this.serviceButtonClickedHandler(); 
+        this.setState({hoverIndex:null});
+        this.props.onRowAdd({serviceName: this.state.selectedService, index: 0});
+        console.log(this.state);
+        console.log(this.props.inputRows);
+      });
   }
   clickRemoveHandler = (event) => {
     if ((!event.target.hasAttribute("type")) && (this.state.btnClicked)) {
@@ -83,7 +93,7 @@ class App extends Component {
     }
   }
   render() {
-    // console.log('[App.js] render')
+    console.log('[App.js] render')
     return (
       <Layout click = {this.clickRemoveHandler}>
         <div 
@@ -109,14 +119,27 @@ class App extends Component {
             index={this.currentCursorPosition.index}
             serviceClass = {this.state.currentServiceClass} 
             services={this.services}/>
-            {(this.state.selectedService)?<InputRows selectedService={this.state.selectedService}/>:null}
+            {this.props.inputRows?<InputRows selectedService={this.props.inputRows.serviceName}/>:null}
         </div>
         
       </Layout>
     );
   }
 }
-export default App;
+
+const mapStateToProps = state => {
+  return {
+      inputRows: state.inputRows.inputRows[0]
+  };
+};
+
+const mapDispatchToPros = dispatch => {
+  return {
+    onRowAdd: (payload) => dispatch( addRow(payload) )
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToPros)(App);
 
 
   

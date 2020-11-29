@@ -4,12 +4,29 @@ import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 //redux imports
-import { createStore } from 'redux';
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
-import reducer from './store/reducer';
+import layoutReducer from './store/reducers/layout';
+import inputRowsReducer from './store/reducers/inputRows';
 
-const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+const rootReducer = combineReducers({
+    layout: layoutReducer,
+    inputRows: inputRowsReducer
+});
 
+const logger = (store) => {
+
+    return next => {
+        return action => {
+            console.log('[Middleware] Dispatching', action);
+            const result = next(action);
+            console.log('[Middleware] next State', store.getState());
+            return result;
+        }
+    }
+};
+const  composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const store = createStore(rootReducer, composeEnhancers(applyMiddleware(logger)));
 ReactDOM.render(
     <Provider store={store}>
         <App />

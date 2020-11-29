@@ -3,6 +3,7 @@ import Input from './Input';
 import InputContext from '../../context/input-context';
 //redux
 import { connect } from 'react-redux';
+import * as actionTypes from '../../store/actions/actions';
 
 const InputRows = (props) => {
     const [keysState, setKeysState] = useState({
@@ -189,7 +190,7 @@ const InputRows = (props) => {
 }
 const mapStateToProps = state => {
     return {
-        id: state.inputRows., 
+        inputRows: state.inputRows, 
         index: 0, 
         qty:1,
         innerWidth: state.layout.innerWidth,
@@ -200,7 +201,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToPros = dispatch => {
     return {
-        onResize: () => dispatch( {type: 'WINDOW_RESIZE', innerWidth: window.innerWidth, innerHeight: window.innerHeight })
+        onResize: () => dispatch( {type: actionTypes.WINDOW_RESIZE, innerWidth: window.innerWidth, innerHeight: window.innerHeight }),
+        onRowAdd: (payload) => dispatch( {type: actionTypes.ADD_ROW, serviceName: payload.serviceName, index: payload.index} )
     }
 }
 

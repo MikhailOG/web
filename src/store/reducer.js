@@ -1,3 +1,4 @@
+import * as actionTypes from './actions';
 import deepFreeze from 'deep-freeze';
 import expect from 'expect';
 
@@ -16,7 +17,24 @@ const initialState = {
 }
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case 'TOGGLE_BACKDROP':
+        case actionTypes.ADD_ROW: 
+            return {
+                ...state,
+                inputRows: 
+                    [   ...state.inputRows.slice(0, action.index),
+                        {
+                            key: Math.floor(1000000000000*Math.random()*Math.floor(Math.sqrt(Math.random()/Math.random()*100000000))),
+                            serviceName: action.serviceName,
+                            index: action.index,
+                            mode: true,
+                            deleteButton: false,
+                            qty: 1
+                        },
+                        ...state.inputRows.slice(action.index)
+                        .map(row =>  Object.assign({}, row, {index: row.index + 1}))
+                    ]
+            };
+        case actionTypes.TOGGLE_BACKDROP:
             return {
                 ...state,
                 layout: {
@@ -24,7 +42,7 @@ const reducer = (state = initialState, action) => {
                     showBackdrop: !state.layout.showBackdrop 
                 }
             };
-        case 'WINDOW_RESIZE' :
+        case actionTypes.WINDOW_RESIZE:
             return {
                 ...state,
                 layout: {
@@ -42,20 +60,7 @@ export default reducer;
 
 const addRow = (state = [], action) => {
     switch (action.type) {
-        case 'ADD_ROW': 
-            return {
-                ...state,
-                inputRows: 
-                    [   ...state.inputRows.slice(0, action.index),
-                        {
-                            id: action.id,
-                            index: action.index,
-                            qty: 1
-                        },
-                        ...state.inputRows.slice(action.index)
-                        .map(row =>  Object.assign({}, row, {index: row.index + 1}))
-                    ]
-            };
+
         default:
             return state;
     };
@@ -123,5 +128,5 @@ const testAddRow = ( ) => {
     deepFreeze(action);
     expect(addRow(stateBefore, action)).toEqual(stateAfter);
 };
-testAddRow();
+//testAddRow();
 console.log("Test has passed")
