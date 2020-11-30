@@ -9,10 +9,28 @@ const initialState = {
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.ADD_ROW: 
+        const preferences = {
+            material: "reinforced-concrete",
+            job: "wall",
+            waste: ["waste-off", 0],
+            elevation: ["elevation-under-limit", 1],
+            water: ["water-off", 1],
+            showPreferences: false,
+            wasteWeight: 100,
+            concreteWeight: 2.4
+        };
         let title = '';
+        let data = {};
         switch (action.serviceName) {
             case 'newCoring':
                 title = "Алмазное бурение: новый проем";
+                data = {
+                    qty: 1,
+                    width: 500,
+                    height: 300,
+                    depth: 250,
+                    diameter: 152
+                };
                 break;
             case 'enhancementCoring':
                 title = "Алмазное бурение: расширение проема";
@@ -53,7 +71,8 @@ const reducer = (state = initialState, action) => {
                             mode: true,
                             deleteButton: false,
                             title: title,
-                            qty: 1
+                            data: {...data},
+                            preferences: {...preferences}
                         },
                         ...state.inputRows.slice(action.index)
                         .map(row =>  Object.assign({}, row, {index: row.index + 1}))

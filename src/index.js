@@ -11,7 +11,7 @@ import inputRowsReducer from './store/reducers/inputRows';
 
 const rootReducer = combineReducers({
     layout: layoutReducer,
-    inputRows: inputRowsReducer
+    inputs: inputRowsReducer
 });
 
 const logger = (store) => {

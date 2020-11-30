@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import Utilities from './Input Components/Utilities'
 import InputComponent from './Interface Components/InputComponent'
 import SelectComponent from './Interface Components/SelectComponent'
@@ -8,39 +8,37 @@ import Signs from './Interface Components/Signs'
 import Cog from './Interface Components/Cog'
 import RowContext from '../../context/row-context'
 import Preferences from './Input Components/Preferences'
+import { connect } from 'react-redux';
 
 const Input = (props) => {
 
-    const [rowState, setRowState] = useState({
-        width: 500,
-        height: 500,
-        depth: 250,
-        diameter: 152,
-        material: "reinforced-concrete",
-        job: "wall",
-        waste: ["waste-off", 0],
-        elevation: ["elevation-under-limit", 1],
-        water: ["water-off", 1],
-        showPreferences: false,
-        wasteWeight: 100,
-        concreteWeight: 2.4
-    });
+    // const [rowState, setRowState] = useState({
+
+    //     material: "reinforced-concrete",
+    //     job: "wall",
+    //     waste: ["waste-off", 0],
+    //     elevation: ["elevation-under-limit", 1],
+    //     water: ["water-off", 1],
+    //     showPreferences: false,
+    //     wasteWeight: 100,
+    //     concreteWeight: 2.4
+    // });
     const rowContext = {
         diameters:[[42, '42 мм'], [52, '52 мм'], [62, '62 мм'], [72, '72 мм'], [82, '82 мм'], [92, '92 мм'], [102, '102 мм'], [112, '112 мм'], [122, '122 мм'], [132, '132 мм'], [142, '142 мм'], [152, '152 мм'], [162, '162 мм'], [172, '172 мм'], [182, '182 мм'], [192, '192 мм'], [200, '200 мм'], [250, '250 мм'], [300, '300 мм'], [350, '350 мм']]
     };
 
     // useEffect(() => {
-    //     if ((!props.mode) && (rowState.showPreferences)) {
+    //     if ((!props.input.mode) && (rowState.showPreferences)) {
     //         let newRowState = {...rowState};
     //         newRowState.showPreferences = false;
     //         setRowstate(newRowState);
     //     }
-    // }, [props.mode]) //moved to Signs.js
+    // }, [props.input.mode]) //moved to Signs.js
 
 
     let inputData = {};
-    const input = (id) => {
-        switch (id){
+    const input = (serviceName) => {
+        switch (serviceName){
             case 'newCoring':
                 inputData ={
                     normalLine: (
@@ -59,8 +57,8 @@ const Input = (props) => {
                         <React.Fragment> 
                             <Signs/>
                             <div className='text'>
-                            <p>Новый проем {rowState.width}x{rowState.height}x{rowState.depth} - {props.qty} шт.</p> 
-                            <p>Диаметр коронки {rowState.diameter} мм</p>
+                            <p>Новый проем {props.input.data.width}x{props.input.data.height}x{props.input.data.depth} - {props.input.data.qty} шт.</p> 
+                            <p>Диаметр коронки {props.input.data.diameter} мм</p>
                             </div>
                             <DrawButton/>
                         </React.Fragment>
@@ -79,37 +77,37 @@ const Input = (props) => {
         }
         
     
-    const mainClass = props.mode?"input":"input-mod";
+    const mainClass = props.input.mode?"input":"input-mod";
     return(
-        <div keyvalue={props.keyvalue} idvalue={props.idvalue} indexvalue={props.indexvalue} className={mainClass + " " + props.lastrow}>
+        <div keyvalue={props.input.key} idvalue={props.idvalue} indexvalue={props.input.index} className={mainClass + " " + props.lastrow}>
             <RowContext.Provider value={{
                 
                 materials:[["reinforced-concrete", "железобетон"], ["concrete", "бетон"], ["brick", "кирпич"]],
                 wasteAnswers:[["waste-off", "вручную"], ["waste-on", "погрузчиком"]],
-                wasteSelectedIndex: rowState.waste[1],
+                wasteSelectedIndex: props.input.preferences.waste[1],
                 elevationAnswers:[["elevation-over-limit", " да"], ["elevation-under-limit", " нет"]],
-                elevationSelectedIndex: rowState.elevation[1],
+                elevationSelectedIndex: props.input.preferences.elevation[1],
                 waterAnswers:[["water-on", " да"], ["water-off", " нет"]],
-                waterSelectedIndex: rowState.water[1],
-                jobs: input(props.idvalue).jobs,
-                width: rowState.width,
-                height: rowState.height,
-                depth: rowState.depth,
-                diameter: rowState.diameter,
-                material: rowState.material,
-                job: rowState.job,
-                wasteWeight: rowState.wasteWeight,
-                concreteWeight: rowState.concreteWeight,
-                qty: props.qty,
-                mode: props.mode,
-                deleteButton: props.deleteButton,
+                waterSelectedIndex: props.input.preferences.water[1],
+                jobs: input(props.input.serviceName).jobs,
+                width: props.input.data.width,
+                height: props.input.data.height,
+                depth: props.input.data.depth,
+                diameter: props.input.data.diameter,
+                material: props.input.preferences.material,
+                job: props.input.preferences.job,
+                wasteWeight: props.input.preferences.wasteWeight,
+                concreteWeight: props.input.preferences.concreteWeight,
+                qty: props.input.data.qty,
+                mode: props.input.mode,
+                deleteButton: props.input.deleteButton,
                 inputChangedHandler: (event) => {
                     const id = event.target.getAttribute('id');
-                    let newRowState = {...rowState};
+                    //let newRowState = {...rowState};
 
                     if (event.target.type === "select-one") {
                         console.log("id: " + id);
-                        console.log("prev value: " + newRowState[id]);
+                        //console.log("prev value: " + newRowState[id]);
                         console.log("new value: " + event.target.value);
                         newRowState[id] = event.target.value;
                     }
@@ -142,8 +140,8 @@ const Input = (props) => {
                 }
             }}>
                 <Utilities 
-                    normalLine={input(props.idvalue).normalLine}
-                    modifiedLine={input(props.idvalue).modifiedLine}
+                    normalLine={input(props.input.serviceName).normalLine}
+                    modifiedLine={input(props.input.serviceName).modifiedLine}
                 />
                 <Preferences showPreferences={rowState.showPreferences} maxHeight="15rem"/>
             </RowContext.Provider>
@@ -152,4 +150,16 @@ const Input = (props) => {
 
 }
 
-export default Input;
+const mapStateToProps = state => {
+    return {
+       // input: state.inputs.inputRows[Input.props.input.indexs]
+    };
+  };
+  
+  const mapDispatchToPros = dispatch => {
+    return {
+     // onRowAdd: (payload) => dispatch( actionCreators.addRow(payload) )
+    }
+  }
+  
+  export default connect(mapStateToProps, mapDispatchToPros)(Input);

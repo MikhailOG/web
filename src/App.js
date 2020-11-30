@@ -120,16 +120,12 @@ class App extends Component {
             serviceClass = {this.state.currentServiceClass} 
             services={this.services}/>
             {this.props.inputRows[0]?<div className='input-rows'>
-              {this.props.inputRows.map((service, index) => {return <Input 
-                            deleteButton={service.deleteButton}
-                            lastrow={index===this.props.inputRows.length-1?"last-row":""}
-                            key={service.key} 
-                            keyvalue={service.key} 
-                            mode={service.mode}
-                            serviceName={service.serviceName} 
-                            indexvalue={service.index} 
-                            qty={service.qty}
-                            />})}</div>:null}
+              {this.props.inputRows.map((service, index) => {
+                return <Input 
+                  lastrow={index===this.props.inputRows.length-1?"last-row":""}
+                  key={service.key} 
+                  input={this.props.inputRows[index]}
+                  />})}</div>:null}
         </div>
         
       </Layout>
@@ -139,7 +135,7 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-      inputRows: state.inputRows.inputRows
+      inputRows: state.inputs.inputRows
   };
 };
 
