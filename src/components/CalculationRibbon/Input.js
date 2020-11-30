@@ -10,42 +10,8 @@ import RowContext from '../../context/row-context'
 import Preferences from './Input Components/Preferences'
 
 const Input = (props) => {
-    let title = '';
-    switch (props.idvalue) {
-        case 'newCoring':
-            title = "Алмазное бурение: новый проем";
-            break;
-        case 'enhancementCoring':
-            title = "Алмазное бурение: расширение проема";
-            break;
-        case 'singleCoring':
-            title = "Алмазное бурение: одиночные отверстия";
-            break;
-        case 'newSaw':
-            title = "Алмазная резка: новый проем";
-            break;
-        case 'enhancementSaw':
-            title = "Алмазная резка: расширение проема";
-            break;
-        case 'definedValueSaw':
-            title = "Алмазная резка: по заданному объему";
-            break;
-        case 'newWire':
-            title = "Канатная резка: новый проем";
-            break;
-        case 'definedWire':
-            title = "Канатная резка: по заданному объему";
-            break;
-        case 'fullEnforcement':
-            title = "Устройство металлоконструкций: усиление проема";
-            break;
-        case 'lightEnforcement':
-            title = "Устройство металлоконструкций: обрамление проема";
-            break;
-    }
-    //console.log(title)
+
     const [rowState, setRowState] = useState({
-        title: title,
         width: 500,
         height: 500,
         depth: 250,

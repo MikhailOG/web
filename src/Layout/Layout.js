@@ -5,7 +5,7 @@ import LayoutContext from '../context/layout-context';
 import Backdrop from '../components/Backdrop/Backdrop';
 import Checkout from '../components/Checkout/Checkout';
 import { connect } from 'react-redux';
-import { windowResize } from '../store/actions/actions';
+import * as actionCreators from '../store/actions/index';
 
 class Layout extends Component {
     state = {
@@ -63,15 +63,15 @@ class Layout extends Component {
 
 const mapStateToProps = state => {
     return {
-        innerWidth: state.layout.layout.innerWidth,
-        innerHeight: state.layout.layout.innerHeight,
-        showBackdrop: state.layout.layout.showBackdrop
+        innerWidth: state.layout.innerWidth,
+        innerHeight: state.layout.innerHeight,
+        showBackdrop: state.layout.showBackdrop
     };
 };
 
 const mapDispatchToPros = dispatch => {
     return {
-        onResize: () => dispatch(windowResize())
+        onResize: () => dispatch(actionCreators.windowResize())
     }
 }
 

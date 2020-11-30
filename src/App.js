@@ -3,9 +3,9 @@ import './styles/App.css';
 import Layout from './Layout/Layout';
 import Btn from './components/Btn/Btn';
 import Services from './components/Btn/Services';
-import InputRows from './components/CalculationRibbon/InputRows';
+import Input from './components/CalculationRibbon/Input';
 import { connect } from 'react-redux';
-import { addRow } from './store/actions/actions';
+import * as actionCreators from './store/actions/index';
 
 class App extends Component {
   // constructor(props) {
@@ -119,7 +119,17 @@ class App extends Component {
             index={this.currentCursorPosition.index}
             serviceClass = {this.state.currentServiceClass} 
             services={this.services}/>
-            {this.props.inputRows?<InputRows selectedService={this.props.inputRows.serviceName}/>:null}
+            {this.props.inputRows[0]?<div className='input-rows'>
+              {this.props.inputRows.map((service, index) => {return <Input 
+                            deleteButton={service.deleteButton}
+                            lastrow={index===this.props.inputRows.length-1?"last-row":""}
+                            key={service.key} 
+                            keyvalue={service.key} 
+                            mode={service.mode}
+                            serviceName={service.serviceName} 
+                            indexvalue={service.index} 
+                            qty={service.qty}
+                            />})}</div>:null}
         </div>
         
       </Layout>
@@ -129,13 +139,13 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-      inputRows: state.inputRows.inputRows[0]
+      inputRows: state.inputRows.inputRows
   };
 };
 
 const mapDispatchToPros = dispatch => {
   return {
-    onRowAdd: (payload) => dispatch( addRow(payload) )
+    onRowAdd: (payload) => dispatch( actionCreators.addRow(payload) )
   }
 }
 

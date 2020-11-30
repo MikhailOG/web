@@ -1,4 +1,4 @@
-import * as actionTypes from '../actions/actions';
+import * as actionTypes from '../actions/actionTypes';
 import deepFreeze from 'deep-freeze';
 import expect from 'expect';
 
@@ -9,6 +9,39 @@ const initialState = {
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.ADD_ROW: 
+        let title = '';
+        switch (action.serviceName) {
+            case 'newCoring':
+                title = "Алмазное бурение: новый проем";
+                break;
+            case 'enhancementCoring':
+                title = "Алмазное бурение: расширение проема";
+                break;
+            case 'singleCoring':
+                title = "Алмазное бурение: одиночные отверстия";
+                break;
+            case 'newSaw':
+                title = "Алмазная резка: новый проем";
+                break;
+            case 'enhancementSaw':
+                title = "Алмазная резка: расширение проема";
+                break;
+            case 'definedValueSaw':
+                title = "Алмазная резка: по заданному объему";
+                break;
+            case 'newWire':
+                title = "Канатная резка: новый проем";
+                break;
+            case 'definedWire':
+                title = "Канатная резка: по заданному объему";
+                break;
+            case 'fullEnforcement':
+                title = "Устройство металлоконструкций: усиление проема";
+                break;
+            case 'lightEnforcement':
+                title = "Устройство металлоконструкций: обрамление проема";
+                break;
+        }
             return {
                 ...state,
                 inputRows: 
@@ -19,6 +52,7 @@ const reducer = (state = initialState, action) => {
                             index: action.index,
                             mode: true,
                             deleteButton: false,
+                            title: title,
                             qty: 1
                         },
                         ...state.inputRows.slice(action.index)

@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { Component,useState, useEffect } from 'react';
 import Input from './Input';
 import InputContext from '../../context/input-context';
 //redux
 import { connect } from 'react-redux';
-import * as actionTypes from '../../store/actions/actions';
+import * as actionCreators from '../../store/actions/index';
 
+class InputRows extends Component {
+
+}
 const InputRows = (props) => {
     const [keysState, setKeysState] = useState({
         keys: [1]
@@ -171,16 +174,16 @@ const InputRows = (props) => {
         }}>
             <div className="input-rows">               
                 {
-                inputState.input.map((service, index) => {
+                props.inputRows.map((service, index) => {
                     return <Input 
-                            deleteButton={service.deleteButton}
-                            lastrow={index===inputState.input.length-1?"last-row":""}
-                            key={keysState.keys[index]} 
-                            keyvalue={keysState.keys[index]} 
-                            mode={service.mode}
+                            deleteButton={props.inputRows[index].deleteButton}
+                            lastrow={index===props.inputRows.length-1?"last-row":""}
+                            key={props.inputRows[index].key} 
+                            keyvalue={props.inputRows[index].key} 
+                            mode={props.inputRows[index].mode}
                             idvalue={service.id} 
-                            indexvalue={service.index} 
-                            qty={service.qty}
+                            indexvalue={props.inputRows[index].index} 
+                            qty={props.inputRows[index].qty}
                             />;
                 })
                 }
@@ -190,19 +193,13 @@ const InputRows = (props) => {
 }
 const mapStateToProps = state => {
     return {
-        inputRows: state.inputRows, 
-        index: 0, 
-        qty:1,
-        innerWidth: state.layout.innerWidth,
-        innerHeight: state.layout.innerHeight,
-        showBackdrop: state.layout.showBackdrop
+        inputRows: state.inputRows.inputRows, 
     };
 };
 
 const mapDispatchToPros = dispatch => {
     return {
-        onResize: () => dispatch( {type: actionTypes.WINDOW_RESIZE, innerWidth: window.innerWidth, innerHeight: window.innerHeight }),
-        onRowAdd: (payload) => dispatch( {type: actionTypes.ADD_ROW, serviceName: payload.serviceName, index: payload.index} )
+        onRowAdd: (payload) => dispatch( actionCreators.addRow(payload) )
     }
 }
 
