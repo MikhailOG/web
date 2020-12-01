@@ -5,3 +5,7 @@ export {
 export {
     addRow
 } from './inputRows';
+export {
+    inputChanged,
+    preferencesChanged
+} from './inputComponents';

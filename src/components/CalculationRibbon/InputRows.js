@@ -35,80 +35,8 @@ const InputRows = (props) => {
 
     return (
         <InputContext.Provider value={{
-            qtyHandler: (mode, event) => {
-                const input = event.target.parentElement.parentElement.parentElement.parentElement;
-                if (input.hasAttributes('keyvalue')){
-                    const index = keysState.keys.findIndex((key) => key === parseFloat(input.getAttribute('keyvalue')));
-                    const newInputState = [...inputState.input];
-                    switch (mode) {
-                        case 'addMode': 
-                        if ((newInputState[index].qty === 0) && (newInputState[index].deleteButton === true)) newInputState[index].deleteButton = false;
-                        newInputState[index].qty ++;
-                        event.target.parentElement.querySelector("input").value = newInputState[index].qty;
-                        break;
-                        case 'subtractMode': 
-                            if (((newInputState[index].qty === 1)&&(newInputState.length>1)) || ((newInputState[index].qty === 0)&&(newInputState[index].deleteButton === false))) {
-                                newInputState[index].deleteButton = true;
-                            }
-                            if ((newInputState[index].qty > 1) || ((newInputState.length>1)&&(newInputState[index].qty === 1))) {
-                            newInputState[index].qty --;
-                            event.target.parentElement.querySelector("input").value = newInputState[index].qty;
-                            }
-                        break;
-                        case 'onChangeMode':
-                            if ((event.target.value >= 1) || ((event.target.value == 0)&&(newInputState.length>1)))
-                            newInputState[index].qty = parseFloat(event.target.value);
-                            else event.target.value = newInputState[index].qty;
-                            if ((newInputState[index].qty >= 1) && (newInputState[index].deleteButton === true))
-                                newInputState[index].deleteButton = false;
-                            else if ((newInputState[index].qty === 0) && (newInputState[index].deleteButton === false) && (newInputState.length>1))
-                                newInputState[index].deleteButton = true;
-                        break;
-                        default: window.alert("incorrect button mode");
-                    }
-                    setInputState({
-                        input: newInputState,
-                        rowNum: inputState.rowNum
-                    })
-                }
-            },
-            targetedQtyHandler: (mode, target) => {
-                const input = target.parentElement.parentElement.parentElement.parentElement;
-                if (input.hasAttributes('keyvalue')){
-                    const index = keysState.keys.findIndex((key) => key === parseFloat(input.getAttribute('keyvalue')));
-                    const newInputState = [...inputState.input];
-                    switch (mode) {
-                        case 'addMode': 
-                        if ((newInputState[index].qty === 0) && (newInputState[index].deleteButton === true)) newInputState[index].deleteButton = false;
-                        newInputState[index].qty ++;
-                        target.parentElement.querySelector("input").value = newInputState[index].qty;
-                        break;
-                        case 'subtractMode': 
-                            if (((newInputState[index].qty === 1)&&(newInputState.length>1)) || ((newInputState[index].qty === 0)&&(newInputState[index].deleteButton === false))) {
-                                newInputState[index].deleteButton = true;
-                            }
-                            if ((newInputState[index].qty > 1) || ((newInputState.length>1)&&(newInputState[index].qty === 1))) {
-                            newInputState[index].qty --;
-                            target.parentElement.querySelector("input").value = newInputState[index].qty;
-                            }
-                        break;
-                        // case 'onChangeMode':
-                        //     if ((target.value >= 1) || ((target.value == 0)&&(newInputState.length>1)))
-                        //     newInputState[index].qty = parseFloat(target.value);
-                        //     else target.value = newInputState[index].qty;
-                        //     if ((newInputState[index].qty >= 1) && (newInputState[index].deleteButton === true))
-                        //         newInputState[index].deleteButton = false;
-                        //     else if ((newInputState[index].qty === 0) && (newInputState[index].deleteButton === false) && (newInputState.length>1))
-                        //         newInputState[index].deleteButton = true;
-                        // break;
-                        default: window.alert("incorrect button mode");
-                    }
-                    setInputState({
-                        input: newInputState,
-                        rowNum: inputState.rowNum
-                    })
-                }
-            },
+
+
             addRowHandler: (event) => {
                 const input = event.target.parentElement.parentElement.parentElement.parentElement;
                 if (input.hasAttributes('keyvalue')){

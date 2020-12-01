@@ -13,7 +13,7 @@ const Preferences = (props) => {
         <SelectComponent id="job" values={rowContext.jobs} value={rowContext.job}>Вид работ:</SelectComponent>
         <SelectComponent id="material" values={rowContext.materials} value={rowContext.material}>Материал стены<br />(перекрытия)</SelectComponent>
         <InputComponent id="wasteWeight">Разделить проем<br />на части весом<br />не более, кг:</InputComponent>
-        <InputComponent id="concreteWeight">Плотность<br />материала,<br />т/м3:</InputComponent>
+        <InputComponent id="concreteWeight">Плотность<br />материала,<br />кг/м3:</InputComponent>
       </div>
       <div className="yes-no-block">
         <YesNoSelect id="waste" answers={rowContext.wasteAnswers} selectedIndex={rowContext.wasteSelectedIndex}>Вынос мусора</YesNoSelect>

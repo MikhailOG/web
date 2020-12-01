@@ -125,6 +125,7 @@ class App extends Component {
                   lastrow={index===this.props.inputRows.length-1?"last-row":""}
                   key={service.key} 
                   input={this.props.inputRows[index]}
+                  inputRowsLength={this.props.inputRows.length}
                   />})}</div>:null}
         </div>
         
