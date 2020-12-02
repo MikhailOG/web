@@ -83,6 +83,15 @@ const reducer = (state = initialState, action) => {
                         .map(row =>  Object.assign({}, row, {index: row.index + 1}))
                     ]
             };
+            case actionTypes.DELETE_ROW: 
+                return {
+                    ...state,
+                    inputRows: 
+                        [   ...state.inputRows.slice(0, action.index),
+                            ...state.inputRows.slice(action.index + 1)
+                            .map(row =>  Object.assign({}, row, {index: row.index - 1}))
+                        ]
+                };
         case actionTypes.INPUT_CHANGED:
             return {
                 ...state,

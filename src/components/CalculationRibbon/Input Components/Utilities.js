@@ -27,6 +27,11 @@ class Utilities extends Component {
                 this.setState(newState);    
             }, 75);
         }
+        if (!this.context.mode && this.state.content !== this.props.modifiedLine) {
+            let newState = {...this.state};
+            newState.content = this.props.modifiedLine;
+            this.setState(newState); 
+        }
     }
  
     render() {

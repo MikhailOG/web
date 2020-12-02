@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Utilities from './Input Components/Utilities'
 import InputComponent from './Interface Components/InputComponent'
 import SelectComponent from './Interface Components/SelectComponent'
@@ -19,6 +19,15 @@ const Input = (props) => {
         mode: true,
         deleteButton: false
     });
+    useEffect(() =>{
+        console.log('Input[' + props.input.index + '] updates...' )
+        if (props.inputRowsLength === 1 && rowState.deleteButton){
+            props.onInputChanged({ index: props.input.index, id: 'qty', value: 1 });
+            let newRowState = {...rowState};
+            newRowState.deleteButton = false;
+            setRowState(newRowState);
+        }
+      });
     const rowContext = {
         diameters:[[42, '42 мм'], [52, '52 мм'], [62, '62 мм'], [72, '72 мм'], [82, '82 мм'], [92, '92 мм'], [102, '102 мм'], [112, '112 мм'], [122, '122 мм'], [132, '132 мм'], [142, '142 мм'], [152, '152 мм'], [162, '162 мм'], [172, '172 мм'], [182, '182 мм'], [192, '192 мм'], [200, '200 мм'], [250, '250 мм'], [300, '300 мм'], [350, '350 мм']]
     };
@@ -43,13 +52,14 @@ const Input = (props) => {
                         <React.Fragment> 
                             <Signs/>
                             <div className='text'>
-                            <p>Новый проем {props.input.data.width}x{props.input.data.height}x{props.input.data.depth} - {props.input.data.qty} шт.</p> 
+                            <p>Новый проем {props.input.data.width}x{props.input.data.height}x{props.input.data.depth} - {props.inputFromStore[props.input.index].data.qty} шт.</p> 
                             <p>Диаметр коронки {props.input.data.diameter} мм</p>
                             </div>
                             <DrawButton/>
                         </React.Fragment>
                     ),
-                    jobs: [['wall', 'проем в стене'], ['floor', 'проем в перекрытии']]
+                    jobs: [['wall', 'проем в стене'], ['floor', 'проем в перекрытии']],
+                    qty: props.input.data.qty
                 }
                 break;
             // case 'newCoring':
@@ -60,10 +70,11 @@ const Input = (props) => {
             default: ;
         };
         return(inputData);
-        }
+    }
     return(
         // <div keyvalue={props.input.key} idvalue={props.idvalue} indexvalue={props.input.index} className={mainClass + " " + props.lastrow}>
         <div keyvalue={props.input.key} indexvalue={props.input.index} className={[rowState.mode?"input":"input-mod", props.lastrow].join(' ')}>
+            {rowState.mode?<h3>{props.input.title}</h3>:null}
             <RowContext.Provider value={{
                 materials:[["reinforced-concrete", "железобетон"], ["concrete", "бетон"], ["brick", "кирпич"]],
                 wasteAnswers:[["waste-off", "вручную"], ["waste-on", "погрузчиком"]],
@@ -111,7 +122,7 @@ const Input = (props) => {
                     setRowState(newRowState);
                 },
                 qtyHandler: (mode, event) => { //OK
-                    const newRowState = {...rowState};
+                    let newRowState = {...rowState};
                     switch (mode) {
                         case 'addMode': 
                         if ((props.input.data.qty === 0) && (newRowState.deleteButton === true)) newRowState.deleteButton = false;
@@ -126,13 +137,18 @@ const Input = (props) => {
                             }
                         break;
                         case 'onChangeMode':
-                            if ((event.target.value >= 1) || ((event.target.value == 0)&&(props.inputRowsLength>1)))
-                            props.onInputChanged({ index: props.input.index, id: 'qty', value: parseFloat(event.target.value) });
-                            else event.target.value = props.input.data.qty;
-                            if ((props.input.data.qty >= 1) && (newRowState.deleteButton === true))
-                                newRowState.deleteButton = false;
-                            else if ((props.input.data.qty === 0) && (newRowState.deleteButton === false) && (props.inputRowsLength>1))
-                                newRowState.deleteButton = true;
+                            if (!isNaN(parseFloat(event.target.value))) {
+                                if (event.target.value >= 1) {
+                                    props.onInputChanged({ index: props.input.index, id: 'qty', value: parseFloat(event.target.value) });
+                                    if (newRowState.deleteButton)
+                                    newRowState.deleteButton = false;
+                                }
+                                else if ((event.target.value == 0)&&(props.inputRowsLength>1)) {
+                                    props.onInputChanged({ index: props.input.index, id: 'qty', value: parseFloat(event.target.value) });
+                                    newRowState.deleteButton = true;
+                                }
+                                else event.target.value = props.input.data.qty;
+                            }
                         break;
                         default: window.alert("incorrect button mode");
                     }
@@ -165,7 +181,10 @@ const Input = (props) => {
                         setRowState(newRowState);
                 },
                 addRowHandler: () => {
-                    props.onRowAdd({serviceName: props.input.serviceName, index: props.input.index + 1});
+                    props.onAddRow({serviceName: props.input.serviceName, index: props.input.index + 1});
+                },
+                deleteRowHandler: () => {
+                    props.onDeleteRow({index: props.input.index});
                 }
             }
             }>
@@ -180,13 +199,19 @@ const Input = (props) => {
 
 }
 
+    const mapStateToProps = state => {
+        return {
+            inputFromStore: state.inputs.inputRows
+        };
+    };
   
   const mapDispatchToPros = dispatch => {
     return {
      onInputChanged: (payload) => dispatch(actionCreators.inputChanged(payload)),
      onPreferencesChanged: (payload) => dispatch(actionCreators.preferencesChanged(payload)),
-     onRowAdd: (payload) => dispatch(actionCreators.addRow(payload))
+     onAddRow: (payload) => dispatch(actionCreators.addRow(payload)),
+     onDeleteRow: (payload) => dispatch(actionCreators.deleteRow(payload))
     }
   }
   
-  export default connect(null, mapDispatchToPros)(Input);
+  export default connect(mapStateToProps, mapDispatchToPros)(Input);

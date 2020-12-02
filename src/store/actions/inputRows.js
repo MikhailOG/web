@@ -7,3 +7,9 @@ export const addRow = (payload) => {
         index: payload.index
     };
 };
+export const deleteRow = (payload) => {
+    return {
+        type: actionTypes.DELETE_ROW,
+        index: payload.index
+    };
+};

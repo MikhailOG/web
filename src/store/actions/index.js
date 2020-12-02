@@ -3,7 +3,8 @@ export {
     windowResize
 } from './layout';
 export {
-    addRow
+    addRow,
+    deleteRow
 } from './inputRows';
 export {
     inputChanged,

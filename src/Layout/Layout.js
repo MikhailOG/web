@@ -9,11 +9,9 @@ import * as actionCreators from '../store/actions/index';
 
 class Layout extends Component {
     state = {
-        innerWidth: 0,
-        innerHeight: 0,
         firstMount: false,
         showBackdrop: false,
-        showCheckout: false // ===showBackdrop?
+        showCheckout: true
     };
 
     componentDidMount() {
@@ -44,13 +42,13 @@ class Layout extends Component {
                 <Nav/>
             </div>
             <LayoutContext.Provider value={{
-                windowWidth: this.state.innerWidth,
-                windowHeight: this.state.innerHeight
+                windowWidth: this.props.innerWidth,
+                windowHeight: this.props.innerHeight
             }}>
                 <div className="main-container">
                         {this.props.children}
                         <Checkout 
-                        showCheckout={this.props.showBackdrop}
+                        showCheckout={this.state.showCheckout}
                         canvasSize={Math.min(this.props.innerWidth, this.props.innerHeight)*0.75*8/12}/>
                 </div>
             </LayoutContext.Provider>

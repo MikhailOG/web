@@ -90,6 +90,7 @@ class App extends Component {
       this.setState({currentServiceClass: null, hoverIndex: null, btnClicked: false})
     }
   }
+
   render() {
     console.log('[App.js] render')
     return (
@@ -124,6 +125,7 @@ class App extends Component {
                   key={service.key} 
                   input={this.props.inputRows[index]}
                   inputRowsLength={this.props.inputRows.length}
+                  inputRows={this.props.inputRows}
                   />})}</div>:null}
         </div>
         
