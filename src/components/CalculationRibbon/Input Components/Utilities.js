@@ -9,7 +9,6 @@ class Utilities extends Component {
         content: this.props.normalLine
     }
     switchContentHandler = () => {
-
         let newState = {...this.state};
         if (!this.context.mode) {
             newState.content = this.props.normalLine;

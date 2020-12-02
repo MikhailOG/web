@@ -78,8 +78,6 @@ class App extends Component {
         this.serviceButtonClickedHandler(); 
         this.setState({hoverIndex:null});
         this.props.onRowAdd({serviceName: this.state.selectedService, index: 0});
-        console.log(this.state);
-        console.log(this.props.inputRows);
       });
   }
   clickRemoveHandler = (event) => {
@@ -142,7 +140,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToPros = dispatch => {
   return {
-    onRowAdd: (payload) => dispatch( actionCreators.addRow(payload) )
+    onRowAdd: (payload) => dispatch(actionCreators.addRow(payload))
   }
 }
 

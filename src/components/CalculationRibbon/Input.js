@@ -61,13 +61,10 @@ const Input = (props) => {
         };
         return(inputData);
         }
-        
-    const mainClass = rowState.mode?"input":"input-mod";
     return(
         // <div keyvalue={props.input.key} idvalue={props.idvalue} indexvalue={props.input.index} className={mainClass + " " + props.lastrow}>
-        <div keyvalue={props.input.key} indexvalue={props.input.index} className={mainClass + " " + props.lastrow}>
+        <div keyvalue={props.input.key} indexvalue={props.input.index} className={[rowState.mode?"input":"input-mod", props.lastrow].join(' ')}>
             <RowContext.Provider value={{
-                
                 materials:[["reinforced-concrete", "железобетон"], ["concrete", "бетон"], ["brick", "кирпич"]],
                 wasteAnswers:[["waste-off", "вручную"], ["waste-on", "погрузчиком"]],
                 wasteSelectedIndex: props.input.preferences.waste[1],
@@ -112,13 +109,6 @@ const Input = (props) => {
                     let newRowState = {...rowState};
                     newRowState.showPreferences = !newRowState.showPreferences;
                     setRowState(newRowState);
-                },
-                togglePreferencesHandle: () => {
-                    if ((rowState.showPreferences) && (!rowState.mode)) {
-                        let newRowState = {...rowState};
-                        newRowState.showPreferences = !newRowState.showPreferences;
-                        setRowState(newRowState);
-                    }
                 },
                 qtyHandler: (mode, event) => { //OK
                     const newRowState = {...rowState};
@@ -166,30 +156,36 @@ const Input = (props) => {
                         default: window.alert("incorrect button mode");
                     }
                     setRowState(newRowState);
-                } 
+                },
+                hideRowHandler: () => {
+                        let newRowState = {...rowState};
+                        newRowState.mode = !newRowState.mode;
+                        if ((rowState.showPreferences !== rowState.mode) && rowState.showPreferences)
+                        newRowState.showPreferences = !newRowState.showPreferences;
+                        setRowState(newRowState);
+                },
+                addRowHandler: () => {
+                    props.onRowAdd({serviceName: props.input.serviceName, index: props.input.index + 1});
+                }
             }
             }>
                 <Utilities 
                     normalLine={input(props.input.serviceName).normalLine}
                     modifiedLine={input(props.input.serviceName).modifiedLine}
                 />
-                <Preferences showPreferences={rowState.showPreferences} maxHeight="15rem"/>
+                <Preferences showPreferences={(rowState.showPreferences === rowState.mode)&&rowState.mode} maxHeight="15rem"/>
             </RowContext.Provider>
         </div>
     );
 
 }
 
-const mapStateToProps = state => {
-    return {
-       // input: state.inputs.inputRows[Input.props.input.indexs]
-    };
-  };
   
   const mapDispatchToPros = dispatch => {
     return {
      onInputChanged: (payload) => dispatch(actionCreators.inputChanged(payload)),
-     onPreferencesChanged: (payload) => dispatch(actionCreators.preferencesChanged(payload))
+     onPreferencesChanged: (payload) => dispatch(actionCreators.preferencesChanged(payload)),
+     onRowAdd: (payload) => dispatch(actionCreators.addRow(payload))
     }
   }
   
