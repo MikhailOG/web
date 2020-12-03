@@ -49,7 +49,7 @@ class Layout extends Component {
                 <div className="main-container">
                         {this.props.children}
                         <JobInfo 
-                        showJobInfo={this.props.showJobInfo}
+                        showJobInfo={this.props.jobInfo.showJobInfo}
                         canvasSize={Math.min(this.props.innerWidth, this.props.innerHeight)*0.75*8/12}/>
                 </div>
             </LayoutContext.Provider>
@@ -65,7 +65,6 @@ const mapStateToProps = state => {
         innerWidth: state.layout.innerWidth,
         innerHeight: state.layout.innerHeight,
         showBackdrop: state.layout.showBackdrop,
-        showJobInfo: state.calc.jobInfo.showJobInfo,
         jobInfo: state.calc.jobInfo
     };
 };

@@ -8,7 +8,6 @@ state={
     wrapperStyle: {},
     checkoutStyle: {},
     canvasStyle: {},
-    showContainer: true,
     canvasGradientAngle: '45deg'
 }
 
@@ -31,8 +30,6 @@ handleResize = () => {
 
 
 erase = () => {
-    this.props.onClearJobInfo();
-    this.props.onToggleBackdrop();
     this.setState({
         wrapperStyle: {
             background: "radial-gradient(circle at top right, transparent 39.5%, #10387d 39.5%)",
@@ -58,16 +55,19 @@ erase = () => {
     }, () => {
         setTimeout(()=> {
             this.setState({
-                showContainer:false
+                wrapperStyle: {},
+                checkoutStyle: {},
+                canvasStyle: {}
             })
         }, 500)
-    });
+        }
+    );
 
 }
 render () {
 
     return (
-        (this.state.showContainer*this.props.showJobInfo)?
+        (this.props.showJobInfo)?
         <div className="checkout-wrapper" id="checkoutWrapper" style={this.state.wrapperStyle}>
             <div className="checkout" style={this.state.checkoutStyle}>
                 <h3>Congrats!</h3>
@@ -78,7 +78,11 @@ render () {
                     style={this.state.canvasStyle}>
                 </canvas>
                 <Button
-                clicked={this.erase}
+                clicked={() => {
+                    this.erase();
+                    this.props.onClearJobInfo();
+                    this.props.onToggleBackdrop();
+                    }}
                 classes="escape">Click</Button>
             </div>          
         </div>:null
@@ -89,8 +93,8 @@ render () {
 
 const mapDispatchToPros = dispatch => {
     return {
-        onClearJobInfo: () => dispatch(actionCreators.clearJobInfo),
-        onToggleBackdrop: () => dispatch(actionCreators.toggleBackdrop()),
+        onClearJobInfo: () => dispatch(actionCreators.clearJobInfo()),
+        onToggleBackdrop: () => dispatch(actionCreators.toggleBackdropAsync()),
         
     }
 }

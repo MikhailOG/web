@@ -501,7 +501,7 @@ html {
         height: 5rem;
         padding: 0.625rem;
         margin: 0.625rem;
-        background: $mainBackgroundColor;
+        background: $whiteColor;
         font-size: 1.125rem;
         font-weight: 600;
         @extend %button-border-shared;
@@ -510,8 +510,19 @@ html {
       }
       .button:hover {
         transition: all 0.5s linear 0s;
-        background: $modeColor;
-        color: $whiteColor;
+        background: $mainBackgroundColor;
+        -webkit-animation: emphasize 500ms 1 ease-in;
+        animation: emphasize 500ms 1 ease-in-out;
+      }
+      @keyframes emphasize {
+        30% {
+          transform: scale(1.05);
+        }
+      }
+      @-webkit-keyframes emphasize {
+        30% {
+          transform: scale(1.05);
+        }
       }
       h3 {
         margin: 0.625rem 0 0 0;

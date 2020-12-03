@@ -6,8 +6,15 @@ export const getJobInfo = (payload) => {
         job: payload
     };
 };
-export const clearJobInfo = () => {
+export const clearJobInfoSync = () => {
     return {
-        type: actionTypes.CLEAR_JOB_INFO,
+        type: actionTypes.CLEAR_JOB_INFO
     };
+};
+export const clearJobInfo = () => {
+    return dispatch => {
+        setTimeout(() => {
+            dispatch(clearJobInfoSync());
+        }, 500); 
+    }
 };

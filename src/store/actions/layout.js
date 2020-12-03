@@ -5,6 +5,13 @@ export const toggleBackdrop = () => {
         type: actionTypes.TOGGLE_BACKDROP
     };
 };
+export const toggleBackdropAsync = () => {
+    return dispatch => {
+        setTimeout(() => {
+            dispatch(toggleBackdrop());
+        }, 500); 
+    }
+};
 
 export const windowResize = () => {
     return {

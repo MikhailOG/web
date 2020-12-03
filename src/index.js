@@ -9,6 +9,7 @@ import { Provider } from 'react-redux';
 import layoutReducer from './store/reducers/layout';
 import inputRowsReducer from './store/reducers/inputRows';
 import jobInfoReducer from './store/reducers/jobInfo';
+import thunk from 'redux-thunk';
 
 const rootReducer = combineReducers({
     layout: layoutReducer,
@@ -28,7 +29,7 @@ const logger = (store) => {
     }
 };
 const  composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const store = createStore(rootReducer, composeEnhancers(applyMiddleware(logger)));
+const store = createStore(rootReducer, composeEnhancers(applyMiddleware(logger, thunk)));
 ReactDOM.render(
     <Provider store={store}>
         <App />

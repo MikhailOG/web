@@ -452,7 +452,7 @@ html {
   height: 5rem;
   padding: 0.625rem;
   margin: 0.625rem;
-  background: #E3D7FF;
+  background: #f3fffd;
   font-size: 1.125rem;
   font-weight: 600;
   outline: none;
@@ -460,8 +460,19 @@ html {
 }
 .main-container .input-rows .input .button:hover {
   transition: all 0.5s linear 0s;
-  background: #966B9D;
-  color: #f3fffd;
+  background: #E3D7FF;
+  -webkit-animation: emphasize 500ms 1 ease-in;
+  animation: emphasize 500ms 1 ease-in-out;
+}
+@keyframes emphasize {
+  30% {
+    transform: scale(1.05);
+  }
+}
+@-webkit-keyframes emphasize {
+  30% {
+    transform: scale(1.05);
+  }
 }
 .main-container .input-rows .input h3 {
   margin: 0.625rem 0 0 0;
