@@ -2,7 +2,7 @@ import React, {useContext} from 'react';
 import RowContext from '../../../context/row-context';
 import LayoutContext from '../../../context/layout-context';
 
-const DrawButton = (props) => {
+const DrawButton = () => {
     const rowContext = useContext(RowContext);
     const layoutContext = useContext(LayoutContext);
     const style = {flexGrow: "1", alignSelf: "center", display: "flex", justifyContent: "flex-end", fontSize: "2rem", marginRight: "3rem"};
@@ -28,12 +28,12 @@ const DrawButton = (props) => {
                     if (layoutContext.windowWidth > 1070) 
                         buttonType = (        
                         <div className="buttons">
-                            <button className="button" type="button">Нарисовать схему</button>
+                            <button onClick={rowContext.drawButtonClickedHandler} className="button" type="button">Нарисовать схему</button>
                         </div>);
                     else 
                         buttonType = (
                             <p style={style}>
-                                <i style={marginLeft} className="classic-hover fas fa-pencil-ruler"></i>
+                                <i onClick={rowContext.drawButtonClickedHandler} style={marginLeft} className="classic-hover fas fa-pencil-ruler"></i>
                             </p>)
                 break;
                 default: break;
@@ -43,7 +43,7 @@ const DrawButton = (props) => {
             buttonType = (
                 <p style={style}>
                     {rowContext.deleteButton?<i onClick={rowContext.deleteRowHandler} style={marginRight} className="fas fa-trash-alt"></i>:null}
-                    <i className="button fas fa-pencil-ruler"></i>
+                    <i onClick={rowContext.drawButtonClickedHandler} className="button fas fa-pencil-ruler"></i>
                 </p>)
     }
     console.log("inner width: " + layoutContext.windowWidth)

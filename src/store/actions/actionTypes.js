@@ -5,6 +5,7 @@ export const WINDOW_RESIZE = 'WINDOW_RESIZE';
 export const INPUT_CHANGED = 'INPUT_CHANGED';
 export const PREFERENCES_CHANGED = 'PREFERENCES_CHANGED';
 export const GET_JOB_INFO = 'GET_JOB_INFO';
+export const CLEAR_JOB_INFO = 'CLEAR_JOB_INFO';
 
 
 

@@ -8,10 +8,12 @@ import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import layoutReducer from './store/reducers/layout';
 import inputRowsReducer from './store/reducers/inputRows';
+import jobInfoReducer from './store/reducers/jobInfo';
 
 const rootReducer = combineReducers({
     layout: layoutReducer,
-    inputs: inputRowsReducer
+    inputs: inputRowsReducer,
+    calc: jobInfoReducer
 });
 
 const logger = (store) => {

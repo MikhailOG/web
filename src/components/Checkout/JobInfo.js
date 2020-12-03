@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import Button from '../UI/Button';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+import * as actionCreators from '../../store/actions/index';
 
-class Checkout extends Component {
+class JobInfo extends Component {
 state={
     wrapperStyle: {},
     checkoutStyle: {},
@@ -30,6 +31,8 @@ handleResize = () => {
 
 
 erase = () => {
+    this.props.onClearJobInfo();
+    this.props.onToggleBackdrop();
     this.setState({
         wrapperStyle: {
             background: "radial-gradient(circle at top right, transparent 39.5%, #10387d 39.5%)",
@@ -58,13 +61,13 @@ erase = () => {
                 showContainer:false
             })
         }, 500)
-    })
+    });
 
 }
 render () {
 
     return (
-        (this.state.showContainer*this.props.showCheckout)?
+        (this.state.showContainer*this.props.showJobInfo)?
         <div className="checkout-wrapper" id="checkoutWrapper" style={this.state.wrapperStyle}>
             <div className="checkout" style={this.state.checkoutStyle}>
                 <h3>Congrats!</h3>
@@ -82,8 +85,14 @@ render () {
     );
 }
 }
-// const mapStateToProps = state => {
 
-// }
 
-export default connect()(Checkout);
+const mapDispatchToPros = dispatch => {
+    return {
+        onClearJobInfo: () => dispatch(actionCreators.clearJobInfo),
+        onToggleBackdrop: () => dispatch(actionCreators.toggleBackdrop()),
+        
+    }
+}
+
+export default connect(null, mapDispatchToPros)(JobInfo);

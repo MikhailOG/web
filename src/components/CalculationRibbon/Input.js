@@ -72,7 +72,6 @@ const Input = (props) => {
         return(inputData);
     }
     return(
-        // <div keyvalue={props.input.key} idvalue={props.idvalue} indexvalue={props.input.index} className={mainClass + " " + props.lastrow}>
         <div keyvalue={props.input.key} indexvalue={props.input.index} className={[rowState.mode?"input":"input-mod", props.lastrow].join(' ')}>
             {rowState.mode?<h3>{props.input.title}</h3>:null}
             <RowContext.Provider value={{
@@ -95,6 +94,10 @@ const Input = (props) => {
                 qty: props.input.data.qty,
                 mode: rowState.mode,
                 deleteButton: rowState.deleteButton,
+                drawButtonClickedHandler: () => {
+                    props.onGetJobInfo(props.input);
+                    props.onToggleBackdrop();
+                },
                 inputChangedHandler: (event) => { //OK
                     const id = event.target.getAttribute('id');
                     if (elementOrAncestorHasClass(event.target, 'preferences')) {
@@ -210,7 +213,9 @@ const Input = (props) => {
      onInputChanged: (payload) => dispatch(actionCreators.inputChanged(payload)),
      onPreferencesChanged: (payload) => dispatch(actionCreators.preferencesChanged(payload)),
      onAddRow: (payload) => dispatch(actionCreators.addRow(payload)),
-     onDeleteRow: (payload) => dispatch(actionCreators.deleteRow(payload))
+     onDeleteRow: (payload) => dispatch(actionCreators.deleteRow(payload)),
+     onGetJobInfo: (payload) => dispatch(actionCreators.getJobInfo(payload)),
+     onToggleBackdrop: () => dispatch(actionCreators.toggleBackdrop())
     }
   }
   

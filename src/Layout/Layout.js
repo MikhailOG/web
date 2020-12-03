@@ -3,15 +3,15 @@ import Header from '../components/Header/Header';
 import Nav from '../components/Nav/Nav';
 import LayoutContext from '../context/layout-context';
 import Backdrop from '../components/Backdrop/Backdrop';
-import Checkout from '../components/Checkout/Checkout';
+import JobInfo from '../components/Checkout/JobInfo';
 import { connect } from 'react-redux';
 import * as actionCreators from '../store/actions/index';
 
 class Layout extends Component {
     state = {
         firstMount: false,
-        showBackdrop: false,
-        showCheckout: true
+        // showBackdrop: false,
+        // showCheckout: true
     };
 
     componentDidMount() {
@@ -27,12 +27,13 @@ class Layout extends Component {
         window.removeEventListener('resize', this.props.onResize);
     };
 
-    hideBackdrop() {
-        this.setState({showBackdrop: false})
-    };
-    showBackdrop() {
-        this.setState({showBackdrop: true})
-    }
+    // hideBackdrop() {
+    //     this.setState({showBackdrop: false})
+    // };
+    // showBackdrop() {
+    //     this.setState({showBackdrop: true})
+    // }
+    
     render() {
         return(
             <div onClick={this.props.click} className="web">
@@ -47,8 +48,8 @@ class Layout extends Component {
             }}>
                 <div className="main-container">
                         {this.props.children}
-                        <Checkout 
-                        showCheckout={this.state.showCheckout}
+                        <JobInfo 
+                        showJobInfo={this.props.showJobInfo}
                         canvasSize={Math.min(this.props.innerWidth, this.props.innerHeight)*0.75*8/12}/>
                 </div>
             </LayoutContext.Provider>
@@ -63,13 +64,17 @@ const mapStateToProps = state => {
     return {
         innerWidth: state.layout.innerWidth,
         innerHeight: state.layout.innerHeight,
-        showBackdrop: state.layout.showBackdrop
+        showBackdrop: state.layout.showBackdrop,
+        showJobInfo: state.calc.jobInfo.showJobInfo,
+        jobInfo: state.calc.jobInfo
     };
 };
 
 const mapDispatchToPros = dispatch => {
     return {
-        onResize: () => dispatch(actionCreators.windowResize())
+        onResize: () => dispatch(actionCreators.windowResize()),
+        onToggleBackdrop: () => dispatch(actionCreators.toggleBackdrop()),
+        
     }
 }
 
