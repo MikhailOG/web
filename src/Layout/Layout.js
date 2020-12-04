@@ -48,9 +48,11 @@ class Layout extends Component {
             }}>
                 <div className="main-container">
                         {this.props.children}
-                        <JobInfo 
-                        showJobInfo={this.props.jobInfo.showJobInfo}
-                        canvasSize={Math.min(this.props.innerWidth, this.props.innerHeight)*0.75*8/12}/>
+                        {this.props.jobInfo.showJobInfo?
+                            <JobInfo 
+                            canvasSize={Math.min(this.props.innerWidth, this.props.innerHeight)*0.75*8/12}/>
+                            :null
+                        }
                 </div>
             </LayoutContext.Provider>
             </div>

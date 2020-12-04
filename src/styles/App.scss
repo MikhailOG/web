@@ -270,7 +270,7 @@ html {
       }
     }
   }
-  .checkout-wrapper {
+  .job-info-wrapper {
     border-radius:15px;
     //padding: 3px;
     background-color: $mainTextColor;
@@ -282,7 +282,7 @@ html {
     z-index: 1;
     //-webkit-animation: gradientBG 5s linear 1;
     //animation: gradientBG 1s linear 1 0.003s;
-    .checkout {
+    .job-info {
       background-color: $bodyBackgroundColor;
       background-size: 280% 280%;
       background-position: 0% 100%;
@@ -293,15 +293,7 @@ html {
       border-radius:10px;
       //-webkit-animation: gradientBG 5s linear 1;
       //animation: gradientBG 1s linear 1;
-      canvas {
-        margin: 2rem;
-        background-color: $whiteColor;
-        //background: radial-gradient(circle at top right, transparent 39.5%, $whiteColor 39.5%);
-        background-size: 280% 280%;
-        @extend %button-border-shared;
-        transition: background-color 0.4s ease-in, border-color 0.35s ease-in;
-      }
-      .escape {
+      button {
         width: 2rem;
         height: 2rem;
         outline: none;
@@ -309,25 +301,24 @@ html {
         repeating-linear-gradient(45deg, transparent 0% 43%, $mainTextColor 43%  57%),
         repeating-linear-gradient(135deg, transparent 0% 43%, $mainTextColor 43%  57%);
         //transition: all 5s ease-in  3s;
-        border: 3px solid $mainTextColor;
+        border: 3px transparent;
         border-radius: 100%;
-        box-sizing: border-box;
+        //box-sizing: border-box;
         position: relative;
-        top: 0.5rem;
-        left: -1rem;
         z-index: 3;
-        &:active {
-          background: inherit;
-          //repeating-linear-gradient(45deg, transparent 0 40%, $redButtonBackgroundColor 40% 60%),
-          //repeating-linear-gradient(135deg, transparent 0 40%, $redButtonBackgroundColor 40% 60%);
-          transition: width 2s ease-in, height 2s ease-in, position 4s linear, margin-left 2s ease-in, margin-top 0.65s ease-in 1.35s;
-          width: 45rem;
-          height: 45rem;
-          margin-left: -35rem;
-          margin-top: -15rem;
-          // top: 10rem;
-          // left: 30rem;
+        &:hover {
+          background: 
+          repeating-linear-gradient(45deg, transparent 0% 43%, $redButtonBackgroundColor 43%  57%),
+          repeating-linear-gradient(135deg, transparent 0% 43%, $redButtonBackgroundColor 43%  57%);
         }
+      }
+      canvas {
+        margin: 2rem;
+        background-color: $whiteColor;
+        //background: radial-gradient(circle at top right, transparent 39.5%, $whiteColor 39.5%);
+        background-size: 280% 280%;
+        @extend %button-border-shared;
+        transition: background-color 0.4s ease-in, border-color 0.35s ease-in;
       }
     } 
     @keyframes gradientBG {

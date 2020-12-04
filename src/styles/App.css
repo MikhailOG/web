@@ -19,7 +19,7 @@ font-family: 'Vollkorn', serif;
 /*colors*/
 /*-------------------------------------*/
 /*shared*/
-.main-container .input-rows .input button, .main-container .input-rows .input, .main-container .input-rows .input-mod, .main-container .input-rows, .main-container .checkout-wrapper .checkout canvas, .main-container .menu .btnBed .btn {
+.main-container .input-rows .input button, .main-container .input-rows .input, .main-container .input-rows .input-mod, .main-container .input-rows, .main-container .job-info-wrapper .job-info canvas, .main-container .menu .btnBed .btn {
   border-radius: 15px;
   border: 3px solid #10387d;
 }
@@ -248,7 +248,7 @@ html {
   color: #10387d;
   text-shadow: 1px 1px 2px #f3fffd, 2px 2px 2px #dadadb;
 }
-.main-container .checkout-wrapper {
+.main-container .job-info-wrapper {
   border-radius: 15px;
   background-color: #10387d;
   margin: 1rem;
@@ -258,7 +258,7 @@ html {
   display: flex;
   z-index: 1;
 }
-.main-container .checkout-wrapper .checkout {
+.main-container .job-info-wrapper .job-info {
   background-color: #ABA9BF;
   background-size: 280% 280%;
   background-position: 0% 100%;
@@ -267,32 +267,24 @@ html {
   flex-grow: 1;
   border-radius: 10px;
 }
-.main-container .checkout-wrapper .checkout canvas {
-  margin: 2rem;
-  background-color: #f3fffd;
-  background-size: 280% 280%;
-  transition: background-color 0.4s ease-in, border-color 0.35s ease-in;
-}
-.main-container .checkout-wrapper .checkout .escape {
+.main-container .job-info-wrapper .job-info button {
   width: 2rem;
   height: 2rem;
   outline: none;
   background: repeating-linear-gradient(45deg, transparent 0% 43%, #10387d 43% 57%), repeating-linear-gradient(135deg, transparent 0% 43%, #10387d 43% 57%);
-  border: 3px solid #10387d;
+  border: 3px transparent;
   border-radius: 100%;
-  box-sizing: border-box;
   position: relative;
-  top: 0.5rem;
-  left: -1rem;
   z-index: 3;
 }
-.main-container .checkout-wrapper .checkout .escape:active {
-  background: inherit;
-  transition: width 2s ease-in, height 2s ease-in, position 4s linear, margin-left 2s ease-in, margin-top 0.65s ease-in 1.35s;
-  width: 45rem;
-  height: 45rem;
-  margin-left: -35rem;
-  margin-top: -15rem;
+.main-container .job-info-wrapper .job-info button:hover {
+  background: repeating-linear-gradient(45deg, transparent 0% 43%, #993955 43% 57%), repeating-linear-gradient(135deg, transparent 0% 43%, #993955 43% 57%);
+}
+.main-container .job-info-wrapper .job-info canvas {
+  margin: 2rem;
+  background-color: #f3fffd;
+  background-size: 280% 280%;
+  transition: background-color 0.4s ease-in, border-color 0.35s ease-in;
 }
 @keyframes gradientBG {
   0% {
