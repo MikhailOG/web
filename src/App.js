@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { BrowserRouter, Route } from 'react-router-dom';
 import './styles/App.css';
 import Layout from './Layout/Layout';
 import Btn from './components/Btn/Btn';
@@ -94,42 +95,47 @@ class App extends Component {
   render() {
     console.log('[App.js] render')
     return (
-      <Layout click = {this.clickRemoveHandler}>
-        <div 
-          onMouseMove = {this.getElement} 
-          onMouseLeave={this.clearServices} 
-          className="menu">
-          {this.services.map((service, index) => {
-            return (
-              <Btn 
-                click={this.serviceButtonClickedHandler}
-                serviceClass={service.serviceClass} 
-                index={index}
-                hover={this.state.hoverIndex}
-                currentClass={this.state.currentServiceClass}
-                serviceTitle={service.serviceTitle} 
-                key={service.serviceClass}
-                clicked={this.state.btnClicked}/>
-            );
-          })}
-          <Services 
-            showServices={this.state.btnClicked}
-            click={this.serviceClickedHandler}
-            index={this.currentCursorPosition.index}
-            serviceClass = {this.state.currentServiceClass} 
-            services={this.services}/>
-            {this.props.inputRows[0]?<div className='input-rows'>
-              {this.props.inputRows.map((service, index) => {
-                return <Input 
-                  lastrow={index===this.props.inputRows.length-1?"last-row":""}
-                  key={service.key} 
-                  input={this.props.inputRows[index]}
-                  inputRowsLength={this.props.inputRows.length}
-                  inputRows={this.props.inputRows}
-                  />})}</div>:null}
-        </div>
-        
-      </Layout>
+      <BrowserRouter>
+        <Layout click = {this.clickRemoveHandler}>
+          <Route path ='/' exact render={() => <h1>Home</h1>}/>
+          <Route path ='/calculator' exact render={() => (
+            <div 
+            onMouseMove = {this.getElement} 
+            onMouseLeave={this.clearServices} 
+            className="menu">
+            {this.services.map((service, index) => {
+              return (
+                <Btn 
+                  click={this.serviceButtonClickedHandler}
+                  serviceClass={service.serviceClass} 
+                  index={index}
+                  hover={this.state.hoverIndex}
+                  currentClass={this.state.currentServiceClass}
+                  serviceTitle={service.serviceTitle} 
+                  key={service.serviceClass}
+                  clicked={this.state.btnClicked}/>
+              );
+            })}
+            <Services 
+              showServices={this.state.btnClicked}
+              click={this.serviceClickedHandler}
+              index={this.currentCursorPosition.index}
+              serviceClass = {this.state.currentServiceClass} 
+              services={this.services}/>
+              {this.props.inputRows[0]?<div className='input-rows'>
+                {this.props.inputRows.map((service, index) => {
+                  return <Input 
+                    lastrow={index===this.props.inputRows.length-1?"last-row":""}
+                    key={service.key} 
+                    input={this.props.inputRows[index]}
+                    inputRowsLength={this.props.inputRows.length}
+                    inputRows={this.props.inputRows}
+                    />})}</div>:null}
+          </div>
+          )}/>
+
+        </Layout>
+      </BrowserRouter>
     );
   }
 }
