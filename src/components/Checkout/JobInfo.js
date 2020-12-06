@@ -17,6 +17,7 @@ state={
 animationDuration = '0.5s';
 
 componentDidMount() {
+    console.log('[JobInfo did mount')
     window.addEventListener('resize', this.handleResize);
     if (this.state.escapeButtonLeftPosition === null && document.documentElement.querySelector('.job-info')){
         this.setState({
@@ -71,18 +72,24 @@ erase = () => {
     }, () => {
         setTimeout(()=> {
             this.setState({
-                wrapperStyle: {},
+                wrapperStyle: {display:'none'},
                 checkoutStyle: {},
-                canvasStyle: {}
+                canvasStyle: {},
+                escaped: false
             })
-        }, 495)
+        }, 495);
+        setTimeout(()=> {
+            this.setState({
+                wrapperStyle: {},
+            })
+        }, 1001)
         }
     );
 
 }
 render () {
     return (
-        <div className="job-info-wrapper" id="jobInfoWrapper" style={this.state.wrapperStyle}>
+        <div className="job-info-wrapper" id="jobInfoWrapper" style={Object.assign({},this.state.wrapperStyle, this.props.showJobInfo?{transform: 'translateY(0)'}:{transform: 'translateY(-100vh)'})}>
             <div className="job-info" style={this.state.checkoutStyle}>
                 <Button
                     clicked={() => {
