@@ -6,7 +6,7 @@ import * as actionCreators from '../../store/actions/index';
 
 class JobInfo extends Component {
 state={
-    wrapperStyle: {},
+    wrapperStyle: {transform: 'translateY(-100vh)'},
     checkoutStyle: {},
     canvasStyle: {},
     canvasGradientAngle: '45deg',
@@ -24,18 +24,18 @@ componentDidMount() {
             escapeButtonLeftPosition: parseFloat(getComputedStyle(document.documentElement.querySelector('.job-info')).width) - convertRemToPixels(2.4)
         })
     };
+    if (this.state.wrapperStyle.transform === 'translateY(-100vh)' && this.props.showJobInfo){
+        console.log('transform')
+        setTimeout(() => {
+            this.setState({wrapperStyle: {transform: 'translateY(0)'}})
+        }, 10)
+    }
 };
 componentWillUnmount(){
     window.removeEventListener('resize', this.handleResize);
 };
 
 handleResize = () => {
-    // const wrapper = document.getElementById('checkoutWrapper');
-    // if (wrapper)
-    // this.setState({
-    //     canvasGradientAngle: Math.atan( wrapper.clientHeight / wrapper.clientWidth)*180/Math.PI + 'deg'
-    // }, console.log(this.state.canvasGradientAngle));
-
     if (document.documentElement.querySelector('.escape') && (this.state.escapeButtonLeftPosition != parseFloat(getComputedStyle(document.documentElement.querySelector('.job-info')).width)) - convertRemToPixels(2.4)){
         this.setState({
             escapeButtonLeftPosition: parseFloat(getComputedStyle(document.documentElement.querySelector('.job-info')).width) - convertRemToPixels(2.4)
@@ -69,51 +69,46 @@ erase = () => {
             // backgroundPosition: "0% 100%"
         },
         escaped: true
-    }, () => {
-        setTimeout(()=> {
-            this.setState({
-                wrapperStyle: {display:'none'},
-                checkoutStyle: {},
-                canvasStyle: {},
-                escaped: false
-            })
-        }, 495);
-        setTimeout(()=> {
-            this.setState({
-                wrapperStyle: {},
-            })
-        }, 1001)
-        }
+    }
     );
 
 }
 render () {
-    return (
-        <div className="job-info-wrapper" id="jobInfoWrapper" style={Object.assign({},this.state.wrapperStyle, this.props.showJobInfo?{transform: 'translateY(0)'}:{transform: 'translateY(-100vh)'})}>
-            <div className="job-info" style={this.state.checkoutStyle}>
-                <Button
-                    clicked={() => {
-                        this.props.onClearJobInfo();
-                        this.props.onToggleBackdrop();
-                        this.erase();
-                        }}
-                    classes="escape"
-                    style={{top:convertRemToPixels(0.4), left: this.state.escapeButtonLeftPosition}}
-                    escaped={this.state.escaped}
-                    />
-                <h3>Congrats!</h3>
-                <canvas 
-                    id="myCanvas" 
-                    width={this.props.canvasSize} 
-                    height={this.props.canvasSize}
-                    style={this.state.canvasStyle}>
-                </canvas>
-            </div>          
-        </div>
-    );
+        //const jobType = this.props.currentJob.preferences.job==='wall'?'в стене':'в перекрытии';
+        return (
+            <div className="job-info-wrapper" id="jobInfoWrapper" style={this.state.wrapperStyle}>
+                <div className="job-info" style={this.state.checkoutStyle}>
+                    <Button
+                        clicked={() => {
+                            this.props.onClearJobInfo();
+                            this.props.onToggleBackdrop();
+                            this.erase();
+                            }}
+                        classes="escape"
+                        style={{top:convertRemToPixels(0.4), left: this.state.escapeButtonLeftPosition}}
+                        escaped={this.state.escaped}
+                        />
+                    <h3>Congrats!</h3>
+                        {/* <div className='job-description'>
+                            <p>{this.props.currentJob.title + ' ' + jobType}</p>
+                        </div> */}
+                        {this.props.currentJob.jobData}
+                    <canvas 
+                        id="myCanvas" 
+                        width={this.props.canvasSize} 
+                        height={this.props.canvasSize}
+                        style={this.state.canvasStyle}>
+                    </canvas>
+                </div>          
+            </div>
+        );
 }
 }
-
+const mapStateToProps = state => {
+    return {
+        currentJob: state.calc.jobInfo
+    };
+}
 
 const mapDispatchToPros = dispatch => {
     return {
@@ -123,4 +118,4 @@ const mapDispatchToPros = dispatch => {
     }
 }
 
-export default connect(null, mapDispatchToPros)(JobInfo);
+export default connect(mapStateToProps, mapDispatchToPros)(JobInfo);

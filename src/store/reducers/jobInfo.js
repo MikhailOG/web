@@ -1,10 +1,11 @@
+
 import * as actionTypes from '../actions/actionTypes';
 import deepFreeze from 'deep-freeze';
 import expect from 'expect';
 
 // reducer
 const initialState = {
-    jobInfo: {showJobInfo: false},
+    jobInfo: {showJobInfo: false}
 }
 const reducer = (state = initialState, action) => {
     switch (action.type) {
@@ -13,6 +14,7 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 jobInfo: {
                     ...action.job,
+                    jobData: action.jobData,
                     showJobInfo: true
                 }
             };
