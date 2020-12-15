@@ -9,6 +9,7 @@ export const getJobInfo = (payload) => {
             jobData = (
             <div className='job-description'>
                 <p>{payload.title + ' ' + jobType}</p>
+                <p>{'Размер проема: ' + payload.data.width + ' x ' + payload.data.height + ' x ' + payload.data.depth + ' мм.  Количество: ' + payload.data.qty + ' шт.'}</p>
             </div>);
     }
     return {

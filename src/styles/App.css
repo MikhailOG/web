@@ -29,7 +29,7 @@ font-family: 'Vollkorn', serif;
   border: 2px solid #10387d;
 }
 
-.main-container .input-rows .input .preferences, .main-container .input-rows .input .first-line, .main-container .input-rows .input-mod .first-line {
+.main-container .input-rows .input .preferences, .main-container .input-rows .input .utility-container .first-line, .main-container .input-rows .input .utility-container .second-line, .main-container .input-rows .input .utility-container, .main-container .input-rows .input-mod .utility-container .first-line, .main-container .input-rows .input-mod .utility-container {
   display: flex;
 }
 
@@ -331,30 +331,34 @@ html {
   text-shadow: 1px 1px 3px #10387d, 0px 2px 10px #4A4063;
   transition: height 0.15s ease-in, background-color 0.3s ease-in 0.01s;
 }
-.main-container .input-rows .input-mod .first-line {
+.main-container .input-rows .input-mod .utility-container {
   justify-content: flex-start;
   padding: 0.625rem 0px 0.625rem 0.3125rem;
   height: 4rem;
   transition: height 0.15s ease-out;
 }
-.main-container .input-rows .input-mod .first-line .signs {
+.main-container .input-rows .input-mod .utility-container .first-line {
+  flex-grow: 1;
+  justify-content: flex-start;
+}
+.main-container .input-rows .input-mod .utility-container .first-line .signs {
   align-self: center;
   font-size: 2.1875rem;
   text-shadow: 0px 2px 10px #4A4063;
 }
-.main-container .input-rows .input-mod .first-line .signs i:last-of-type {
+.main-container .input-rows .input-mod .utility-container .first-line .signs i:last-of-type {
   margin: 0 0.625rem;
 }
-.main-container .input-rows .input-mod .first-line .text {
+.main-container .input-rows .input-mod .utility-container .first-line .text {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
-.main-container .input-rows .input-mod .first-line .text p {
+.main-container .input-rows .input-mod .utility-container .first-line .text p {
   display: inline-block;
   margin: 0;
 }
-.main-container .input-rows .input-mod i:hover, .main-container .input-rows .input-mod .signs i:hover {
+.main-container .input-rows .input-mod .utility-container i:hover, .main-container .input-rows .input-mod .utility-container .signs i:hover {
   color: #10387d;
   text-shadow: 0px 0px 10px #f3fffd;
   transition: color 0.5s linear 0s;
@@ -476,20 +480,36 @@ html {
   margin: 0.625rem 0 0 0;
   text-align: center;
 }
-.main-container .input-rows .input .first-line {
-  justify-content: flex-start;
-  padding: 0 0px 0.625rem 0.3125rem;
-  height: 6.5rem;
+.main-container .input-rows .input .utility-container {
   transition: height 0.15s ease-out;
+  padding: 0 0px 0.625rem 0.3125rem;
+  flex-direction: column;
+  height: 11.5rem;
+  align-items: center;
 }
-.main-container .input-rows .input .first-line .signs {
+.main-container .input-rows .input .utility-container .title-text {
+  margin-bottom: 0.3rem;
+}
+.main-container .input-rows .input .utility-container .second-line {
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+.main-container .input-rows .input .utility-container .second-line div {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+.main-container .input-rows .input .utility-container .first-line {
+  justify-content: flex-start;
+}
+.main-container .input-rows .input .utility-container .first-line .signs {
   align-self: center;
   font-size: 2.1875rem;
 }
-.main-container .input-rows .input .first-line .signs i:last-of-type {
+.main-container .input-rows .input .utility-container .first-line .signs i:last-of-type {
   margin: 0 0.625rem;
 }
-.main-container .input-rows .input .first-line .signs p:first-child {
+.main-container .input-rows .input .utility-container .first-line .signs p:first-child {
   display: flex;
 }
 .main-container .input-rows .input .opacity-class {

@@ -31,9 +31,20 @@ const reducer = (state = initialState, action) => {
                     diameter: 152
                 };
                 break;
-            // case 'enhancementCoring':
-            //     title = "Алмазное бурение: расширение проема";
-            //     break;
+            case 'enhancementCoring':
+                title = "Алмазное бурение: расширение проема";
+                data = {
+                    qty: 1,
+                    width: 500,
+                    height: 500,
+                    depth: 250,
+                    diameter: 152,
+                    enhancementTop: 0,
+                    enhancementBottom: 0,
+                    enhancementLeft: 0,
+                    enhancementRight: 0
+                };
+                break;
             // case 'singleCoring':
             //     title = "Алмазное бурение: одиночные отверстия";
             //     break;

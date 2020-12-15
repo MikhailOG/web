@@ -5,14 +5,15 @@ import UtilityContext from '../../../context/utility-context';
 class Utilities extends Component {
     static contextType = RowContext;
     state = {
-        classList: ['first-line'],
+        classList: ['utility-container'],
         content: this.props.normalLine
     }
+
     switchContentHandler = () => {
         let newState = {...this.state};
         if (!this.context.mode) {
             newState.content = this.props.normalLine;
-            newState.classList = ['first-line', 'opacity-class'];
+            newState.classList = ['utility-container', 'opacity-class'];
         }
         else {
             newState.content = this.props.modifiedLine;
@@ -23,9 +24,9 @@ class Utilities extends Component {
         if (this.state.classList[1]) {
             let newState = {...this.state};
             setTimeout(() => {
-                newState.classList = ['first-line'];
+                newState.classList = ['utility-container'];
                 this.setState(newState);    
-            }, 75);
+            }, this.props.transitionTime);
         }
         if (!this.context.mode && this.state.content !== this.props.modifiedLine) {
             let newState = {...this.state};
@@ -35,15 +36,23 @@ class Utilities extends Component {
     }
  
     render() {
-
+        let height = {};
+        this.context.mode?height=this.props.height:null;
         return (
             <UtilityContext.Provider value={{
                 switchContentHandler: this.switchContentHandler
                 
             }}>
-                <div className={this.state.classList.join(' ')}>
+                <div 
+                style = {height}
+                className={this.state.classList.join(' ')}
+                >
                     {this.state.content}
                 </div>
+                {/* {!this.props.extraLine==0?<div className={this.state.classList.join(' ')}>
+                    {this.props.extraLine}
+                </div>:null} */}
+
             </UtilityContext.Provider>
 
         );
@@ -52,7 +61,7 @@ class Utilities extends Component {
 }
 export default Utilities;
 // const firstLineModified = (
-//     <div className="first-line opacity-class"> 
+//     <div className="utility-container opacity-class"> 
 //         <Signs/>
 //         <div className='text'>
 //         <p>Новый проем {this.context.width}x{this.context.height}x{this.context.depth} - {this.context.qty} шт.</p> 
@@ -64,7 +73,7 @@ export default Utilities;
 
 
 //     const firstLine = (
-//         <div className="first-line"> 
+//         <div className="utility-container"> 
 //             <Signs/>
 //             <InputComponent id="width">Ширина, мм:</InputComponent>
 //             <InputComponent id="height">Высота, мм:</InputComponent>

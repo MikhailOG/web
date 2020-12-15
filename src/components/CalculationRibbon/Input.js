@@ -38,35 +38,80 @@ const Input = (props) => {
                 inputData ={
                     normalLine: (
                         <React.Fragment> 
-                            <Signs/>
-                            <InputComponent id="width">Ширина, мм:</InputComponent>
-                            <InputComponent id="height">Высота, мм:</InputComponent>
-                            <InputComponent id="depth">Глубина, мм:</InputComponent>
-                            <SelectComponent id="diameter" values={rowContext.diameters}>Диаметр коронки:</SelectComponent>
-                            <Cog/>
-                            <AddToCart/>
-                            <DrawButton/>
+                            <div className='first-line'>
+                                <Signs/>
+                                <InputComponent id="width">Ширина, мм:</InputComponent>
+                                <InputComponent id="height">Высота, мм:</InputComponent>
+                                <InputComponent id="depth">Глубина, мм:</InputComponent>
+                                <SelectComponent id="diameter" values={rowContext.diameters}>Диаметр коронки:</SelectComponent>
+                                <Cog/>
+                                <AddToCart/>
+                                <DrawButton/>
+                            </div>
                         </React.Fragment>
                     ), 
                     modifiedLine: (
                         <React.Fragment> 
-                            <Signs/>
-                            <div className='text'>
-                            <p>Новый проем {props.input.data.width}x{props.input.data.height}x{props.input.data.depth} - {props.inputFromStore[props.input.index].data.qty} шт.</p> 
-                            <p>Диаметр коронки {props.input.data.diameter} мм</p>
+                            <div className='first-line'>
+                                <Signs/>
+                                <div className='text'>
+                                <p>Новый проем {props.input.data.width}x{props.input.data.height}x{props.input.data.depth} - {props.inputFromStore[props.input.index].data.qty} шт.</p> 
+                                <p>Диаметр коронки {props.input.data.diameter} мм</p>
+                                </div>
+                                <DrawButton/>
                             </div>
-                            <DrawButton/>
                         </React.Fragment>
                     ),
                     jobs: [['wall', 'проем в стене'], ['floor', 'проем в перекрытии']],
-                    qty: props.input.data.qty
+                    qty: props.input.data.qty,
+                    transitionTime: 75,
+                    height: {height: '6rem'}
                 }
                 break;
-            // case 'newCoring':
-            //    inputData = {
-            //         input: <NewCoring/>,
-            //         jobs: [['wall', 'проем в стене'], ['floor', 'проем в перекрытии']]};
-            // break;
+                case 'enhancementCoring':
+                    inputData ={
+                        normalLine: (
+                            <React.Fragment> 
+                                <div className='first-line'>
+                                    <Signs/>
+                                    <InputComponent id="width">Ширина, мм:</InputComponent>
+                                    <InputComponent id="height">Высота, мм:</InputComponent>
+                                    <InputComponent id="depth">Глубина, мм:</InputComponent>
+                                    <SelectComponent id="diameter" values={rowContext.diameters}>Диаметр коронки:</SelectComponent>
+                                    <AddToCart/>
+                                    <Cog/>
+                                    <DrawButton/>
+                                </div>
+                                <div className='title-text'>
+                                    <p>Насколько расширить проем?</p>
+                                </div>
+                                <div className='second-line'>
+                                    <InputComponent id="enhancementLeft">Слева, мм:</InputComponent>
+                                    <InputComponent id="enhancementRight">Справа, мм:</InputComponent>
+                                    <InputComponent id="enhancementTop">Сверху, мм:</InputComponent>
+                                    <InputComponent id="enhancementBottom">Снизу, мм:</InputComponent>   
+
+                                </div>
+                            </React.Fragment>
+                        ),
+                        modifiedLine: (
+                            <React.Fragment> 
+                                <div className='first-line'>
+                                    <Signs/>
+                                    <div className='text'>
+                                    <p>Расширение проема {props.input.data.width}x{props.input.data.height}x{props.input.data.depth} - {props.inputFromStore[props.input.index].data.qty} шт.</p> 
+                                    <p>Диаметр коронки {props.input.data.diameter} мм</p>
+                                    </div>
+                                    <DrawButton/>
+                                </div>
+                            </React.Fragment>
+                        ),
+                        jobs: [['wall', 'проем в стене'], ['floor', 'проем в перекрытии']],
+                        qty: props.input.data.qty,
+                        transitionTime: 120,
+                        height: {height: '11rem'}
+                    }
+                    break;
             default: ;
         };
         return(inputData);
@@ -87,6 +132,10 @@ const Input = (props) => {
                 height: props.input.data.height,
                 depth: props.input.data.depth,
                 diameter: props.input.data.diameter,
+                enhancementTop: props.input.data.enhancementTop,
+                enhancementBottom: props.input.data.enhancementBottom,
+                enhancementLeft: props.input.data.enhancementLeft,
+                enhancementRight: props.input.data.enhancementRight,
                 material: props.input.preferences.material,
                 job: props.input.preferences.job,
                 wasteWeight: props.input.preferences.wasteWeight,
@@ -105,6 +154,10 @@ const Input = (props) => {
                             props.onPreferencesChanged({ index: props.input.index, id: id, value: event.target.value });
                         else if (event.target.type === "text" && !isNaN(event.target.value) && event.target.value > 0) 
                             props.onPreferencesChanged({ index: props.input.index, id: id, value: parseFloat(event.target.value) });
+                    }
+                    else if (elementOrAncestorHasClass(event.target, 'second-line')) {
+                        if (event.target.type === "text" && !isNaN(event.target.value) && !isNaN(parseFloat(event.target.value)) && event.target.value >= 0) 
+                            props.onInputChanged({ index: props.input.index, id: id, value: parseFloat(event.target.value) });
                     }
                     else {
                         if (event.target.type === "select-one")
@@ -192,6 +245,8 @@ const Input = (props) => {
             }
             }>
                 <Utilities 
+                    height={input(props.input.serviceName).height}
+                    transitionTime={input(props.input.serviceName).transitionTime}
                     normalLine={input(props.input.serviceName).normalLine}
                     modifiedLine={input(props.input.serviceName).modifiedLine}
                 />

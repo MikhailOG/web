@@ -35,6 +35,7 @@ class Calculator extends Component {
     if (this.context.clicked) {
       this.clickRemoveHandler(this.context.clickedEvt)
     }
+    console.log('[Calculator.js] componentDidUpdate')
   }
   getElement = (event) => {
     if (event.target.hasAttribute("type")) {
