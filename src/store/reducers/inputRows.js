@@ -39,7 +39,7 @@ const reducer = (state = initialState, action) => {
                     height: 500,
                     depth: 250,
                     diameter: 152,
-                    enhancementTop: 0,
+                    enhancementTop: 250,
                     enhancementBottom: 0,
                     enhancementLeft: 0,
                     enhancementRight: 0

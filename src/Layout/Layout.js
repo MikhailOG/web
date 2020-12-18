@@ -41,9 +41,9 @@ class Layout extends Component {
     };
     
     render() {
+        console.log('showJobInfo: ' + this.props.jobInfo.showJobInfo)
         return(
             <div onClick={(event) => this.clickHandler(event)} className="web">
-            {/* <div onClick={this.props.click} className="web"></div> */}
             <Backdrop showBackdrop={this.props.showBackdrop}></Backdrop>
             <div className="grid-container">
                 <Header title="Тепловые Линии Мск" titleText="Алмазная резка и алмазное бурение" telefone="+7 (926) 932 68 40"/>

@@ -15,7 +15,8 @@ const reducer = (state = initialState, action) => {
                 jobInfo: {
                     ...action.job,
                     jobData: action.jobData,
-                    showJobInfo: true
+                    showJobInfo: true,
+                    showCanvas: action.showCanvas
                 }
             };
         case actionTypes.CLEAR_JOB_INFO: 
