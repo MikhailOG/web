@@ -32,7 +32,7 @@ class JobInfo extends Component {
             }, 10)
         }
         if (this.props.currentJob.showCanvas) {
-            canvas(this.props.currentJob.serviceName, this.props.currentJob.data)
+            canvas(this.props.currentJob.serviceName, this.props.currentJob.data, this.props.currentJob.preferences.concreteWeight, this.props.currentJob.preferences.wasteWeight)
         }
 
     };
@@ -45,7 +45,7 @@ class JobInfo extends Component {
             this.setState({
                 escapeButtonLeftPosition: parseFloat(getComputedStyle(document.documentElement.querySelector('.job-info')).width) - convertRemToPixels(2.4)
             })
-            canvas(this.props.currentJob.serviceName, this.props.currentJob.data)
+            canvas(this.props.currentJob.serviceName, this.props.currentJob.data, this.props.currentJob.preferences.concreteWeight, this.props.currentJob.preferences.wasteWeight)
         };
     };
 

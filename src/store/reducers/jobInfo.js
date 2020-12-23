@@ -5,7 +5,10 @@ import expect from 'expect';
 
 // reducer
 const initialState = {
-    jobInfo: {showJobInfo: false}
+    jobInfo: {
+        showJobInfo: false,
+        showCanvas: false
+    }
 }
 const reducer = (state = initialState, action) => {
     switch (action.type) {

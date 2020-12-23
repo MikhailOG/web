@@ -1,6 +1,6 @@
 
 
-export function canvas(serviceName, data) {
+export function canvas(serviceName, data, concreteWeight, wasteWeight) {
     var holesNum = 0;
     var holesDistHor = 0;
     var holesDistVert = 0;
@@ -59,6 +59,10 @@ export function canvas(serviceName, data) {
             var botEnhancement = data.enhancementBottom;
             var leftEnhancement = data.enhancementLeft;
             var rightEnhancement = data.enhancementRight;
+            // waste calculation variables
+            var vertHoles = [];
+            var horHoles = [];
+            // ---------------------------
             scale_enhancement_input();
             var length = get_length(radius);
             var limit = 30*scalar - radius + length;
@@ -73,6 +77,7 @@ export function canvas(serviceName, data) {
                     rectMoveY = canvasHeight/2 + topEnhancement/2;
                     fill_rectangle("rgb(223,222,227)");
                     drawTopEnhancement(rectMoveX, rectMoveY);
+                    console.log('length: ' + length/scalar)
                 }
                 else if ((topEnhancement <= 0) && (botEnhancement > 0) && (leftEnhancement <= 0) && (rightEnhancement <= 0)) {
                 //completed
@@ -437,6 +442,10 @@ export function canvas(serviceName, data) {
                     errorAlert();
             }
             draw_rectangle(width, height, "standart");
+            console.log('vertHoles')
+            console.log(vertHoles)
+            console.log('horHoles')
+            console.log(horHoles)
         break;
         case 'newCoring':
             scale_input();
@@ -1153,6 +1162,12 @@ export function canvas(serviceName, data) {
             xDirection = "true";
           }
           drawCircles (heightCircNum, heightCircStep, widthCircNum, widthCircStep, 1, "free", vert, hor, xCoord, yCoord, 0, 0, xDirection, yDirection);
+          // waste calculation 
+          if (heightCircNum === 0) 
+            horHoles.push({circNum: widthCircNum+1, circStep: widthCircStep/scalar});
+          if (widthCircNum === 0) 
+            vertHoles.push({circNum: heightCircNum+1, circStep: heightCircStep/scalar});
+          // -------------------
           xCoord += path.x[i];
           yCoord += path.y[i];
         }
