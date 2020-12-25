@@ -9,6 +9,7 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
     var height = data.height;
     var diameter = data.diameter;
     var depth = data.depth;
+    var old_radius = diameter/2;
     var radius = diameter/2;
 // declaring function variables
     var x;
@@ -55,397 +56,409 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
     // var enhancement = curINPUT.getElementsByTagName("select")["job-type"].value == "enhancement";
     switch (serviceName) {
         case 'enhancementCoring': 
-            var topEnhancement = data.enhancementTop;
-            var botEnhancement = data.enhancementBottom;
-            var leftEnhancement = data.enhancementLeft;
-            var rightEnhancement = data.enhancementRight;
-            // waste calculation variables
-            var vertHoles = [];
-            var horHoles = [];
-            // ---------------------------
-            scale_enhancement_input();
-            var length = get_length(radius);
-            var limit = 30*scalar - radius + length;
-            if ((topEnhancement <= 0) && (botEnhancement <= 0) && (leftEnhancement <= 0) && (rightEnhancement <= 0)) {
-                window.alert("Введите значение для расширения проема хотя бы в одном из направлений");
-                error = true;
+          var topEnhancement = data.enhancementTop;
+          var botEnhancement = data.enhancementBottom;
+          var leftEnhancement = data.enhancementLeft;
+          var rightEnhancement = data.enhancementRight;
+          // waste calculation variables
+          var vertHoles = [];
+          var horHoles = [];
+          var baseCoreWeight = 0;
+          // ---------------------------
+          scale_enhancement_input();
+          var length = get_length(radius);
+          // get old_limit to fix canvas scaling bug
+          //var old_limit
+          var limit = 30*scalar - radius + length;
+          console.log('limit: ' + limit)
+          if ((topEnhancement <= 0) && (botEnhancement <= 0) && (leftEnhancement <= 0) && (rightEnhancement <= 0)) {
+              window.alert("Введите значение для расширения проема хотя бы в одном из направлений");
+              error = true;
+          }
+          else {
+            if      ((topEnhancement > 0) && (botEnhancement > 0) && (leftEnhancement > 0) && (rightEnhancement > 0) && ((leftEnhancement + width > diameter) || (rightEnhancement + width > diameter)) && ((topEnhancement + height > diameter) || (botEnhancement + height > diameter))) {
+              rectMoveX = (canvasWidth - leftEnhancement - width - rightEnhancement)/2 + leftEnhancement + width/2;
+              rectMoveY = (canvasHeight - botEnhancement - topEnhancement - height)/2 + topEnhancement + height/2;
+              var path = new Path(rectMoveX + width/2 + rightEnhancement - length, rectMoveY + height/2 + botEnhancement - length,
+                  [-rightEnhancement - width - leftEnhancement + 2*length, 0, leftEnhancement + width + rightEnhancement - 2*length, 0],
+                  [0, -botEnhancement - height - topEnhancement + 2*length, 0, topEnhancement + height + botEnhancement - 2*length]);
+              fill_enhancement_rectangle("top-bot-left-right-enhancement");
+              fill_rectangle("rgb(223,222,227)");
+              circlesByPath(path);
+              holesNum--;
+              draw_polyline("top-bot-left-right-enhancement");
+              getArea();
+              console.log(vertHoles)
+              console.log(horHoles)
+              vertHoles.map(hole =>{
+                baseCoreWeight += hole.circNum * Math.PI * old_radius * old_radius - (hole.circNum - 1) * 2 * hole.middleSegmentArea;
+              });
+              horHoles.map(hole => {
+                baseCoreWeight += (hole.circNum - 2) * Math.PI * old_radius * old_radius - (hole.circNum - 1) * 2 * hole.middleSegmentArea;
+              });
+              console.log('baseCoreWeight: ' + baseCoreWeight)
             }
-            else {
-                if ((topEnhancement > 0) && (botEnhancement <= 0) && (leftEnhancement <= 0) && (rightEnhancement <= 0)) {
-                // completed
-                    rectMoveX = canvasWidth/2;
-                    rectMoveY = canvasHeight/2 + topEnhancement/2;
-                    fill_rectangle("rgb(223,222,227)");
-                    drawTopEnhancement(rectMoveX, rectMoveY);
-                    console.log('length: ' + length/scalar)
-                }
-                else if ((topEnhancement <= 0) && (botEnhancement > 0) && (leftEnhancement <= 0) && (rightEnhancement <= 0)) {
-                //completed
-                    rectMoveX = canvasWidth/2;
-                    rectMoveY = canvasHeight/2 - botEnhancement/2;
-                    fill_rectangle("rgb(223,222,227)");
-                    drawBotEnhancement(rectMoveX, rectMoveY);
-                }
-                else if ((topEnhancement <= 0) && (botEnhancement <= 0) && (leftEnhancement > 0) && (rightEnhancement <= 0)) {
-                //completed
-                    rectMoveX = canvasWidth/2 + leftEnhancement/2;
-                    rectMoveY = canvasHeight/2;
-                    fill_rectangle("rgb(223,222,227)");
-                    drawLeftEnhancement(rectMoveX, rectMoveY);
-                }
-                else if ((topEnhancement <= 0) && (botEnhancement <= 0) && (leftEnhancement <= 0) && (rightEnhancement > 0)) {
-                //completed
-                    rectMoveX = canvasWidth/2 - rightEnhancement/2;
-                    rectMoveY = canvasHeight/2;
-                    fill_rectangle("rgb(223,222,227)");
-                    drawRightEnhancement(rectMoveX, rectMoveY);
-                }
-                else if ((topEnhancement > 0) && (botEnhancement <= 0) && (leftEnhancement > 0) && (rightEnhancement <= 0)) {
-                //completed
-                    rectMoveX = canvasWidth/2 + leftEnhancement/2;
-                    rectMoveY = canvasHeight/2 + topEnhancement/2;
-                    fill_rectangle("rgb(223,222,227)");
-                    if ((diameter < topEnhancement - limit) && (diameter < leftEnhancement - limit)) {
-                        fill_enhancement_rectangle("top-left-enhancement");
-                        var path = new Path(rectMoveX + width/2 - length, rectMoveY - height/2 - length,
-                        [0, -width - leftEnhancement + 2*length, 0, leftEnhancement - 2*length],
-                        [-topEnhancement + 2*length, 0, topEnhancement + height - 2*length, 0]);
-                        circlesByPath(path);
-                    }
-                    else if ((diameter >= topEnhancement - limit) && (diameter < leftEnhancement - limit) && (diameter < topEnhancement+height)) {
-                        fill_enhancement_rectangle("top-left-enhancement");
-                        var path = new Path(rectMoveX + width/2 - length, rectMoveY - height/2 -topEnhancement + length,
-                        [-width - leftEnhancement + 2*length, 0, leftEnhancement - 2*length],
-                        [0, topEnhancement + height - 2*length, 0]);
-                        circlesByPath(path);
-                    }
-                    else if ((diameter < topEnhancement - limit) && (diameter >= leftEnhancement - limit) && (diameter < leftEnhancement+width)) {
-                        fill_enhancement_rectangle("top-left-enhancement");
-                        var path = new Path(rectMoveX + width/2 - length, rectMoveY - height/2 - length,
-                        [0, -width - leftEnhancement + 2*length, 0],
-                        [-topEnhancement + 2*length, 0, topEnhancement + height - 2*length]);
-                        circlesByPath(path);
-                    }
-                    else if ((diameter >= topEnhancement - limit) && (diameter >= leftEnhancement - limit) && (diameter < topEnhancement+height) && (diameter < leftEnhancement+width)) {
-                        fill_enhancement_rectangle("top-left-enhancement");
-                        var path = new Path(rectMoveX + width/2 - length, rectMoveY - height/2 -topEnhancement + length,
-                        [-width - leftEnhancement + 2*length, 0],
-                        [0, topEnhancement + height - 2*length]);
-                        circlesByPath(path);
-                    }
-                    else 
-                        errorAlert();
-                    draw_polyline("top-left-enhancement");
-                }
-                else if ((topEnhancement > 0) && (botEnhancement <= 0) && (leftEnhancement <= 0) && (rightEnhancement > 0)) {
-                //completed
-                    rectMoveX = canvasWidth/2 - rightEnhancement/2;
-                    rectMoveY = canvasHeight/2 + topEnhancement/2;
-                    fill_rectangle("rgb(223,222,227)");
-                    if ((diameter < topEnhancement - limit) && (diameter < rightEnhancement - limit)) {
-                        var path = new Path(rectMoveX - width/2 + length, rectMoveY - height/2 - length,
-                        [0, width + rightEnhancement - 2*length, 0, -rightEnhancement + 2*length],
-                        [-topEnhancement + 2*length, 0, topEnhancement + height - 2*length, 0]);
-                        fill_enhancement_rectangle("top-right-enhancement");
-                        circlesByPath(path);
-                    }
-                    else if ((diameter >= topEnhancement - limit) && (diameter < rightEnhancement - limit) && (diameter < topEnhancement + height)) {
-                        var path = new Path(rectMoveX - width/2 + length, rectMoveY - height/2 - topEnhancement + length,
-                        [width + rightEnhancement - 2*length, 0, -rightEnhancement + 2*length],
-                        [0, topEnhancement + height - 2*length, 0]);
-                        fill_enhancement_rectangle("top-right-enhancement");
-                        circlesByPath(path);
-                    }
-                    else if ((diameter < topEnhancement - limit) && (diameter >= rightEnhancement - limit) && (diameter < rightEnhancement+width)) {
-                        var path = new Path(rectMoveX - width/2 + length, rectMoveY - height/2 - length,
-                        [0, width + rightEnhancement - 2*length, 0],
-                        [-topEnhancement + 2*length, 0, topEnhancement + height - 2*length]);
-                        fill_enhancement_rectangle("top-right-enhancement");
-                        circlesByPath(path);
-                    }
-                    else if ((diameter >= topEnhancement - limit) && (diameter >= rightEnhancement - limit) && (diameter < topEnhancement+height) && (diameter < rightEnhancement+width)) {
-                        var path = new Path(rectMoveX - width/2 + length, rectMoveY - height/2 - topEnhancement + length,
-                        [width + rightEnhancement - 2*length, 0],
-                        [0, topEnhancement + height - 2*length]);
-                        fill_enhancement_rectangle("top-right-enhancement");
-                        circlesByPath(path);
-                    }
-                    else 
-                        errorAlert();
-                    draw_polyline("top-right-enhancement");
-                }
-                else if ((topEnhancement <= 0) && (botEnhancement > 0) && (leftEnhancement <= 0) && (rightEnhancement > 0)) {
-                // completed
-                    rectMoveX = canvasWidth/2 - rightEnhancement/2;
-                    rectMoveY = canvasHeight/2 - botEnhancement/2;
-                    fill_rectangle("rgb(223,222,227)");
-                    if ((diameter < botEnhancement - limit) && (diameter < rightEnhancement - limit)) {
-                        fill_enhancement_rectangle("bot-right-enhancement");
-                        var path = new Path(rectMoveX - width/2 + length, rectMoveY + height/2 + length,
-                        [0, width + rightEnhancement - 2*length, 0, -rightEnhancement + 2*length],
-                        [botEnhancement - 2*length, 0, -botEnhancement - height + 2*length, 0]);
-                        circlesByPath(path);
-                    }
-                    else if ((diameter >= botEnhancement - limit) && (diameter < rightEnhancement - limit) && (diameter < botEnhancement+height)) {
-                        fill_enhancement_rectangle("bot-right-enhancement");
-                        var path = new Path(rectMoveX - width/2 + length, rectMoveY + height/2 + botEnhancement - length,
-                        [width + rightEnhancement - 2*length, 0, -rightEnhancement + 2*length],
-                        [0, -botEnhancement - height + 2*length, 0]);
-                        circlesByPath(path);
-                    }
-                    else if ((diameter < botEnhancement - limit) && (diameter >= rightEnhancement - limit) && (diameter < rightEnhancement+width)) {
-                        fill_enhancement_rectangle("bot-right-enhancement");
-                        var path = new Path(rectMoveX - width/2 + length, rectMoveY + height/2 + length,
-                        [0, width + rightEnhancement - 2*length, 0],
-                        [botEnhancement - 2*length, 0, -botEnhancement - height + 2*length]);
-                        circlesByPath(path);
-                    }
-                    else if ((diameter >= botEnhancement - limit) && (diameter >= rightEnhancement - limit) && (diameter < botEnhancement+height) && (diameter < rightEnhancement+width)) {
-                        fill_enhancement_rectangle("bot-right-enhancement");
-                        var path = new Path(rectMoveX - width/2 + length, rectMoveY + height/2 + botEnhancement - length,
-                        [width + rightEnhancement - 2*length, 0],
-                        [0, -botEnhancement - height + 2*length]);
-                        circlesByPath(path);
-                    }
-                    else 
-                        errorAlert();
-                    draw_polyline("bot-right-enhancement");
-                }
-                else if ((topEnhancement <= 0) && (botEnhancement > 0) && (leftEnhancement > 0) && (rightEnhancement <= 0)) {
-                //completed
-                    rectMoveX = canvasWidth/2 + leftEnhancement/2;
-                    rectMoveY = canvasHeight/2 - botEnhancement/2;
-                    fill_rectangle("rgb(223,222,227)");
-                    if ((diameter < botEnhancement - limit) && (diameter < leftEnhancement - limit)) {
-                        var path = new Path(rectMoveX - width/2 - length, rectMoveY - height/2 + length,
-                        [-leftEnhancement + 2 * length, 0, leftEnhancement + width - 2 * length, 0],
-                        [0, height + botEnhancement - 2 * length, 0, -botEnhancement + 2 * length]);
-                        fill_enhancement_rectangle("bot-left-right-enhancement");
-                        circlesByPath(path);
-                    }
-                    else if ((diameter >= botEnhancement - limit) && (diameter < leftEnhancement - limit) && (diameter < botEnhancement+height)) {
-                        var path = new Path(rectMoveX - width/2 - length, rectMoveY - height/2 + length,
-                        [-leftEnhancement + 2 * length, 0, leftEnhancement + width - 2 * length],
-                        [0, height + botEnhancement - 2*length, 0]);
-                        fill_enhancement_rectangle("bot-left-right-enhancement");
-                        circlesByPath(path);
-                    }
-                    else if ((diameter < botEnhancement - limit) && (diameter >= leftEnhancement - limit) && (diameter < leftEnhancement+width)) {
-                        var path = new Path(rectMoveX - width/2 - leftEnhancement + length, rectMoveY - height/2 + length,
-                        [0, leftEnhancement + width - 2*length, 0],
-                        [height + botEnhancement - 2 * length, 0, -botEnhancement + 2 * length]);
-                        fill_enhancement_rectangle("bot-left-right-enhancement");
-                        circlesByPath(path);
-                    }
-                    else if ((diameter >= botEnhancement - limit) && (diameter >= leftEnhancement - limit) && (diameter < botEnhancement+height) && (diameter < leftEnhancement+width)) {
-                        var path = new Path(rectMoveX - width/2 - leftEnhancement + length, rectMoveY - height/2 + length,
-                        [0, leftEnhancement + width - 2*length],
-                        [height + botEnhancement - 2*length, 0]);
-                        fill_enhancement_rectangle("bot-left-right-enhancement");
-                        circlesByPath(path);
-                    }
-                    else 
-                        errorAlert();
-                    draw_polyline("bot-left-enhancement");
-                }
-                else if ((topEnhancement <= 0) && (botEnhancement > 0) && (leftEnhancement > 0) && (rightEnhancement > 0)) {
-                //completed
-                    rectMoveX = (canvasWidth - leftEnhancement - width - rightEnhancement)/2 + leftEnhancement + width/2;
-                    rectMoveY = canvasHeight/2 - botEnhancement/2;
-                    fill_rectangle("rgb(223,222,227)");
-                    if (diameter < botEnhancement+height) {
-                        if ((diameter < leftEnhancement - limit) && (diameter < rightEnhancement - limit)) {
-                        var path = new Path(rectMoveX - width/2 - length, rectMoveY - height/2 + length,
-                            [-leftEnhancement + 2 * length, 0, leftEnhancement + width + rightEnhancement - 2 * length, 0, -rightEnhancement + 2* length],
-                            [0, height + botEnhancement - 2 * length, 0, -botEnhancement - height + 2 * length, 0]);
-                        fill_enhancement_rectangle("bot-left-right-enhancement");
-                        circlesByPath(path);
-                        }
-                        else if ((diameter >= leftEnhancement - limit) && (diameter < rightEnhancement - limit)) {
-                        var path = new Path(rectMoveX - width/2 - leftEnhancement + length, rectMoveY - height/2 + length,
-                            [0, leftEnhancement + width + rightEnhancement - 2*length, 0, -rightEnhancement + 2 * length],
-                            [height + botEnhancement - 2*length, 0, -botEnhancement - height + 2*length, 0]);
-                        fill_enhancement_rectangle("bot-left-right-enhancement");
-                        circlesByPath(path);
-                        }
-                        else if ((diameter >= leftEnhancement - limit) && (diameter >= rightEnhancement - limit) && ((diameter < leftEnhancement+width) || (diameter < rightEnhancement+width))) {
-                        var path = new Path(rectMoveX - width/2 - leftEnhancement + length, rectMoveY - height/2 + length,
-                            [0, leftEnhancement + width + rightEnhancement - 2*length, 0],
-                            [height + botEnhancement - 2*length, 0, -botEnhancement - height + 2*length]);
-                        fill_enhancement_rectangle("bot-left-right-enhancement");
-                        circlesByPath(path);
-                        }
-                        else if ((diameter < leftEnhancement - limit) && (diameter >= rightEnhancement - limit)) {
-                        var path = new Path(rectMoveX - width/2 - length, rectMoveY - height/2 + length,
-                            [-leftEnhancement + 2 * length, 0, leftEnhancement + width + rightEnhancement - 2 * length, 0],
-                            [0, height + botEnhancement - 2 * length, 0, -botEnhancement - height + 2 * length]);
-                        fill_enhancement_rectangle("bot-left-right-enhancement");
-                        circlesByPath(path);
-                        }
-                        else 
-                        errorAlert();
-                        draw_polyline("bot-left-right-enhancement");
-                    }
-                    else
-                        errorAlert();
-                }
-                else if ((topEnhancement > 0) && (botEnhancement <= 0) && (leftEnhancement > 0) && (rightEnhancement > 0)) {
-                //completed
-                    rectMoveX = (canvasWidth - leftEnhancement - width - rightEnhancement)/2 + leftEnhancement + width/2;
-                    rectMoveY = canvasHeight/2 + topEnhancement/2;
-                    if (diameter < height+topEnhancement) {
-                        fill_rectangle("rgb(223,222,227)");
-                        if ((diameter < leftEnhancement - limit) && (diameter < rightEnhancement - limit)) {
-                        var path = new Path(rectMoveX - width/2 - length, rectMoveY + height/2 - length,
-                        [-leftEnhancement + 2*length, 0, leftEnhancement + width + rightEnhancement - 2*length, 0, -rightEnhancement + 2*length],
-                        [0, -height - topEnhancement + 2*length, 0, topEnhancement + height - 2*length, 0]);
-                        fill_enhancement_rectangle("top-left-right-enhancement");
-                        circlesByPath(path);
-                        }
-                        else if ((diameter >= leftEnhancement - limit) && (diameter >= rightEnhancement - limit) && ((diameter < leftEnhancement+width) || (diameter < rightEnhancement+width)) && (diameter < topEnhancement+height)) {
-                        var path = new Path(rectMoveX - width/2 - leftEnhancement + length, rectMoveY + height/2 - length,
-                            [0, leftEnhancement + width + rightEnhancement - 2*length, 0],
-                            [-height - topEnhancement + 2*length, 0, topEnhancement + height - 2*length]);
-                        fill_enhancement_rectangle("top-left-right-enhancement");
-                        circlesByPath(path);
-                        }
-                        else if ((diameter < leftEnhancement - limit) && (diameter >= rightEnhancement - limit)) {
-                        var path = new Path(rectMoveX - width/2 - length, rectMoveY + height/2 - length,
-                            [-leftEnhancement + 2*length, 0, leftEnhancement + width + rightEnhancement - 2*length, 0],
-                            [0, -height - topEnhancement + 2*length, 0, topEnhancement + height - 2*length]);
-                        fill_enhancement_rectangle("top-left-right-enhancement");
-                        circlesByPath(path);
-                        }
-                        else if ((diameter >= leftEnhancement - limit) && (diameter < rightEnhancement - limit)) {
-                        var path = new Path(rectMoveX - width/2 - leftEnhancement + length, rectMoveY + height/2 - length,
-                            [0, leftEnhancement + width + rightEnhancement - 2*length, 0, -rightEnhancement + 2*length],
-                            [-height - topEnhancement + 2*length, 0, topEnhancement + height - 2*length, 0]);
-                        fill_enhancement_rectangle("top-left-right-enhancement");
-                        circlesByPath(path);
-                        }
-                        else 
-                        errorAlert();
-                    }
-                    else 
-                        errorAlert();
-                    draw_polyline("top-left-right-enhancement");
-                }
-                else if ((topEnhancement > 0) && (botEnhancement > 0) && (leftEnhancement <= 0) && (rightEnhancement > 0)) {
-                    // completed
-                    rectMoveY = (canvasWidth - botEnhancement - topEnhancement - height)/2 + topEnhancement + height/2;
-                    rectMoveX = canvasHeight/2 - rightEnhancement/2;
-                    fill_rectangle("rgb(223,222,227)");
-                    if (diameter < width + rightEnhancement) {
-                        if ((diameter < topEnhancement - limit) && (diameter < botEnhancement - limit)) {
-                        var path = new Path(rectMoveX - width/2 + length, rectMoveY - height/2 - length,
-                        [0, width + rightEnhancement - 2*length, 0, -rightEnhancement - width + 2*length, 0],
-                        [-topEnhancement + 2*length, 0, topEnhancement + height + botEnhancement - 2*length, 0, -botEnhancement + 2*length]);
-                        fill_enhancement_rectangle("top-bot-right-enhancement");
-                        circlesByPath(path);
-                        }
-                        else if ((diameter >= topEnhancement - limit) && (diameter < botEnhancement - limit)) {
-                        var path = new Path(rectMoveX - width/2 + length, rectMoveY - height/2 - topEnhancement + length,
-                            [width + rightEnhancement - 2*length, 0, -rightEnhancement - width + 2*length, 0],
-                            [0, topEnhancement + height + botEnhancement - 2*length, 0, -botEnhancement + 2*length]);
-                            fill_enhancement_rectangle("top-bot-right-enhancement");
-                            circlesByPath(path);
-                        }
-                        else if ((diameter >= topEnhancement - limit) && (diameter >= botEnhancement - limit) && ((diameter < botEnhancement+height) || (diameter < topEnhancement+height))) {
-                        var path = new Path(rectMoveX - width/2 + length, rectMoveY - height/2 - topEnhancement + length,
-                            [width + rightEnhancement - 2*length, 0, -rightEnhancement - width + 2*length],
-                            [0, topEnhancement + height + botEnhancement - 2*length, 0]);
-                            fill_enhancement_rectangle("top-bot-right-enhancement");
-                            circlesByPath(path);
-                        }
-                        else if ((diameter < topEnhancement) && (diameter >= botEnhancement)) {
-                        var path = new Path(rectMoveX - width/2 + length, rectMoveY - height/2 - length,
-                            [0, width + rightEnhancement - 2*length, 0, -rightEnhancement - width + 2*length],
-                            [-topEnhancement + 2*length, 0, topEnhancement + height + botEnhancement - 2*length, 0]);
-                            fill_enhancement_rectangle("top-bot-right-enhancement");
-                            circlesByPath(path);
-                        }
-                        else 
-                        errorAlert();
-                        draw_polyline("top-bot-right-enhancement");
-                    }
-                    else 
-                        errorAlert();
-                    }
-                else if ((topEnhancement > 0) && (botEnhancement > 0) && (leftEnhancement > 0) && (rightEnhancement <= 0)) {
-                // completed
-                    rectMoveY = (canvasWidth - botEnhancement - topEnhancement - height)/2 + topEnhancement + height/2;
-                    rectMoveX = canvasHeight/2 + leftEnhancement/2;
-                    fill_rectangle("rgb(223,222,227)");
-                    if (diameter < width + leftEnhancement) {
-                        if ((diameter < topEnhancement - limit) && (diameter < botEnhancement - limit)) {
+            else if ((topEnhancement > 0) && (botEnhancement <= 0) && (leftEnhancement <= 0) && (rightEnhancement <= 0)) {
+            // completed
+                rectMoveX = canvasWidth/2;
+                rectMoveY = canvasHeight/2 + topEnhancement/2;
+                fill_rectangle("rgb(223,222,227)");
+                drawTopEnhancement(rectMoveX, rectMoveY);
+                console.log('length: ' + length/scalar)
+            }
+            else if ((topEnhancement > 0) && (botEnhancement > 0) && (leftEnhancement <= 0) && (rightEnhancement <= 0)) {
+              rectMoveX = canvasWidth/2;
+              rectMoveY = (canvasHeight - botEnhancement - topEnhancement - height)/2 + topEnhancement + height/2;
+              fill_rectangle("rgb(223,222,227)");
+              drawTopEnhancement(rectMoveX, rectMoveY);
+              drawBotEnhancement(rectMoveX, rectMoveY);
+            }
+            else if ((topEnhancement > 0) && (botEnhancement > 0) && (leftEnhancement > 0) && (rightEnhancement <= 0)) {
+              // completed
+                  rectMoveY = (canvasWidth - botEnhancement - topEnhancement - height)/2 + topEnhancement + height/2;
+                  rectMoveX = canvasHeight/2 + leftEnhancement/2;
+                  fill_rectangle("rgb(223,222,227)");
+                  if (diameter < width + leftEnhancement) {
+                      if ((diameter < topEnhancement - limit) && (diameter < botEnhancement - limit)) {
                         var path = new Path(rectMoveX + width/2 - length, rectMoveY + height/2 + length,
-                        [0, -width - leftEnhancement + 2*length, 0, leftEnhancement + width - 2*length, 0],
-                        [botEnhancement - 2*length, 0, -botEnhancement - height - topEnhancement + 2*length, 0, topEnhancement - 2*length]);
+                          [0, -width - leftEnhancement + 2*length, 0, leftEnhancement + width - 2*length, 0],
+                          [botEnhancement - 2*length, 0, -botEnhancement - height - topEnhancement + 2*length, 0, topEnhancement - 2*length]);
                         fill_enhancement_rectangle("top-bot-left-enhancement");
                         circlesByPath(path);
-                        }
-                        else if ((diameter < topEnhancement - limit) && (diameter >= botEnhancement - limit)) {
+                      }
+                      else if ((diameter < topEnhancement - limit) && (diameter >= botEnhancement - limit)) {
                         var path = new Path(rectMoveX + width/2 - length, rectMoveY + height/2 + botEnhancement - length,
                             [-width - leftEnhancement + 2*length, 0, leftEnhancement + width - 2*length, 0],
                             [0, -botEnhancement - height - topEnhancement + 2*length, 0, topEnhancement - 2*length]);
-                            fill_enhancement_rectangle("top-bot-left-enhancement");
-                            circlesByPath(path);
-                        }
-                        else if ((diameter >= topEnhancement - limit) && (diameter >= botEnhancement - limit) && ((diameter < botEnhancement+height) || (diameter < topEnhancement+height))) {
-                        var path = new Path(rectMoveX + width/2 - length, rectMoveY + height/2 + botEnhancement - length,
-                            [-width - leftEnhancement + 2*length, 0, leftEnhancement + width - 2*length],
-                            [0, -botEnhancement - height - topEnhancement + 2*length, 0]);
-                            fill_enhancement_rectangle("top-bot-left-enhancement");
-                            circlesByPath(path);
-                        }
-                        else if ((diameter >= topEnhancement) && (diameter < botEnhancement)) {
+                        fill_enhancement_rectangle("top-bot-left-enhancement");
+                        circlesByPath(path);
+                      }
+                      else if ((diameter >= topEnhancement - limit) && (diameter < botEnhancement - limit)) {
                         var path = new Path(rectMoveX + width/2 - length, rectMoveY + height/2 + length,
                             [0, -width - leftEnhancement + 2*length, 0, leftEnhancement + width - 2*length],
                             [botEnhancement - 2*length, 0, -botEnhancement - height - topEnhancement + 2*length, 0]);
-                            fill_enhancement_rectangle("top-bot-left-enhancement");
-                            circlesByPath(path);
+                        fill_enhancement_rectangle("top-bot-left-enhancement");
+                        circlesByPath(path);
                         }
-                        else 
-                            errorAlert();
-                        draw_polyline("top-bot-left-enhancement");
+                      else if ((diameter >= topEnhancement - limit) && (diameter >= botEnhancement - limit) && ((diameter < botEnhancement+height) || (diameter < topEnhancement+height))) {
+                        var path = new Path(rectMoveX + width/2 - length, rectMoveY + height/2 + botEnhancement - length,
+                            [-width - leftEnhancement + 2*length, 0, leftEnhancement + width - 2*length],
+                            [0, -botEnhancement - height - topEnhancement + 2*length, 0]);
+                        fill_enhancement_rectangle("top-bot-left-enhancement");
+                        circlesByPath(path);
+                      }
+                      else
+                        errorAlert();
+                      draw_polyline("top-bot-left-enhancement");
+                  }
+                  else 
+                      errorAlert();
+              }
+            else if ((topEnhancement > 0) && (botEnhancement <= 0) && (leftEnhancement > 0) && (rightEnhancement <= 0)) {
+              //completed
+                  rectMoveX = canvasWidth/2 + leftEnhancement/2;
+                  rectMoveY = canvasHeight/2 + topEnhancement/2;
+                  fill_rectangle("rgb(223,222,227)");
+                  if ((diameter < topEnhancement - limit) && (diameter < leftEnhancement - limit)) {
+                      fill_enhancement_rectangle("top-left-enhancement");
+                      var path = new Path(rectMoveX + width/2 - length, rectMoveY - height/2 - length,
+                      [0, -width - leftEnhancement + 2*length, 0, leftEnhancement - 2*length],
+                      [-topEnhancement + 2*length, 0, topEnhancement + height - 2*length, 0]);
+                      circlesByPath(path);
+                  }
+                  else if ((diameter >= topEnhancement - limit) && (diameter < leftEnhancement - limit) && (diameter < topEnhancement+height)) {
+                      fill_enhancement_rectangle("top-left-enhancement");
+                      var path = new Path(rectMoveX + width/2 - length, rectMoveY - height/2 -topEnhancement + length,
+                      [-width - leftEnhancement + 2*length, 0, leftEnhancement - 2*length],
+                      [0, topEnhancement + height - 2*length, 0]);
+                      circlesByPath(path);
+                  }
+                  else if ((diameter < topEnhancement - limit) && (diameter >= leftEnhancement - limit) && (diameter < leftEnhancement+width)) {
+                      fill_enhancement_rectangle("top-left-enhancement");
+                      var path = new Path(rectMoveX + width/2 - length, rectMoveY - height/2 - length,
+                      [0, -width - leftEnhancement + 2*length, 0],
+                      [-topEnhancement + 2*length, 0, topEnhancement + height - 2*length]);
+                      circlesByPath(path);
+                  }
+                  else if ((diameter >= topEnhancement - limit) && (diameter >= leftEnhancement - limit) && (diameter < topEnhancement+height) && (diameter < leftEnhancement+width)) {
+                      fill_enhancement_rectangle("top-left-enhancement");
+                      var path = new Path(rectMoveX + width/2 - length, rectMoveY - height/2 -topEnhancement + length,
+                      [-width - leftEnhancement + 2*length, 0],
+                      [0, topEnhancement + height - 2*length]);
+                      circlesByPath(path);
+                  }
+                  else 
+                      errorAlert();
+                  draw_polyline("top-left-enhancement");
+            }
+            else if ((topEnhancement > 0) && (botEnhancement <= 0) && (leftEnhancement <= 0) && (rightEnhancement > 0)) {
+            //completed
+                rectMoveX = canvasWidth/2 - rightEnhancement/2;
+                rectMoveY = canvasHeight/2 + topEnhancement/2;
+                fill_rectangle("rgb(223,222,227)");
+                if ((diameter < topEnhancement - limit) && (diameter < rightEnhancement - limit)) {
+                    var path = new Path(rectMoveX - width/2 + length, rectMoveY - height/2 - length,
+                    [0, width + rightEnhancement - 2*length, 0, -rightEnhancement + 2*length],
+                    [-topEnhancement + 2*length, 0, topEnhancement + height - 2*length, 0]);
+                    fill_enhancement_rectangle("top-right-enhancement");
+                    circlesByPath(path);
+                }
+                else if ((diameter >= topEnhancement - limit) && (diameter < rightEnhancement - limit) && (diameter < topEnhancement + height)) {
+                    var path = new Path(rectMoveX - width/2 + length, rectMoveY - height/2 - topEnhancement + length,
+                    [width + rightEnhancement - 2*length, 0, -rightEnhancement + 2*length],
+                    [0, topEnhancement + height - 2*length, 0]);
+                    fill_enhancement_rectangle("top-right-enhancement");
+                    circlesByPath(path);
+                }
+                else if ((diameter < topEnhancement - limit) && (diameter >= rightEnhancement - limit) && (diameter < rightEnhancement+width)) {
+                    var path = new Path(rectMoveX - width/2 + length, rectMoveY - height/2 - length,
+                    [0, width + rightEnhancement - 2*length, 0],
+                    [-topEnhancement + 2*length, 0, topEnhancement + height - 2*length]);
+                    fill_enhancement_rectangle("top-right-enhancement");
+                    circlesByPath(path);
+                }
+                else if ((diameter >= topEnhancement - limit) && (diameter >= rightEnhancement - limit) && (diameter < topEnhancement+height) && (diameter < rightEnhancement+width)) {
+                    var path = new Path(rectMoveX - width/2 + length, rectMoveY - height/2 - topEnhancement + length,
+                    [width + rightEnhancement - 2*length, 0],
+                    [0, topEnhancement + height - 2*length]);
+                    fill_enhancement_rectangle("top-right-enhancement");
+                    circlesByPath(path);
+                }
+                else 
+                    errorAlert();
+                draw_polyline("top-right-enhancement");
+            }
+            else if ((topEnhancement > 0) && (botEnhancement <= 0) && (leftEnhancement > 0) && (rightEnhancement > 0)) {
+              //completed
+                  rectMoveX = (canvasWidth - leftEnhancement - width - rightEnhancement)/2 + leftEnhancement + width/2;
+                  rectMoveY = canvasHeight/2 + topEnhancement/2;
+                  if (diameter < height+topEnhancement) {
+                      fill_rectangle("rgb(223,222,227)");
+                      if ((diameter < leftEnhancement - limit) && (diameter < rightEnhancement - limit)) {
+                      var path = new Path(rectMoveX - width/2 - length, rectMoveY + height/2 - length,
+                      [-leftEnhancement + 2*length, 0, leftEnhancement + width + rightEnhancement - 2*length, 0, -rightEnhancement + 2*length],
+                      [0, -height - topEnhancement + 2*length, 0, topEnhancement + height - 2*length, 0]);
+                      fill_enhancement_rectangle("top-left-right-enhancement");
+                      circlesByPath(path);
+                      }
+                      else if ((diameter >= leftEnhancement - limit) && (diameter >= rightEnhancement - limit) && ((diameter < leftEnhancement+width) || (diameter < rightEnhancement+width)) && (diameter < topEnhancement+height)) {
+                      var path = new Path(rectMoveX - width/2 - leftEnhancement + length, rectMoveY + height/2 - length,
+                          [0, leftEnhancement + width + rightEnhancement - 2*length, 0],
+                          [-height - topEnhancement + 2*length, 0, topEnhancement + height - 2*length]);
+                      fill_enhancement_rectangle("top-left-right-enhancement");
+                      circlesByPath(path);
+                      }
+                      else if ((diameter < leftEnhancement - limit) && (diameter >= rightEnhancement - limit)) {
+                      var path = new Path(rectMoveX - width/2 - length, rectMoveY + height/2 - length,
+                          [-leftEnhancement + 2*length, 0, leftEnhancement + width + rightEnhancement - 2*length, 0],
+                          [0, -height - topEnhancement + 2*length, 0, topEnhancement + height - 2*length]);
+                      fill_enhancement_rectangle("top-left-right-enhancement");
+                      circlesByPath(path);
+                      }
+                      else if ((diameter >= leftEnhancement - limit) && (diameter < rightEnhancement - limit)) {
+                      var path = new Path(rectMoveX - width/2 - leftEnhancement + length, rectMoveY + height/2 - length,
+                          [0, leftEnhancement + width + rightEnhancement - 2*length, 0, -rightEnhancement + 2*length],
+                          [-height - topEnhancement + 2*length, 0, topEnhancement + height - 2*length, 0]);
+                      fill_enhancement_rectangle("top-left-right-enhancement");
+                      circlesByPath(path);
+                      }
+                      else 
+                      errorAlert();
+                  }
+                  else 
+                      errorAlert();
+                  draw_polyline("top-left-right-enhancement");
+            }
+            else if ((topEnhancement > 0) && (botEnhancement > 0) && (leftEnhancement <= 0) && (rightEnhancement > 0)) {
+                // completed
+                rectMoveY = (canvasWidth - botEnhancement - topEnhancement - height)/2 + topEnhancement + height/2;
+                rectMoveX = canvasHeight/2 - rightEnhancement/2;
+                fill_rectangle("rgb(223,222,227)");
+                if (diameter < width + rightEnhancement) {
+                    if ((diameter < topEnhancement - limit) && (diameter < botEnhancement - limit)) {
+                    var path = new Path(rectMoveX - width/2 + length, rectMoveY - height/2 - length,
+                    [0, width + rightEnhancement - 2*length, 0, -rightEnhancement - width + 2*length, 0],
+                    [-topEnhancement + 2*length, 0, topEnhancement + height + botEnhancement - 2*length, 0, -botEnhancement + 2*length]);
+                    fill_enhancement_rectangle("top-bot-right-enhancement");
+                    circlesByPath(path);
+                    }
+                    else if ((diameter >= topEnhancement - limit) && (diameter < botEnhancement - limit)) {
+                    var path = new Path(rectMoveX - width/2 + length, rectMoveY - height/2 - topEnhancement + length,
+                        [width + rightEnhancement - 2*length, 0, -rightEnhancement - width + 2*length, 0],
+                        [0, topEnhancement + height + botEnhancement - 2*length, 0, -botEnhancement + 2*length]);
+                        fill_enhancement_rectangle("top-bot-right-enhancement");
+                        circlesByPath(path);
+                    }
+                    else if ((diameter >= topEnhancement - limit) && (diameter >= botEnhancement - limit) && ((diameter < botEnhancement+height) || (diameter < topEnhancement+height))) {
+                    var path = new Path(rectMoveX - width/2 + length, rectMoveY - height/2 - topEnhancement + length,
+                        [width + rightEnhancement - 2*length, 0, -rightEnhancement - width + 2*length],
+                        [0, topEnhancement + height + botEnhancement - 2*length, 0]);
+                        fill_enhancement_rectangle("top-bot-right-enhancement");
+                        circlesByPath(path);
+                    }
+                    else if ((diameter < topEnhancement - limit) && (diameter >= botEnhancement - limit)) {
+                    var path = new Path(rectMoveX - width/2 + length, rectMoveY - height/2 - length,
+                        [0, width + rightEnhancement - 2*length, 0, -rightEnhancement - width + 2*length],
+                        [-topEnhancement + 2*length, 0, topEnhancement + height + botEnhancement - 2*length, 0]);
+                        fill_enhancement_rectangle("top-bot-right-enhancement");
+                        circlesByPath(path);
                     }
                     else 
-                        errorAlert();
+                      errorAlert();
+                    draw_polyline("top-bot-right-enhancement");
                 }
-                else if ((topEnhancement > 0) && (botEnhancement > 0) && (leftEnhancement > 0) && (rightEnhancement > 0) && ((leftEnhancement + width > diameter) || (rightEnhancement + width > diameter)) && ((topEnhancement + height > diameter) || (botEnhancement + height > diameter))) {
-                    rectMoveX = (canvasWidth - leftEnhancement - width - rightEnhancement)/2 + leftEnhancement + width/2;
-                    rectMoveY = (canvasHeight - botEnhancement - topEnhancement - height)/2 + topEnhancement + height/2;
-                    var path = new Path(rectMoveX + width/2 + rightEnhancement - length, rectMoveY + height/2 + botEnhancement - length,
-                        [-rightEnhancement - width - leftEnhancement + 2*length, 0, leftEnhancement + width + rightEnhancement - 2*length, 0],
-                        [0, -botEnhancement - height - topEnhancement + 2*length, 0, topEnhancement + height + botEnhancement - 2*length]);
-                    fill_enhancement_rectangle("top-bot-left-right-enhancement");
-                    fill_rectangle("rgb(223,222,227)");
+                else 
+                    errorAlert();
+            }
+            else if ((topEnhancement <= 0) && (botEnhancement <= 0) && (leftEnhancement > 0) && (rightEnhancement > 0)) {
+              rectMoveX = (canvasWidth - leftEnhancement - width - rightEnhancement)/2 + leftEnhancement + width/2;
+              rectMoveY = canvasHeight/2;
+              fill_rectangle("rgb(223,222,227)");
+              drawLeftEnhancement(rectMoveX, rectMoveY);
+              drawRightEnhancement(rectMoveX, rectMoveY);
+            }
+            else if ((topEnhancement <= 0) && (botEnhancement > 0) && (leftEnhancement <= 0) && (rightEnhancement <= 0)) {
+            //completed
+                rectMoveX = canvasWidth/2;
+                rectMoveY = canvasHeight/2 - botEnhancement/2;
+                fill_rectangle("rgb(223,222,227)");
+                drawBotEnhancement(rectMoveX, rectMoveY);
+            }
+            else if ((topEnhancement <= 0) && (botEnhancement <= 0) && (leftEnhancement > 0) && (rightEnhancement <= 0)) {
+            //completed
+                rectMoveX = canvasWidth/2 + leftEnhancement/2;
+                rectMoveY = canvasHeight/2;
+                fill_rectangle("rgb(223,222,227)");
+                drawLeftEnhancement(rectMoveX, rectMoveY);
+            }
+            else if ((topEnhancement <= 0) && (botEnhancement <= 0) && (leftEnhancement <= 0) && (rightEnhancement > 0)) {
+            //completed
+                rectMoveX = canvasWidth/2 - rightEnhancement/2;
+                rectMoveY = canvasHeight/2;
+                fill_rectangle("rgb(223,222,227)");
+                drawRightEnhancement(rectMoveX, rectMoveY);
+            }
+            else if ((topEnhancement <= 0) && (botEnhancement > 0) && (leftEnhancement <= 0) && (rightEnhancement > 0)) {
+            // completed
+                rectMoveX = canvasWidth/2 - rightEnhancement/2;
+                rectMoveY = canvasHeight/2 - botEnhancement/2;
+                fill_rectangle("rgb(223,222,227)");
+                if ((diameter < botEnhancement - limit) && (diameter < rightEnhancement - limit)) {
+                    fill_enhancement_rectangle("bot-right-enhancement");
+                    var path = new Path(rectMoveX - width/2 + length, rectMoveY + height/2 + length,
+                    [0, width + rightEnhancement - 2*length, 0, -rightEnhancement + 2*length],
+                    [botEnhancement - 2*length, 0, -botEnhancement - height + 2*length, 0]);
                     circlesByPath(path);
-                    holesNum--;
-                    draw_polyline("top-bot-left-right-enhancement");
                 }
-                else if ((topEnhancement <= 0) && (botEnhancement <= 0) && (leftEnhancement > 0) && (rightEnhancement > 0)) {
-                    rectMoveX = (canvasWidth - leftEnhancement - width - rightEnhancement)/2 + leftEnhancement + width/2;
-                    rectMoveY = canvasHeight/2;
-                    fill_rectangle("rgb(223,222,227)");
-                    drawLeftEnhancement(rectMoveX, rectMoveY);
-                    drawRightEnhancement(rectMoveX, rectMoveY);
+                else if ((diameter >= botEnhancement - limit) && (diameter < rightEnhancement - limit) && (diameter < botEnhancement+height)) {
+                    fill_enhancement_rectangle("bot-right-enhancement");
+                    var path = new Path(rectMoveX - width/2 + length, rectMoveY + height/2 + botEnhancement - length,
+                    [width + rightEnhancement - 2*length, 0, -rightEnhancement + 2*length],
+                    [0, -botEnhancement - height + 2*length, 0]);
+                    circlesByPath(path);
                 }
-                else if ((topEnhancement > 0) && (botEnhancement > 0) && (leftEnhancement <= 0) && (rightEnhancement <= 0)) {
-                    rectMoveX = canvasWidth/2;
-                    rectMoveY = (canvasHeight - botEnhancement - topEnhancement - height)/2 + topEnhancement + height/2;
-                    fill_rectangle("rgb(223,222,227)");
-                    drawTopEnhancement(rectMoveX, rectMoveY);
-                    drawBotEnhancement(rectMoveX, rectMoveY);
+                else if ((diameter < botEnhancement - limit) && (diameter >= rightEnhancement - limit) && (diameter < rightEnhancement+width)) {
+                    fill_enhancement_rectangle("bot-right-enhancement");
+                    var path = new Path(rectMoveX - width/2 + length, rectMoveY + height/2 + length,
+                    [0, width + rightEnhancement - 2*length, 0],
+                    [botEnhancement - 2*length, 0, -botEnhancement - height + 2*length]);
+                    circlesByPath(path);
+                }
+                else if ((diameter >= botEnhancement - limit) && (diameter >= rightEnhancement - limit) && (diameter < botEnhancement+height) && (diameter < rightEnhancement+width)) {
+                    fill_enhancement_rectangle("bot-right-enhancement");
+                    var path = new Path(rectMoveX - width/2 + length, rectMoveY + height/2 + botEnhancement - length,
+                    [width + rightEnhancement - 2*length, 0],
+                    [0, -botEnhancement - height + 2*length]);
+                    circlesByPath(path);
+                }
+                else 
+                    errorAlert();
+                draw_polyline("bot-right-enhancement");
+            }
+            else if ((topEnhancement <= 0) && (botEnhancement > 0) && (leftEnhancement > 0) && (rightEnhancement <= 0)) {
+            //completed
+                rectMoveX = canvasWidth/2 + leftEnhancement/2;
+                rectMoveY = canvasHeight/2 - botEnhancement/2;
+                fill_rectangle("rgb(223,222,227)");
+                if ((diameter < botEnhancement - limit) && (diameter < leftEnhancement - limit)) {
+                    var path = new Path(rectMoveX - width/2 - length, rectMoveY - height/2 + length,
+                    [-leftEnhancement + 2 * length, 0, leftEnhancement + width - 2 * length, 0],
+                    [0, height + botEnhancement - 2 * length, 0, -botEnhancement + 2 * length]);
+                    fill_enhancement_rectangle("bot-left-right-enhancement");
+                    circlesByPath(path);
+                }
+                else if ((diameter >= botEnhancement - limit) && (diameter < leftEnhancement - limit) && (diameter < botEnhancement+height)) {
+                    var path = new Path(rectMoveX - width/2 - length, rectMoveY - height/2 + length,
+                    [-leftEnhancement + 2 * length, 0, leftEnhancement + width - 2 * length],
+                    [0, height + botEnhancement - 2*length, 0]);
+                    fill_enhancement_rectangle("bot-left-right-enhancement");
+                    circlesByPath(path);
+                }
+                else if ((diameter < botEnhancement - limit) && (diameter >= leftEnhancement - limit) && (diameter < leftEnhancement+width)) {
+                    var path = new Path(rectMoveX - width/2 - leftEnhancement + length, rectMoveY - height/2 + length,
+                    [0, leftEnhancement + width - 2*length, 0],
+                    [height + botEnhancement - 2 * length, 0, -botEnhancement + 2 * length]);
+                    fill_enhancement_rectangle("bot-left-right-enhancement");
+                    circlesByPath(path);
+                }
+                else if ((diameter >= botEnhancement - limit) && (diameter >= leftEnhancement - limit) && (diameter < botEnhancement+height) && (diameter < leftEnhancement+width)) {
+                    var path = new Path(rectMoveX - width/2 - leftEnhancement + length, rectMoveY - height/2 + length,
+                    [0, leftEnhancement + width - 2*length],
+                    [height + botEnhancement - 2*length, 0]);
+                    fill_enhancement_rectangle("bot-left-right-enhancement");
+                    circlesByPath(path);
+                }
+                else 
+                    errorAlert();
+                draw_polyline("bot-left-enhancement");
+            }
+            else if ((topEnhancement <= 0) && (botEnhancement > 0) && (leftEnhancement > 0) && (rightEnhancement > 0)) {
+            //completed
+                rectMoveX = (canvasWidth - leftEnhancement - width - rightEnhancement)/2 + leftEnhancement + width/2;
+                rectMoveY = canvasHeight/2 - botEnhancement/2;
+                fill_rectangle("rgb(223,222,227)");
+                if (diameter < botEnhancement+height) {
+                    if ((diameter < leftEnhancement - limit) && (diameter < rightEnhancement - limit)) {
+                    var path = new Path(rectMoveX - width/2 - length, rectMoveY - height/2 + length,
+                        [-leftEnhancement + 2 * length, 0, leftEnhancement + width + rightEnhancement - 2 * length, 0, -rightEnhancement + 2* length],
+                        [0, height + botEnhancement - 2 * length, 0, -botEnhancement - height + 2 * length, 0]);
+                    fill_enhancement_rectangle("bot-left-right-enhancement");
+                    circlesByPath(path);
+                    }
+                    else if ((diameter >= leftEnhancement - limit) && (diameter < rightEnhancement - limit)) {
+                    var path = new Path(rectMoveX - width/2 - leftEnhancement + length, rectMoveY - height/2 + length,
+                        [0, leftEnhancement + width + rightEnhancement - 2*length, 0, -rightEnhancement + 2 * length],
+                        [height + botEnhancement - 2*length, 0, -botEnhancement - height + 2*length, 0]);
+                    fill_enhancement_rectangle("bot-left-right-enhancement");
+                    circlesByPath(path);
+                    }
+                    else if ((diameter >= leftEnhancement - limit) && (diameter >= rightEnhancement - limit) && ((diameter < leftEnhancement+width) || (diameter < rightEnhancement+width))) {
+                    var path = new Path(rectMoveX - width/2 - leftEnhancement + length, rectMoveY - height/2 + length,
+                        [0, leftEnhancement + width + rightEnhancement - 2*length, 0],
+                        [height + botEnhancement - 2*length, 0, -botEnhancement - height + 2*length]);
+                    fill_enhancement_rectangle("bot-left-right-enhancement");
+                    circlesByPath(path);
+                    }
+                    else if ((diameter < leftEnhancement - limit) && (diameter >= rightEnhancement - limit)) {
+                    var path = new Path(rectMoveX - width/2 - length, rectMoveY - height/2 + length,
+                        [-leftEnhancement + 2 * length, 0, leftEnhancement + width + rightEnhancement - 2 * length, 0],
+                        [0, height + botEnhancement - 2 * length, 0, -botEnhancement - height + 2 * length]);
+                    fill_enhancement_rectangle("bot-left-right-enhancement");
+                    circlesByPath(path);
+                    }
+                    else 
+                    errorAlert();
+                    draw_polyline("bot-left-right-enhancement");
                 }
                 else
                     errorAlert();
             }
-            draw_rectangle(width, height, "standart");
-            console.log('vertHoles')
-            console.log(vertHoles)
-            console.log('horHoles')
-            console.log(horHoles)
+            //else if
+            else
+              errorAlert();
+          }
+          draw_rectangle(width, height, "standart");
+
         break;
         case 'newCoring':
             scale_input();
@@ -918,8 +931,8 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
       ctx.stroke();
       holesNum++;
     }
-    function get_length(diameter) {
-      length = Math.cos(45 * Math.PI / 180) * diameter;
+    function get_length(radius) {
+      length = Math.cos(45 * Math.PI / 180) * radius;
       return length;
     }
     function get_circNum(sideLength, firstLength, secondLength) {
@@ -1383,7 +1396,60 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
         errorAlert();
       draw_rectangle(rightEnhancement, height, "right-enhancement");
     }
+    function getArea () {
+      //waste calc
+      const topSegmentArea = 0.5 * (Math.PI/2 - 1) * old_radius * old_radius;
+      console.log(path)
+      console.log('vertHoles')
+      console.log(vertHoles)
+      console.log('horHoles')
+      console.log(horHoles)
+      console.log(old_radius)
+      vertHoles.map((vertRow, index) => {
+        var middleSectorAngel = 2*Math.acos((vertRow.circStep/2)/old_radius); //rad
+        var middleSegmentArea = (0.5 * (middleSectorAngel - Math.sin(middleSectorAngel)) * old_radius * old_radius); // 1/2
+        var rowDistance;
+        if (scalar*vertRow.circStep/radius > 1.41421357) {
+          rowDistance = 'long';
+        }
+        else if (scalar*vertRow.circStep/radius == 1.41421357) {
+          rowDistance = 'perfect';
+        }
+        else if (scalar*vertRow.circStep/radius < 1.41421357) {
+          rowDistance = 'short';
+        }
+        vertHoles[index] = {
+          circStep: vertRow.circStep,
+          circNum: vertRow.circNum,
+          topSegmentArea: topSegmentArea,
+          middleSegmentArea: middleSegmentArea,
+          rowDistance: rowDistance
+        }
+      } );
+      horHoles.map((horRow, index) => {
+        var middleSectorAngel = 2*Math.acos((horRow.circStep/2)/old_radius); //rad
+        var middleSegmentArea = 0.5 * (middleSectorAngel - Math.sin(middleSectorAngel)) * old_radius * old_radius; // 1/2
+        var rowDistance;
+        if (scalar*horRow.circStep/radius > 1.41421357) {
+          rowDistance = 'long';
+        }
+        else if (scalar*horRow.circStep/radius == 1.41421357) {
+          rowDistance = 'perfect';
+        }
+        else if (scalar*horRow.circStep/radius < 1.41421357) {
+          rowDistance = 'short';
+        }
+        horHoles[index] = {
+          circStep: horRow.circStep,
+          circNum: horRow.circNum,
+          topSegmentArea: topSegmentArea,
+          middleSegmentArea: middleSegmentArea,
+          rowDistance: rowDistance
+        }
+      } );
+    }
 }
+
 
 // export function canvas (serviceName, data) {
 //     var width = data.width;
