@@ -63,14 +63,17 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
           // waste calculation variables
           var vertHoles = [];
           var horHoles = [];
-          var baseCoreWeight = 0;
+          var baseCoringArea = 0;
+          var externalCoringArea = 0;
+          var restArea = 0;
+          var totalArea = (topEnhancement + height + botEnhancement) * (leftEnhancement + width + rightEnhancement) - height * width;
+          var totalWeight = 0; // totalArea + externalCoringArea
+          var restWeight = 0;
           // ---------------------------
           scale_enhancement_input();
           var length = get_length(radius);
-          // get old_limit to fix canvas scaling bug
           //var old_limit
           var limit = 30*scalar - radius + length;
-          console.log('limit: ' + limit)
           if ((topEnhancement <= 0) && (botEnhancement <= 0) && (leftEnhancement <= 0) && (rightEnhancement <= 0)) {
               window.alert("Введите значение для расширения проема хотя бы в одном из направлений");
               error = true;
@@ -87,16 +90,72 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
               circlesByPath(path);
               holesNum--;
               draw_polyline("top-bot-left-right-enhancement");
+              //waste calc
               getArea();
+              console.log('vertHoles')
               console.log(vertHoles)
+              console.log('horHoles')
               console.log(horHoles)
               vertHoles.map(hole =>{
-                baseCoreWeight += hole.circNum * Math.PI * old_radius * old_radius - (hole.circNum - 1) * 2 * hole.middleSegmentArea;
+                baseCoringArea += (hole.circNum * Math.PI * old_radius * old_radius - (hole.circNum - 1) * 2 * hole.middleSegmentArea); //pure coring weight
+                console.log('baseCoringArea: ' + baseCoringArea)
+                externalCoringArea += hole.circNum * hole.topSegmentArea;
+                if (hole.rowDistance === 'short') 
+                  externalCoringArea -= (hole.circNum-1) * hole.externalCoringOverLengthArea;
               });
               horHoles.map(hole => {
-                baseCoreWeight += (hole.circNum - 2) * Math.PI * old_radius * old_radius - (hole.circNum - 1) * 2 * hole.middleSegmentArea;
+                baseCoringArea += (hole.circNum - 2) * Math.PI * old_radius * old_radius - (hole.circNum - 1) * 2 * hole.middleSegmentArea; //pure coring weight
+                console.log('baseCoringArea: ' + baseCoringArea)
+                externalCoringArea += hole.circNum * hole.topSegmentArea;
+                if (hole.rowDistance === 'short') 
+                  externalCoringArea -= (hole.circNum-1) * hole.externalCoringOverLengthArea;
               });
-              console.log('baseCoreWeight: ' + baseCoreWeight)
+              restArea = totalArea - baseCoringArea + externalCoringArea;
+              restWeight = restArea * 0.000001 * depth * 0.001 * concreteWeight;
+              console.log('restWeight: ' + restWeight);
+              if (restWeight > 1.02*wasteWeight) {
+                let partsQty = Math.ceil(restWeight/wasteWeight);
+                console.log('parts QTY: ' + partsQty)
+                var embrasureAreaPercent = 100*(width*height/scalar/scalar)/restArea;
+                console.log('R/S: ' + embrasureAreaPercent)
+                if (embrasureAreaPercent < 10) { //?
+                  var calc_width = (leftEnhancement + width + rightEnhancement - diameter - 2*length)/scalar;
+                  var calc_height = (topEnhancement + height + botEnhancement - diameter - 2*length)/scalar;
+                  var minSide = Math.min(calc_width, calc_height);
+                  var maxSide = Math.max(calc_width, calc_height);
+                  var k = 0;
+                  var minDistance = minSide*(partsQty-1)/(k+1) + maxSide*k;
+                  do {  
+                    k ++;
+                    var newDistance = minSide*(partsQty-1)/(k+1) + maxSide*k;
+                    console.log('N.D./O.D: ' + newDistance + ' / ' + minDistance);
+                    if (newDistance<minDistance)  
+                      minDistance = newDistance
+                  } while (minDistance == newDistance)
+                }
+                //if (restArea/(width*height))
+                //----------------------------
+                // var enhancementSum = topEnhancement + botEnhancement + leftEnhancement + rightEnhancement;
+                // var shortest = Math.min((topEnhancement + botEnhancement), (leftEnhancement + rightEnhancement))
+                // switch (shortest) {
+                //   case topEnhancement + botEnhancement:
+                //     if (((topEnhancement + botEnhancement + height)<leftEnhancement) || ((topEnhancement + botEnhancement + height)<rightEnhancement))
+                //       if (rightEnhancement<leftEnhancement) {
+                //         if (rightEnhancement+width+leftEnhancement)
+                //       }
+                //       else {
+
+                //       }
+                //     break;
+                //   case leftEnhancement + rightEnhancement:
+                //     break;
+                // }
+                // //var longest = Math.max(leftEnhancement/enhancementSum, + rightEnhancement/enhancementSum, topEnhancement/enhancementSum, botEnhancement/enhancementSum);
+                // switch (partsQty) {
+                //   case 2: 
+
+                // }
+              }
             }
             else if ((topEnhancement > 0) && (botEnhancement <= 0) && (leftEnhancement <= 0) && (rightEnhancement <= 0)) {
             // completed
@@ -1400,30 +1459,30 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
       //waste calc
       const topSegmentArea = 0.5 * (Math.PI/2 - 1) * old_radius * old_radius;
       console.log(path)
-      console.log('vertHoles')
-      console.log(vertHoles)
-      console.log('horHoles')
-      console.log(horHoles)
-      console.log(old_radius)
       vertHoles.map((vertRow, index) => {
         var middleSectorAngel = 2*Math.acos((vertRow.circStep/2)/old_radius); //rad
         var middleSegmentArea = (0.5 * (middleSectorAngel - Math.sin(middleSectorAngel)) * old_radius * old_radius); // 1/2
         var rowDistance;
         if (scalar*vertRow.circStep/radius > 1.41421357) {
           rowDistance = 'long';
+          var externalCoringOverLengthArea = 0;
         }
         else if (scalar*vertRow.circStep/radius == 1.41421357) {
           rowDistance = 'perfect';
+          var externalCoringOverLengthArea = 0;
         }
         else if (scalar*vertRow.circStep/radius < 1.41421357) {
           rowDistance = 'short';
+          var externalCoringOverLengthArea = get_externalCoringOverLengthArea(vertRow);
         }
         vertHoles[index] = {
+          name: 'vertRow'+index,
           circStep: vertRow.circStep,
           circNum: vertRow.circNum,
           topSegmentArea: topSegmentArea,
           middleSegmentArea: middleSegmentArea,
-          rowDistance: rowDistance
+          rowDistance: rowDistance,
+          externalCoringOverLengthArea: externalCoringOverLengthArea
         }
       } );
       horHoles.map((horRow, index) => {
@@ -1432,21 +1491,34 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
         var rowDistance;
         if (scalar*horRow.circStep/radius > 1.41421357) {
           rowDistance = 'long';
+          var externalCoringOverLengthArea = 0;
         }
         else if (scalar*horRow.circStep/radius == 1.41421357) {
           rowDistance = 'perfect';
+          var externalCoringOverLengthArea = 0;
         }
         else if (scalar*horRow.circStep/radius < 1.41421357) {
           rowDistance = 'short';
+          var externalCoringOverLengthArea = get_externalCoringOverLengthArea(horRow);
         }
         horHoles[index] = {
+          name: 'horRow'+index,
           circStep: horRow.circStep,
           circNum: horRow.circNum,
           topSegmentArea: topSegmentArea,
           middleSegmentArea: middleSegmentArea,
-          rowDistance: rowDistance
+          rowDistance: rowDistance,
+          externalCoringOverLengthArea: externalCoringOverLengthArea
         }
       } );
+      function get_externalCoringOverLengthArea(row) {
+        let heightToCircIntersection = Math.sqrt(old_radius*old_radius-row.circStep*row.circStep/4);
+        let hypotenuseAngle = (Math.asin(heightToCircIntersection/old_radius)-Math.asin((length/scalar)/old_radius));
+        let hypotenuse = old_radius * hypotenuseAngle;
+        let intersectionHeight = heightToCircIntersection - length/scalar;
+        let side = Math.sqrt(hypotenuse * hypotenuse - intersectionHeight * intersectionHeight);
+        return side * intersectionHeight;
+      }
     }
 }
 
