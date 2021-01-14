@@ -46,7 +46,7 @@ class Layout extends Component {
             <div onClick={(event) => this.clickHandler(event)} className="web">
             <Backdrop showBackdrop={this.props.showBackdrop}></Backdrop>
             <div className="grid-container">
-                <Header title="Тепловые Линии Мск" titleText="Алмазная резка и алмазное бурение" telefone="+7 (926) 932 68 40"/>
+                <Header title="Diamond coring services" titleText="Алмазная резка и алмазное бурение" telefone="+7 (926) 932 68 40"/>
                 <Nav/>
             </div>
             <LayoutContext.Provider value={{
