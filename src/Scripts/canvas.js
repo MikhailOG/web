@@ -571,13 +571,14 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
                 console.log('new WeightToCalc: ' + weightToCalc)
                 console.log('parts QTY: ' + partsQty)
                 wasteCuts = calc_wasteQty(partsQty);
-                console.log(wasteCuts)
+                console.log(wasteCuts) //+
                 //console.log(minSide + ' / ' + maxSide)
                 var deltaMinSide = (minSide - wasteCuts.longCut*diameter)/(wasteCuts.longCut+1) + diameter; 
                 var deltaMaxSide = (maxSide - wasteCuts.shortCut*diameter)/(wasteCuts.shortCut+1) + diameter; 
-                //console.log(deltaMinSide + ' / ' + deltaMaxSide)
+                console.log(deltaMinSide + ' / ' + deltaMaxSide)
                 length = get_length(radius);
                 let paths = calc_separate(wasteCuts);
+                console.log(paths)
                 console.log('vertSepHoles: ')
                 console.log(vertSepHoles)
                 console.log('horSepHoles: ')
@@ -1673,6 +1674,7 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
     };
   }
   function separate(wasteCuts) {
+    console.log('wasteCuts from separate: ' + wasteCuts)
     var deltaMinSide = (minSide - wasteCuts.longCut*diameter)/(wasteCuts.longCut+1) + diameter; 
     var deltaMaxSide = (maxSide - wasteCuts.shortCut*diameter)/(wasteCuts.shortCut+1) + diameter;
     let heightGtWidthX, heightGtWidthY, widthGtHeightX, widthGtHeightY, heightGtWidthStartX, widthGtHeightStartY;
@@ -1807,9 +1809,12 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
   }
   function get_sepWaste_weight(holesRow) {
     holesRow.map((row, index) => {
-      var middleSectorAngel = 2*Math.acos((row.circStep/2)/radius); //rad
-      var middleSegmentArea = (0.5 * (middleSectorAngel - Math.sin(middleSectorAngel)) * radius * radius); // 1/2
-      console.log(middleSegmentArea)
+      var middleSectorAngel;
+      var middleSegmentArea = 0;
+      if (((row.circStep/2)/radius) < 1) {
+        middleSectorAngel = 2*Math.acos((row.circStep/2)/radius); //rad
+        middleSegmentArea = (0.5 * (middleSectorAngel - Math.sin(middleSectorAngel)) * radius * radius); // 1/2
+      }
       holesRow[index] = {
         name: row.name+index,
         circStep: row.circStep,
