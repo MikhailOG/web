@@ -11,7 +11,6 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
   var height = data.height;
   var diameter = data.diameter;
   var depth = data.depth;
-  var old_radius = diameter/2;
   var radius = diameter/2;
   var topEnhancement;
   var botEnhancement;
@@ -21,6 +20,18 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
   ((typeof data.enhancementBottom) === 'undefined')? botEnhancement = 0 : botEnhancement = data.enhancementBottom;
   ((typeof data.enhancementLeft) === 'undefined')? leftEnhancement = 0 : leftEnhancement = data.enhancementLeft;
   ((typeof data.enhancementRight) === 'undefined')? rightEnhancement = 0 : rightEnhancement = data.enhancementRight;
+  var unscaled = {
+    width: width,
+    height: height,
+    diameter: diameter,
+    radius: radius,
+    depth: depth,
+    length: get_length(radius),
+    topEnhancement: topEnhancement,
+    botEnhancement: botEnhancement,
+    leftEnhancement: leftEnhancement,
+    rightEnhancement: rightEnhancement
+  }
   // declaring function variables
   var x;
   var y;
@@ -42,7 +53,6 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
   var heightCircStep;
   var widthCircNum;
   var widthCircStep;
-  //var circSepMode = false;
   //----------------------
   var c = document.getElementById("myCanvas");
   var ctx = c.getContext("2d");
@@ -70,12 +80,12 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
   var horHoles = [];
   var horSepHoles = [];
   var vertSepHoles = [];
-  var baseCoringArea = 0;
-  var externalCoringArea = 0;
-  var restArea = 0;
-  var totalArea = (topEnhancement + height + botEnhancement) * (leftEnhancement + width + rightEnhancement);
-  var totalWeight = 0; // totalArea + externalCoringArea
-  var restWeight = 0;
+  // var baseCoringArea = 0;
+  // var externalCoringArea = 0;
+  // var restArea = 0;
+  // var totalArea = (topEnhancement + height + botEnhancement) * (leftEnhancement + width + rightEnhancement);
+  // var totalWeight = 0; // totalArea + externalCoringArea
+  // var restWeight = 0;
   // ---------------------------
   switch (serviceName) {
       case 'enhancementCoring': 
@@ -106,14 +116,14 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
             console.log('horHoles')
             console.log(horHoles)
             vertHoles.map(hole =>{
-              baseCoringArea += (hole.circNum * Math.PI * old_radius * old_radius - (hole.circNum - 1) * 2 * hole.middleSegmentArea); //pure coring weight
+              baseCoringArea += (hole.circNum * Math.PI * unscaled.radius * unscaled.radius - (hole.circNum - 1) * 2 * hole.middleSegmentArea); //pure coring weight
               console.log('baseCoringArea: ' + baseCoringArea)
               externalCoringArea += hole.circNum * hole.topSegmentArea;
               if (hole.rowDistance === 'short') 
                 externalCoringArea -= (hole.circNum-1) * hole.externalCoringOverLengthArea;
             });
             horHoles.map(hole => {
-              baseCoringArea += (hole.circNum - 2) * Math.PI * old_radius * old_radius - (hole.circNum - 1) * 2 * hole.middleSegmentArea; //pure coring weight
+              baseCoringArea += (hole.circNum - 2) * Math.PI * unscaled.radius * unscaled.radius - (hole.circNum - 1) * 2 * hole.middleSegmentArea; //pure coring weight
               console.log('baseCoringArea: ' + baseCoringArea)
               externalCoringArea += hole.circNum * hole.topSegmentArea;
               if (hole.rowDistance === 'short') 
@@ -542,101 +552,7 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
             holesNum--;
             //-----
             //waste calc
-            get_waste_basic_info(vertHoles);
-            get_waste_basic_info(horHoles);
-            get_coringArea();
-            restArea = totalArea - baseCoringArea + externalCoringArea;
-            restWeight = restArea * 0.000001 * depth * 0.001 * concreteWeight;
-            console.log('restWeight: ' + restWeight);
-            if (restWeight > 1.02*wasteWeight) {
-              var calc_width = (leftEnhancement + width + rightEnhancement - diameter - 2*length)/scalar;
-              var calc_height = (topEnhancement + height + botEnhancement - diameter - 2*length)/scalar;
-              diameter = data.diameter;
-              radius = diameter/2;
-              width = data.width;
-              height = data.height;
-              var minSide = Math.min(calc_width, calc_height);
-              var maxSide = Math.max(calc_width, calc_height);
-              var weightToCalc = restWeight;
-              var partsQty = Math.ceil(restWeight/wasteWeight);
-              console.log('first WEIGHT: '+ restWeight/partsQty)
-              var processing = true;
-              var counter = 0;
-              var wasteCuts;
-              var bestWasteCuts;
-              var bestPaths = [];
-              var bestRealPartWeight;
-              do {
-                console.log('COUNTER: ' + counter);
-                console.log('new WeightToCalc: ' + weightToCalc)
-                console.log('parts QTY: ' + partsQty)
-                wasteCuts = calc_wasteQty(partsQty);
-                console.log(wasteCuts) //+
-                //console.log(minSide + ' / ' + maxSide)
-                var deltaMinSide = (minSide - wasteCuts.longCut*diameter)/(wasteCuts.longCut+1) + diameter; 
-                var deltaMaxSide = (maxSide - wasteCuts.shortCut*diameter)/(wasteCuts.shortCut+1) + diameter; 
-                console.log(deltaMinSide + ' / ' + deltaMaxSide)
-                length = get_length(radius);
-                let paths = calc_separate(wasteCuts);
-                console.log(paths)
-                console.log('vertSepHoles: ')
-                console.log(vertSepHoles)
-                console.log('horSepHoles: ')
-                console.log(horSepHoles)
-                get_sepWaste_weight(vertSepHoles);
-                get_sepWaste_weight(horSepHoles);
-                let sepWasteWeight = 0;
-                vertSepHoles.map(row => sepWasteWeight += row.weight);
-                horSepHoles.map(row => sepWasteWeight += row.weight);
-                console.log('restWeight: ' + restWeight);
-                console.log('sepWeight: ' + sepWasteWeight)
-                weightToCalc = restWeight - sepWasteWeight;
-                console.log('WeightToCalc: ' + weightToCalc)
-                if (weightToCalc < 0) {
-                  console.log('ERROR');
-                  processing = false;
-                }
-                let real_part_weight = weightToCalc/partsQty;
-                console.log('real weight of one part: ' + real_part_weight + ' kg');
-                console.log('partQTY: ' + partsQty);
-                console.log('new PArtQTY: ' + Math.ceil(weightToCalc/wasteWeight))
-                if (real_part_weight <= 1.05 * wasteWeight) {
-                  bestWasteCuts = wasteCuts;
-                  bestPaths = paths;
-                  bestRealPartWeight = real_part_weight;
-                  if ((partsQty - Math.ceil(weightToCalc/wasteWeight)) <= 0)  {
-                    processing = false;
-                    console.log('rejected to proceed, new PartsQty (' + Math.ceil(weightToCalc/wasteWeight) + ') >= (' + partsQty + ') prev partsQty')
-                  }
-                  else {
-                    partsQty = Math.ceil(weightToCalc/wasteWeight);
-                    console.log('accepted to proceed')
-                    counter++;
-                  }
-                }
-                else {
-                  processing = false;
-                  console.log('rejected to proceed, parts are too heavy: ' + (real_part_weight > 1.05 * wasteWeight))
-                }
-              } while (processing === true);
-              diameter = data.diameter*scalar;
-              radius = diameter/2;
-              width = data.width*scalar;
-              height = data.height*scalar;
-              minSide *= scalar;
-              maxSide *= scalar;
-              deltaMinSide *= scalar;
-              deltaMaxSide *= scalar;
-              length *= scalar;
-
-              console.log('bestWasteCuts: ' + bestWasteCuts)
-              console.log(bestWasteCuts)
-              console.log('Best real weight of one part: ' + bestRealPartWeight + ' kg');
-              console.log(bestPaths)
-
-              separate(bestWasteCuts);
-
-            }
+            sepStandart();
             //-----
             }
           else if ((width<=diameter)&&(height<=diameter)) {
@@ -1236,6 +1152,12 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
     }
   }
 
+  // function Unscaled(xStart, yStart, x, y, skipX, skipY) {
+  //   this.xStart = xStart;
+  //   this.yStart = yStart;
+  //   this.x = x;
+  //   this.y = y;
+  // }
   function Path(xStart, yStart, x, y, skipX, skipY) {
     this.xStart = xStart;
     this.yStart = yStart;
@@ -1537,24 +1459,24 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
     draw_rectangle(rightEnhancement, height, "right-enhancement");
   }
   // waste section
-  function calc_topSegmentArea(length) {
-    let angle = 2 * Math.acos(length/old_radius);
-    return 0.5 * (angle - Math.sin(angle)) * old_radius * old_radius;
+  function calc_topSegmentArea(unscaled) {
+    let angle = 2 * Math.acos(unscaled.length/unscaled.radius);
+    return 0.5 * (angle - Math.sin(angle)) * unscaled.radius * unscaled.radius;
   }
   function get_waste_basic_info (holesRow) {
     holesRow.map((row, index) => {
-      var middleSectorAngel = 2*Math.acos((row.circStep/2)/old_radius); //rad
-      var middleSegmentArea = (0.5 * (middleSectorAngel - Math.sin(middleSectorAngel)) * old_radius * old_radius); // 1/2
+      var middleSectorAngel = 2*Math.acos((row.circStep/2)/unscaled.radius); //rad
+      var middleSegmentArea = (0.5 * (middleSectorAngel - Math.sin(middleSectorAngel)) * unscaled.radius * unscaled.radius); // 1/2
       var rowDistance;
-      if (scalar*row.circStep/radius > 1.41421357) {
+      if (row.circStep/unscaled.radius > 1.41421357) {
         rowDistance = 'long';
         var externalCoringOverLengthArea = 0;
       }
-      else if (scalar*row.circStep/radius == 1.41421357) {
+      else if (row.circStep/unscaled.radius == 1.41421357) {
         rowDistance = 'perfect';
         var externalCoringOverLengthArea = 0;
       }
-      else if (scalar*row.circStep/radius < 1.41421357) {
+      else if (row.circStep/unscaled.radius < 1.41421357) {
         rowDistance = 'short';
         var externalCoringOverLengthArea = get_externalCoringOverLengthArea(row);
       }
@@ -1562,7 +1484,7 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
         name: row.name+index,
         circStep: row.circStep,
         circNum: row.circNum,
-        topSegmentArea: calc_topSegmentArea(length/scalar),
+        topSegmentArea: calc_topSegmentArea(unscaled),
         middleSegmentArea: middleSegmentArea,
         rowDistance: rowDistance,
         externalCoringOverLengthArea: externalCoringOverLengthArea
@@ -1570,24 +1492,27 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
     } );
   }
   function get_externalCoringOverLengthArea(row) {
-    let heightToCircIntersection = Math.sqrt(old_radius*old_radius-row.circStep*row.circStep/4);
-    let hypotenuseAngle = (Math.asin(heightToCircIntersection/old_radius)-Math.asin((length/scalar)/old_radius));
-    let hypotenuse = old_radius * hypotenuseAngle;
+    let heightToCircIntersection = Math.sqrt(unscaled.radius*unscaled.radius-row.circStep*row.circStep/4);
+    let hypotenuseAngle = (Math.asin(heightToCircIntersection/unscaled.radius)-Math.asin((length/scalar)/unscaled.radius));
+    let hypotenuse = unscaled.radius * hypotenuseAngle;
     let intersectionHeight = heightToCircIntersection - length/scalar;
     let side = Math.sqrt(hypotenuse * hypotenuse - intersectionHeight * intersectionHeight);
     return side * intersectionHeight;
   }
   function get_coringArea() {
+    var totalArea = (unscaled.topEnhancement + unscaled.height + unscaled.botEnhancement) * (unscaled.leftEnhancement + unscaled.width + unscaled.rightEnhancement)
+    var baseCoringArea = 0;
+    var externalCoringArea = 0;
     if ((vertHoles.length > 0) && (horHoles.length > 0)) {
       vertHoles.map(hole =>{
-        baseCoringArea += (hole.circNum * Math.PI * old_radius * old_radius - (hole.circNum - 1) * 2 * hole.middleSegmentArea); //pure coring weight
+        baseCoringArea += (hole.circNum * Math.PI * unscaled.radius * unscaled.radius - (hole.circNum - 1) * 2 * hole.middleSegmentArea); //pure coring weight
         console.log('baseCoringArea: ' + baseCoringArea)
         externalCoringArea += hole.circNum * hole.topSegmentArea;
         if (hole.rowDistance === 'short') 
           externalCoringArea -= (hole.circNum-1) * hole.externalCoringOverLengthArea;
       });
       horHoles.map(hole => {
-        baseCoringArea += (hole.circNum - 2) * Math.PI * old_radius * old_radius - (hole.circNum - 1) * 2 * hole.middleSegmentArea; //pure coring weight
+        baseCoringArea += (hole.circNum - 2) * Math.PI * unscaled.radius * unscaled.radius - (hole.circNum - 1) * 2 * hole.middleSegmentArea; //pure coring weight
         console.log('baseCoringArea: ' + baseCoringArea)
         externalCoringArea += hole.circNum * hole.topSegmentArea;
         if (hole.rowDistance === 'short') 
@@ -1596,7 +1521,7 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
     }
     else if ((vertHoles.length === 0) && (horHoles.length > 0)) {
       horHoles.map(hole =>{
-        baseCoringArea += (hole.circNum * Math.PI * old_radius * old_radius - (hole.circNum - 1) * 2 * hole.middleSegmentArea); //pure coring weight
+        baseCoringArea += (hole.circNum * Math.PI * unscaled.radius * unscaled.radius - (hole.circNum - 1) * 2 * hole.middleSegmentArea); //pure coring weight
         console.log('baseCoringArea: ' + baseCoringArea)
         let k;
         (serviceName === 'newCoring') ? k = 2: k = 1;
@@ -1607,7 +1532,7 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
     }
     else if ((vertHoles.length > 0) && (horHoles.length === 0)) {
       vertHoles.map(hole =>{
-        baseCoringArea += (hole.circNum * Math.PI * old_radius * old_radius - (hole.circNum - 1) * 2 * hole.middleSegmentArea); //pure coring weight
+        baseCoringArea += (hole.circNum * Math.PI * unscaled.radius * unscaled.radius - (hole.circNum - 1) * 2 * hole.middleSegmentArea); //pure coring weight
         console.log('baseCoringArea: ' + baseCoringArea)
         let k;
         (serviceName === 'newCoring') ? k = 2: k = 1;
@@ -1616,17 +1541,17 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
           externalCoringArea -= (k * hole.circNum-1) * hole.externalCoringOverLengthArea;
       });
     }
-    totalWeight = (totalArea + externalCoringArea) * depth * 0.000000001 * concreteWeight;
-    console.log('total weight: ' + totalWeight);
+    console.log('totalarea: ', totalArea)
+    return {
+      totalWeight: (totalArea + externalCoringArea) * depth * 0.000000001 * concreteWeight,
+      restArea: totalArea - baseCoringArea + externalCoringArea,
+    }
   }
-  function scaleSides() {
-    minSide = scalar * minSide;
-    maxSide = scalar * maxSide;
-  }
-  function get_sepCircNum(sideLength) {
+
+  function get_sepCircNum(sideLength, diameter) {
     if (sideLength > 0) {
       circNum = Math.ceil(sideLength/diameter);
-      if (((circNum * diameter - sideLength) > (diameter - 10*scalar)) && (circNum > 1)) {
+      if (((circNum * diameter - sideLength) > (diameter - 10)) && (circNum > 1)) {
         circNum --;
       }
       circStep = sideLength/circNum;
@@ -1640,13 +1565,11 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
       circNum: circNum
     };
   }
-  function calc_wasteQty(partsQty) {
-
+  function calc_wasteQty(partsQty, minSide, maxSide) {
     let shortCut = partsQty-1;
     let longCut = 0;
     let longCounter = 0;
     let minDistance = minSide*shortCut;
-
     do {  
       for (let shortCounter = partsQty - 1 - longCut; (shortCounter + 1)*(longCounter + 1) >= partsQty; shortCounter--) {
         var newDistance = minSide*shortCounter/(longCounter+1) + maxSide*longCounter;
@@ -1658,11 +1581,8 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
       }
       longCounter ++;
     } while ((minDistance == newDistance) || (longCounter<partsQty-2));
-    console.log('result: ' + minDistance + ', longCuts: ' + longCut + ", shortCuts: " + shortCut + ', piece weight: ' + restWeight/((longCut + 1)*(shortCut + 1)))
-    //let minSideScaled = scalar * minSide;
-    //let maxSideScaled = scalar * maxSide;
-    let longHolesNum = get_sepCircNum(maxSide).circNum*longCut;
-    let shortHolesNum = (longCut+1) * shortCut * get_sepCircNum((minSide-longCut*diameter)/(longCut+1)).circNum;
+    let longHolesNum = get_sepCircNum(maxSide, unscaled.diameter).circNum*longCut;
+    let shortHolesNum = (longCut+1) * shortCut * get_sepCircNum((minSide-longCut*diameter)/(longCut+1), unscaled.diameter).circNum;
     return {
       sepHolesNum: shortHolesNum + longHolesNum,
       longCut: longCut,
@@ -1673,11 +1593,13 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
       shortHolesNum: shortHolesNum
     };
   }
-  function separate(wasteCuts) {
-    console.log('wasteCuts from separate: ' + wasteCuts)
+  function separate(wasteCuts, minSide, maxSide) {
+    var minSide = minSide*scalar;
+    var maxSide = maxSide*scalar;
     var deltaMinSide = (minSide - wasteCuts.longCut*diameter)/(wasteCuts.longCut+1) + diameter; 
     var deltaMaxSide = (maxSide - wasteCuts.shortCut*diameter)/(wasteCuts.shortCut+1) + diameter;
-    let heightGtWidthX, heightGtWidthY, widthGtHeightX, widthGtHeightY, heightGtWidthStartX, widthGtHeightStartY;
+    var heightGtWidthX, heightGtWidthY, widthGtHeightX, widthGtHeightY, heightGtWidthStartX, widthGtHeightStartY;
+
     if ((wasteCuts.shortHolesNum/(wasteCuts.shortCut*(wasteCuts.longCut+1))) === 1) {
       heightGtWidthStartX = deltaMinSide/2;
       widthGtHeightStartY = deltaMinSide/2;
@@ -1739,8 +1661,12 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
       }
     }
   }
-  function calc_separate(wasteCuts) {
+  function calc_separate(wasteCuts, minSide, maxSide) {
 
+    let deltaMinSide = (minSide - wasteCuts.longCut*unscaled.diameter)/(wasteCuts.longCut+1) + unscaled.diameter; 
+    let deltaMaxSide = (maxSide - wasteCuts.shortCut*unscaled.diameter)/(wasteCuts.shortCut+1) + unscaled.diameter; 
+    console.log('deltas from calc_separate: ' + deltaMinSide + ' / ' + deltaMaxSide)
+    console.log('unscaled.diameter from calc_separate: ' + unscaled.diameter)
     horSepHoles = [];
     vertSepHoles = [];
     let heightGtWidthX, heightGtWidthY, widthGtHeightX, widthGtHeightY, heightGtWidthStartX, widthGtHeightStartY;
@@ -1749,23 +1675,23 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
       heightGtWidthStartX = deltaMinSide/2;
       widthGtHeightStartY = deltaMinSide/2;
       heightGtWidthX = 0;
-      heightGtWidthY = - maxSide+diameter;
-      widthGtHeightX = - maxSide+diameter;
+      heightGtWidthY = - maxSide+unscaled.diameter;
+      widthGtHeightX = - maxSide+unscaled.diameter;
       widthGtHeightY = 0;
     }
     else {
-      heightGtWidthStartX = diameter;
-      widthGtHeightStartY = diameter;
-      heightGtWidthX = deltaMinSide-2*diameter;
-      heightGtWidthY = - maxSide+diameter;
-      widthGtHeightX = - maxSide+diameter;
-      widthGtHeightY = -deltaMinSide+2*diameter;
+      heightGtWidthStartX = unscaled.diameter;
+      widthGtHeightStartY = unscaled.diameter;
+      heightGtWidthX = deltaMinSide-2*unscaled.diameter;
+      heightGtWidthY = - maxSide+unscaled.diameter;
+      widthGtHeightX = - maxSide+unscaled.diameter;
+      widthGtHeightY = -deltaMinSide+2*unscaled.diameter;
     }
     if (height >= width) {
       for (let i=1; i <= wasteCuts.longCut; i++) {
         let path = new Path(
-          rectMoveX + width/2 - length - i*deltaMinSide, 
-          rectMoveY + height/2 - length - diameter,
+          rectMoveX + unscaled.width/2 - unscaled.length - i*deltaMinSide, 
+          rectMoveY + unscaled.height/2 - unscaled.length - unscaled.diameter,
           [0],
           [heightGtWidthY]);
         calc_SepCirclesByPath(path);
@@ -1774,8 +1700,8 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
       for (let i=1; i <= wasteCuts.shortCut; i++) {
         for (let j=0; j < (wasteCuts.longCut + 1); j++) {
           let path = new Path(
-            rectMoveX - width/2 + length + heightGtWidthStartX + j*deltaMinSide, 
-            rectMoveY + height/2 - length - i * deltaMaxSide, //OK
+            rectMoveX - unscaled.width/2 + unscaled.length + heightGtWidthStartX + j*deltaMinSide, 
+            rectMoveY + unscaled.height/2 - unscaled.length - i * deltaMaxSide, //OK
             [heightGtWidthX],
             [0]);
           calc_SepCirclesByPath(path);
@@ -1786,8 +1712,8 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
     else {
       for (let i=1; i <= wasteCuts.longCut; i++) {
         let path = new Path(
-          rectMoveX + width/2 - length - diameter, 
-          rectMoveY + height/2 - length - i*deltaMinSide,
+          rectMoveX + unscaled.width/2 - unscaled.length - unscaled.diameter, 
+          rectMoveY + unscaled.height/2 - unscaled.length - i*deltaMinSide,
           [widthGtHeightX],
           [0]);
         calc_SepCirclesByPath(path);
@@ -1796,8 +1722,8 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
       for (let i=1; i <= wasteCuts.shortCut; i++) {
         for (let j=0; j < (wasteCuts.longCut + 1); j++) {
           let path = new Path(
-            rectMoveX - width/2 + length  + i * deltaMaxSide,
-            rectMoveY + height/2 - length - widthGtHeightStartY - j*deltaMinSide,
+            rectMoveX - unscaled.width/2 + unscaled.length  + i * deltaMaxSide,
+            rectMoveY + unscaled.height/2 - unscaled.length - widthGtHeightStartY - j*deltaMinSide,
             [0],
             [widthGtHeightY]);
           calc_SepCirclesByPath(path);
@@ -1811,16 +1737,16 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
     holesRow.map((row, index) => {
       var middleSectorAngel;
       var middleSegmentArea = 0;
-      if (((row.circStep/2)/radius) < 1) {
-        middleSectorAngel = 2*Math.acos((row.circStep/2)/radius); //rad
-        middleSegmentArea = (0.5 * (middleSectorAngel - Math.sin(middleSectorAngel)) * radius * radius); // 1/2
+      if (((row.circStep/2)/unscaled.radius) < 1) {
+        middleSectorAngel = 2*Math.acos((row.circStep/2)/unscaled.radius); //rad
+        middleSegmentArea = (0.5 * (middleSectorAngel - Math.sin(middleSectorAngel)) * unscaled.radius * unscaled.radius); // 1/2
       }
       holesRow[index] = {
         name: row.name+index,
         circStep: row.circStep,
         circNum: row.circNum,
         middleSegmentArea: middleSegmentArea,
-        weight: (Math.PI * old_radius * old_radius * row.circNum - 2 * middleSegmentArea * (row.circNum - 1)) * depth * 0.000000001 * concreteWeight
+        weight: (Math.PI * unscaled.radius * unscaled.radius * row.circNum - 2 * middleSegmentArea * (row.circNum - 1)) * depth * 0.000000001 * concreteWeight
       }
     } );
   }
@@ -1844,8 +1770,8 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
         var yDirection = "false";
         var hor = "false";
         var vert = "false";
-        heightCircNum = get_sepCircNum(Math.abs(path.y[i])).circNum;
-        heightCircStep = get_sepCircNum(Math.abs(path.y[i])).circStep;
+        heightCircNum = get_sepCircNum(Math.abs(path.y[i]), diameter).circNum;
+        heightCircStep = get_sepCircNum(Math.abs(path.y[i]), diameter).circStep;
         if ((yCoord + path.y[i]) > yCoord) {
           vert = "true";
         }
@@ -1853,8 +1779,8 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
           vert = "true";
           yDirection = "true";
         }
-        widthCircNum = get_sepCircNum(Math.abs(path.x[i])).circNum;
-        widthCircStep = get_sepCircNum(Math.abs(path.x[i])).circStep;
+        widthCircNum = get_sepCircNum(Math.abs(path.x[i]), diameter).circNum;
+        widthCircStep = get_sepCircNum(Math.abs(path.x[i]), diameter).circStep;
         if ((xCoord + path.x[i]) > xCoord) {
           hor = "true";
         }
@@ -1888,8 +1814,8 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
         var yDirection = "false";
         var hor = "false";
         var vert = "false";
-        heightCircNum = get_sepCircNum(Math.abs(path.y[i])).circNum;
-        heightCircStep = get_sepCircNum(Math.abs(path.y[i])).circStep;
+        heightCircNum = get_sepCircNum(Math.abs(path.y[i]), diameter).circNum;
+        heightCircStep = get_sepCircNum(Math.abs(path.y[i]), diameter).circStep;
         if ((yCoord + path.y[i]) > yCoord) {
           vert = "true";
         }
@@ -1897,8 +1823,8 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
           vert = "true";
           yDirection = "true";
         }
-        widthCircNum = get_sepCircNum(Math.abs(path.x[i])).circNum;
-        widthCircStep = get_sepCircNum(Math.abs(path.x[i])).circStep;
+        widthCircNum = get_sepCircNum(Math.abs(path.x[i]), diameter).circNum;
+        widthCircStep = get_sepCircNum(Math.abs(path.x[i]), diameter).circStep;
         if ((xCoord + path.x[i]) > xCoord) {
           hor = "true";
         }
@@ -1941,11 +1867,11 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
     widthCircNum = 0;
     heightCircNum = 0;
 
-    heightCircNum = get_sepCircNum(Math.abs(path.y[0])).circNum;
-    heightCircStep = get_sepCircNum(Math.abs(path.y[0])).circStep;
+    heightCircNum = get_sepCircNum(Math.abs(path.y[0]), unscaled.diameter).circNum;
+    heightCircStep = get_sepCircNum(Math.abs(path.y[0]), unscaled.diameter).circStep;
 
-    widthCircNum = get_sepCircNum(Math.abs(path.x[0])).circNum;
-    widthCircStep = get_sepCircNum(Math.abs(path.x[0])).circStep;
+    widthCircNum = get_sepCircNum(Math.abs(path.x[0]), unscaled.diameter).circNum;
+    widthCircStep = get_sepCircNum(Math.abs(path.x[0]), unscaled.diameter).circStep;
 
     console.log('wN/hN: ' + widthCircNum + ' / ' + heightCircNum)
 
@@ -1955,6 +1881,100 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
       vertSepHoles.push({name: 'vertHoles', circNum: heightCircNum+1, circStep: heightCircStep});
   }
 
+  function sepStandart() {
+    console.log(unscaled)
+    get_waste_basic_info(vertHoles); //+
+    get_waste_basic_info(horHoles);//+
+    var coringArea = get_coringArea();
+    var totalWeight = coringArea.totalWeight;
+    var restWeight = coringArea.restArea * depth * 0.000000001 * concreteWeight;
+    console.log('restWeight: ' + restWeight);
+    console.log('totalWeight: ' + totalWeight);
+    if (restWeight > 1.02*wasteWeight) {
+      var calc_width = (unscaled.leftEnhancement + unscaled.width + unscaled.rightEnhancement - unscaled.diameter - 2*unscaled.length);
+      var calc_height = (unscaled.topEnhancement + unscaled.height + unscaled.botEnhancement - unscaled.diameter - 2*unscaled.length);
+      var minSide = Math.min(calc_width, calc_height);
+      var maxSide = Math.max(calc_width, calc_height);
+      var weightToCalc = restWeight;
+      var partsQty = Math.ceil(restWeight/wasteWeight);
+      console.log('first WEIGHT: '+ restWeight/partsQty)
+      var processing = true;
+      var counter = 0;
+      var wasteCuts;
+      var bestWasteCuts;
+      var bestPaths = [];
+      var bestRealPartWeight;
+      do {
+        console.log('COUNTER: ' + counter);
+        console.log('new WeightToCalc: ' + weightToCalc)
+        console.log('parts QTY: ' + partsQty)
+        wasteCuts = calc_wasteQty(partsQty, minSide, maxSide);
+        console.log(wasteCuts) //+
+        //console.log(minSide + ' / ' + maxSide)
+        // var deltaMinSide = (minSide - wasteCuts.longCut*diameter)/(wasteCuts.longCut+1) + diameter; 
+        // var deltaMaxSide = (maxSide - wasteCuts.shortCut*diameter)/(wasteCuts.shortCut+1) + diameter; 
+        //console.log(deltaMinSide + ' / ' + deltaMaxSide)
+        //length = get_length(radius);
+        let paths = calc_separate(wasteCuts, minSide, maxSide);
+        console.log(paths)
+        console.log('vertSepHoles: ')
+        console.log(vertSepHoles)
+        console.log('horSepHoles: ')
+        console.log(horSepHoles)
+        get_sepWaste_weight(vertSepHoles);
+        get_sepWaste_weight(horSepHoles);
+        let sepWasteWeight = 0;
+        vertSepHoles.map(row => sepWasteWeight += row.weight);
+        horSepHoles.map(row => sepWasteWeight += row.weight);
+        console.log('restWeight: ' + restWeight);
+        console.log('sepWeight: ' + sepWasteWeight)
+        weightToCalc = restWeight - sepWasteWeight;
+        console.log('WeightToCalc: ' + weightToCalc)
+        if (weightToCalc < 0) {
+          console.log('ERROR');
+          processing = false;
+        }
+        let real_part_weight = weightToCalc/partsQty;
+        console.log('real weight of one part: ' + real_part_weight + ' kg');
+        console.log('partQTY: ' + partsQty);
+        console.log('new PArtQTY: ' + Math.ceil(weightToCalc/wasteWeight))
+        if (real_part_weight <= 1.05 * wasteWeight) {
+          bestWasteCuts = wasteCuts;
+          bestPaths = paths;
+          bestRealPartWeight = real_part_weight;
+          if ((partsQty - Math.ceil(weightToCalc/wasteWeight)) <= 0)  {
+            processing = false;
+            console.log('rejected to proceed, new PartsQty (' + Math.ceil(weightToCalc/wasteWeight) + ') >= (' + partsQty + ') prev partsQty')
+          }
+          else {
+            partsQty = Math.ceil(weightToCalc/wasteWeight);
+            console.log('accepted to proceed')
+            counter++;
+          }
+        }
+        else {
+          processing = false;
+          console.log('rejected to proceed, parts are too heavy: ' + (real_part_weight > 1.05 * wasteWeight))
+        }
+      } while (processing === true);
+      // diameter = data.diameter*scalar;
+      // radius = diameter/2;
+      // width = data.width*scalar;
+      // height = data.height*scalar;
+      // minSide *= scalar;
+      // maxSide *= scalar;
+      // deltaMinSide *= scalar;
+      // deltaMaxSide *= scalar;
+      // length *= scalar;
+
+      console.log('bestWasteCuts: ')
+      console.log(bestWasteCuts)
+      console.log('Best real weight of one part: ' + bestRealPartWeight + ' kg');
+      console.log(bestPaths)
+
+      separate(bestWasteCuts, minSide, maxSide);
+    }
+  }
 
 
 }
