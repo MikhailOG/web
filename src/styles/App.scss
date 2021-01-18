@@ -80,7 +80,7 @@ html {
   grid-template-rows: [header-start] 8.4375rem [header-end nav-start] auto [nav-end];
   header {
     grid-area: header-start / first / header-end / end;
-    p {
+    p, i {
       font-size: 1.5625rem;
       }
     .header-cont {
@@ -122,11 +122,14 @@ html {
           margin-top: 0.625rem;
         }
       }
-      .telefone {
+      .contacts {
         grid-column: 3;
         grid-row: 1;
         text-align: right;
-        margin: 0.625rem 1.5625rem 0 0.625rem;
+        margin: 0.3rem 1.5625rem 0 0.625rem;
+        i {
+          margin-right: 0.35rem;
+        }
       }
     }
   }

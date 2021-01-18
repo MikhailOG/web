@@ -17,8 +17,9 @@ const header = (props) => {
             <h1>{props.title}</h1>
             <p>{props.titleText}</p>
           </div>
-          <div className="telefone">
-            <p><i className="fas fa-phone"></i> {props.telefone}<br/>Михаил</p>
+          <div className="contacts">
+            <p><i className="fas fa-phone"></i> {props.telefone}</p>
+            <p><a href="mailto:info@diamondcoring.ru"><i className="far fa-envelope"></i></a> {props.email}</p>
           </div>
         </div>
       </header>
