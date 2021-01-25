@@ -1775,15 +1775,25 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
             }
           }
         } 
-        for (let i = 0; i < shortHoles.length; i++) { //check 3 row in one hor row than move down
-          if (shortHoles[i].name.toString().startsWith('hor')) { //height > width
+        if (shortHoles[0].name.toString().startsWith('hor')) { //height > width
+          for (let i = 0; i < wasteCuts.shortCut; i++) {
             let xStart = rectMoveX - width/2 + length + diameter;
             let yStart = rectMoveY + height/2 - length - (i+1)*deltaMaxSide;
-            for (let j = 0; j < shortHoles[i].circNum; j++) {
-              draw_circle(xStart + j * shortHoles[i].circStep*scalar, yStart , radius)
-              
+
+            for (let j = 0; j < wasteCuts.longCut+1; j++) {
+              xStart += j * deltaMinSide;
+              console.log('[' + xStart + ', ' + yStart + ']');
+              let centerMark = 0;
+              if (j === 1 || j === wasteCuts.longCut)
+                centerMark = 1;
+              for (let k = 0; k < shortHoles[i * (wasteCuts.longCut+1) + j].circNum; k++) {
+                console.log(i * (wasteCuts.longCut+1) + j)
+                draw_circle(xStart + k * shortHoles[i * (wasteCuts.longCut+1) + j].circStep*scalar, yStart , radius)
+              }
             }
           }
+        } else { // width >= height
+
         }
       } else {// shortside is solid 
         console.log('SOLID SHORT SIDE');
