@@ -1580,7 +1580,7 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
     do {  
       let shortCounter = partsQty - 1 - longCounter;
       do {
-        var newDistance = shortCounter * (minSide - (unscaled.diameter * longCounter)) + maxSide*longCounter;
+        var newDistance = shortCounter * (minSide - (unscaled.diameter * longCounter)) + maxSide*longCounter; //try delete (unscaled.diameter * longCounter)
         if (newDistance < minDistance && minDistance > 0) {
           console.log('longCounter, shortCounter: [' + longCounter + ', ' + shortCounter + ']');
           console.log('prev Dist: ' + minDistance);
@@ -1622,23 +1622,26 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
       for (let index = 0; index < shortHoles.length; index += longCut+1) {
         for (let i = 0; i < longCut+1; i++) {
           console.log('i: ' + i);
-          if (i === 0 || i === longCut) {
+          //if (i === 0 || i === longCut) {
             shortHoles[index + i] = 
             {
               name: shortSideName,
-              circNum: get_sepCircNum(minSide/(longCut+1) - unscaled.radius, unscaled.diameter, delta).circNum,
-              circStep: get_sepCircNum(minSide/(longCut+1) - unscaled.radius, unscaled.diameter, delta).circStep
+              circNum: get_sepCircNum((minSide - longCut * unscaled.diameter)/(longCut+1), unscaled.diameter, delta).circNum,
+              circStep: get_sepCircNum((minSide - longCut * unscaled.diameter)/(longCut+1), unscaled.diameter, delta).circStep
+              // circNum: get_sepCircNum(minSide/(longCut+1) - unscaled.radius, unscaled.diameter, delta).circNum,
+              // circStep: get_sepCircNum(minSide/(longCut+1) - unscaled.radius, unscaled.diameter, delta).circStep
             }
-          } else {
-            shortHoles[index + i] = 
-            {
-              name: shortSideName,
-              circNum: get_sepCircNum(minSide/(longCut+1) - unscaled.diameter, unscaled.diameter, delta).circNum,
-              circStep: get_sepCircNum(minSide/(longCut+1) - unscaled.diameter, unscaled.diameter, delta).circStep
-            }
-          }
+        //   } else {
+        //     shortHoles[index + i] = 
+        //     {
+        //       name: shortSideName,
+        //       circNum: get_sepCircNum(minSide/(longCut+1) - unscaled.diameter, unscaled.diameter, delta).circNum,
+        //       circStep: get_sepCircNum(minSide/(longCut+1) - unscaled.diameter, unscaled.diameter, delta).circStep
+        //     }
+        //  }
         }
       }
+      //console.log(shortHoles)
       longCutResult = {shortHoles: shortHoles, longHoles: longHoles}; // result for long case
       // short case
       var shortCutResult;
@@ -1654,22 +1657,24 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
       longHoles = new Array(longCut * (shortCut + 1));
       for (let index = 0; index < longHoles.length; index += shortCut+1) {
         for (let i = 0; i < shortCut+1; i++) {
-          console.log('i: ' + i);
-          if (i === 0 || i === shortCut) {
+          //console.log('i: ' + i);
+          // if (i === 0 || i === shortCut) {
             longHoles[index + i] = 
             {
               name: longSideName,
-              circNum: get_sepCircNum(maxSide/(shortCut+1) - unscaled.radius, unscaled.diameter, delta).circNum,
-              circStep: get_sepCircNum(maxSide/(shortCut+1) - unscaled.radius, unscaled.diameter, delta).circStep
+              circNum: get_sepCircNum((maxSide - shortCut * unscaled.diameter)/(shortCut+1), unscaled.diameter, delta).circNum,
+              circStep: get_sepCircNum((maxSide - shortCut * unscaled.diameter)/(shortCut+1), unscaled.diameter, delta).circStep
+              // circNum: get_sepCircNum(maxSide/(shortCut+1) - unscaled.radius, unscaled.diameter, delta).circNum,
+              // circStep: get_sepCircNum(maxSide/(shortCut+1) - unscaled.radius, unscaled.diameter, delta).circStep
             }
-          } else {
-            longHoles[index + i] = 
-            {
-              name: longSideName,
-              circNum: get_sepCircNum(maxSide/(shortCut+1) - unscaled.diameter, unscaled.diameter, delta).circNum,
-              circStep: get_sepCircNum(maxSide/(shortCut+1) - unscaled.diameter, unscaled.diameter, delta).circStep
-            }
-          }
+          // } else {
+          //   longHoles[index + i] = 
+          //   {
+          //     name: longSideName,
+          //     circNum: get_sepCircNum(maxSide/(shortCut+1) - unscaled.diameter, unscaled.diameter, delta).circNum,
+          //     circStep: get_sepCircNum(maxSide/(shortCut+1) - unscaled.diameter, unscaled.diameter, delta).circStep
+          //   }
+          // }
         }
       }
       shortCutResult = {shortHoles: shortHoles, longHoles: longHoles}; // result for short case
@@ -1707,6 +1712,7 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
       let shortCaseShortCutCircNum = 0;
       shortCutResult.shortHoles.map(row => shortCaseShortCutCircNum += row.circNum);
       shortCutResult.longHoles.map(row => shortCaseLongCutCircNum += row.circNum);
+      //console.log("longCaseNum: " + longCaseLongCutCircNum + ", shortCaseNum: " + shortCaseLongCutCircNum);
       ((longCaseLongCutCircNum + longCaseShortCutCircNum) <= (shortCaseLongCutCircNum + shortCaseShortCutCircNum)) ? bestResult = {...longCutResult, longHolesNum: longCaseLongCutCircNum, shortHolesNum: longCaseShortCutCircNum} : bestResult = {...shortCutResult, longHolesNum: shortCaseLongCutCircNum, shortHolesNum: shortCaseShortCutCircNum};
     } else { // only shortCuts
       let shortHolesNum = 0;
@@ -1745,8 +1751,7 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
       heightGtWidthY = - maxSide+diameter;
       widthGtHeightX = - maxSide+diameter;
       widthGtHeightY = 0;
-    }
-    else { // multi circle
+    } else { // multi circle
       heightGtWidthStartX = diameter;
       widthGtHeightStartY = diameter;
       heightGtWidthX = deltaMinSide-2*diameter;
@@ -1760,6 +1765,7 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
         console.log('SOLID LONG SIDE');
         for (let i = 0; i < longHoles.length; i++) {
           if (longHoles[i].name.toString().startsWith('vert')) { //height > width
+            console.log("IM HERE")
             let xStart = rectMoveX + width/2 - length - (i+1)*deltaMinSide;
             let yStart = rectMoveY + height/2 - length - diameter;
             for (let j = 0; j < longHoles[i].circNum; j++) {
@@ -1781,40 +1787,38 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
             let yStart = rectMoveY + height/2 - length - (i+1)*deltaMaxSide;
 
             for (let j = 0; j < wasteCuts.longCut+1; j++) {
-              xStart += j * deltaMinSide;
+              console.log(xStart)
               console.log('[' + xStart + ', ' + yStart + ']');
-              let centerMark = 0;
-              if (j === 1 || j === wasteCuts.longCut)
-                centerMark = 1;
               for (let k = 0; k < shortHoles[i * (wasteCuts.longCut+1) + j].circNum; k++) {
-                console.log(i * (wasteCuts.longCut+1) + j)
-                draw_circle(xStart + k * shortHoles[i * (wasteCuts.longCut+1) + j].circStep*scalar, yStart , radius)
+                //console.log(i * (wasteCuts.longCut+1) + j)
+                draw_circle(xStart + k * shortHoles[i * (wasteCuts.longCut+1) + j].circStep * scalar, yStart , radius)
               }
+              xStart += deltaMinSide;
             }
           }
         } else { // width >= height
-
+          console.log('width>=height')
         }
-      } else {// shortside is solid 
-        console.log('SOLID SHORT SIDE');
-        for (let i = 0; i < shortHoles.length; i++) {
-          if (shortHoles[i].name.toString().startsWith('hor')) { //height > width
-            let xStart = rectMoveX + width/2 - length - (i+1)*deltaMinSide;
-            let yStart = rectMoveY + height/2 - length - diameter;
-            for (let j = 0; j < shortHoles[i].circNum; j++) {
-              draw_circle(xStart, yStart - j * shortHoles[i].circStep*scalar, radius)
+      } //else {// shortside is solid 
+      //   console.log('SOLID SHORT SIDE');
+      //   for (let i = 0; i < shortHoles.length; i++) {
+      //     if (shortHoles[i].name.toString().startsWith('hor')) { //height > width
+      //       let xStart = rectMoveX + width/2 - length - (i+1)*deltaMinSide;
+      //       let yStart = rectMoveY + height/2 - length - diameter;
+      //       for (let j = 0; j < shortHoles[i].circNum; j++) {
+      //         draw_circle(xStart, yStart - j * shortHoles[i].circStep*scalar, radius)
               
-            }
-          } else { // width >= height
-            let xStart = rectMoveX + width/2 - length - diameter;
-            let yStart = rectMoveY + height/2 - length - (i+1)*deltaMinSide;
-            for (let j = 0; j < shortHoles[i].circNum; j++) {
-              draw_circle(xStart - j * shortHoles[i].circStep*scalar, yStart, radius)
+      //       }
+      //     } else { // width >= height
+      //       let xStart = rectMoveX + width/2 - length - diameter;
+      //       let yStart = rectMoveY + height/2 - length - (i+1)*deltaMinSide;
+      //       for (let j = 0; j < shortHoles[i].circNum; j++) {
+      //         draw_circle(xStart - j * shortHoles[i].circStep*scalar, yStart, radius)
               
-            }
-          }
-        } 
-      }
+      //       }
+      //     }
+      //   } 
+      // }
 
     // if (height >= width) {
     //   for (let i=1; i <= wasteCuts.longCut; i++) {
