@@ -1596,7 +1596,7 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
     // let longHolesNum = get_sepCircNum(maxSide - 2 * unscaled.length, unscaled.diameter, 10).circNum*longCut;
     // let shortHolesNum = (longCut+1) * shortCut * get_sepCircNum((minSide-(longCut+1)*unscaled.diameter)/(longCut+1), unscaled.diameter, 10).circNum;
     
-    let delta = 3;
+    let delta = 5;
     if (unscaled.width > unscaled.height) {
       var longSideName = "horHoles";
       var shortSideName = "vertHoles";
@@ -1641,7 +1641,7 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
         //  }
         }
       }
-      //console.log(shortHoles)
+      console.log(shortHoles)
       longCutResult = {shortHoles: shortHoles, longHoles: longHoles}; // result for long case
       // short case
       var shortCutResult;
@@ -1744,7 +1744,7 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
     var heightGtWidthX, heightGtWidthY, widthGtHeightX, widthGtHeightY, heightGtWidthStartX, widthGtHeightStartY;
 
     if ((wasteCuts.shortHolesNum/(wasteCuts.shortCut*(wasteCuts.longCut+1))) === 1) { // single circle
-
+console.log('SINGLE HOLE CASE'); //1500x1000 92/16
       heightGtWidthStartX = deltaMinSide/2;
       widthGtHeightStartY = deltaMinSide/2;
       heightGtWidthX = 0;
@@ -1763,109 +1763,91 @@ export function canvas(serviceName, data, concreteWeight, wasteWeight) {
     let longHoles = wasteCuts.bestResult.longHoles;
       if (shortHoles.length > longHoles.length) { //longside is solid
         console.log('SOLID LONG SIDE');
-        for (let i = 0; i < longHoles.length; i++) {
-          if (longHoles[i].name.toString().startsWith('vert')) { //height > width
-            console.log("IM HERE")
+        for (let i = 0; i < longHoles.length; i++) { // draw long side
+          if (longHoles[i].name.toString().startsWith('vert')) { //height >= width
             let xStart = rectMoveX + width/2 - length - (i+1)*deltaMinSide;
             let yStart = rectMoveY + height/2 - length - diameter;
             for (let j = 0; j < longHoles[i].circNum; j++) {
               draw_circle(xStart, yStart - j * longHoles[i].circStep*scalar, radius)
               
             }
-          } else { // width >= height
+          } else { // width > height
             let xStart = rectMoveX + width/2 - length - diameter;
             let yStart = rectMoveY + height/2 - length - (i+1)*deltaMinSide;
             for (let j = 0; j < longHoles[i].circNum; j++) {
               draw_circle(xStart - j * longHoles[i].circStep*scalar, yStart, radius)
-              
             }
           }
         } 
+        // draw
         if (shortHoles[0].name.toString().startsWith('hor')) { //height > width
           for (let i = 0; i < wasteCuts.shortCut; i++) {
             let xStart = rectMoveX - width/2 + length + diameter;
             let yStart = rectMoveY + height/2 - length - (i+1)*deltaMaxSide;
-
             for (let j = 0; j < wasteCuts.longCut+1; j++) {
-              console.log(xStart)
-              console.log('[' + xStart + ', ' + yStart + ']');
               for (let k = 0; k < shortHoles[i * (wasteCuts.longCut+1) + j].circNum; k++) {
-                //console.log(i * (wasteCuts.longCut+1) + j)
                 draw_circle(xStart + k * shortHoles[i * (wasteCuts.longCut+1) + j].circStep * scalar, yStart , radius)
               }
               xStart += deltaMinSide;
             }
           }
         } else { // width >= height
-          console.log('width>=height')
+          for (let i = 0; i < wasteCuts.shortCut; i++) {
+            let xStart = rectMoveX - width/2 + length + (i+1)*deltaMaxSide;
+            let yStart = rectMoveY + height/2 - length - diameter;
+            for (let j = 0; j < wasteCuts.longCut+1; j++) {
+              for (let k = 0; k < shortHoles[i * (wasteCuts.longCut+1) + j].circNum; k++) {
+                draw_circle(xStart, yStart - k * shortHoles[i * (wasteCuts.longCut+1) + j].circStep * scalar, radius)
+              }
+              yStart -= deltaMinSide;
+            }
+          }
         }
-      } //else {// shortside is solid 
-      //   console.log('SOLID SHORT SIDE');
-      //   for (let i = 0; i < shortHoles.length; i++) {
-      //     if (shortHoles[i].name.toString().startsWith('hor')) { //height > width
-      //       let xStart = rectMoveX + width/2 - length - (i+1)*deltaMinSide;
-      //       let yStart = rectMoveY + height/2 - length - diameter;
-      //       for (let j = 0; j < shortHoles[i].circNum; j++) {
-      //         draw_circle(xStart, yStart - j * shortHoles[i].circStep*scalar, radius)
-              
-      //       }
-      //     } else { // width >= height
-      //       let xStart = rectMoveX + width/2 - length - diameter;
-      //       let yStart = rectMoveY + height/2 - length - (i+1)*deltaMinSide;
-      //       for (let j = 0; j < shortHoles[i].circNum; j++) {
-      //         draw_circle(xStart - j * shortHoles[i].circStep*scalar, yStart, radius)
-              
-      //       }
-      //     }
-      //   } 
-      // }
-
-    // if (height >= width) {
-    //   for (let i=1; i <= wasteCuts.longCut; i++) {
-    //     let xStart = 
-    //     draw_circle(xStart+xLength, y, radius);
-    //     let path = new Path(
-    //       rectMoveX + width/2 - length - i*deltaMinSide, 
-    //       rectMoveY + height/2 - length - diameter,
-    //       [0],
-    //       [heightGtWidthY]);
-    //     fillSepCirclesByPath(path);
-    //     drawSepCirclesByPath(path);
-    //   }
-    //   for (let i=1; i <= wasteCuts.shortCut; i++) {
-    //     for (let j=0; j < (wasteCuts.longCut + 1); j++) {
-    //       let path = new Path(
-    //         rectMoveX - width/2 + length + heightGtWidthStartX + j*deltaMinSide, 
-    //         rectMoveY + height/2 - length - i * deltaMaxSide, //OK
-    //         [heightGtWidthX],
-    //         [0]);
-    //       fillSepCirclesByPath(path);
-    //       drawSepCirclesByPath(path);
-    //     }
-    //   }
-    // }
-    // else {
-    //   for (let i=1; i <= wasteCuts.longCut; i++) {
-    //     let path = new Path(
-    //       rectMoveX + width/2 - length - diameter, 
-    //       rectMoveY + height/2 - length - i*deltaMinSide,
-    //       [widthGtHeightX],
-    //       [0]);
-    //     fillSepCirclesByPath(path);
-    //     drawSepCirclesByPath(path);
-    //   }
-    //   for (let i=1; i <= wasteCuts.shortCut; i++) {
-    //     for (let j=0; j < (wasteCuts.longCut + 1); j++) {
-    //       let path = new Path(
-    //         rectMoveX - width/2 + length  + i * deltaMaxSide,
-    //         rectMoveY + height/2 - length - widthGtHeightStartY - j*deltaMinSide,
-    //         [0],
-    //         [widthGtHeightY]);
-    //       fillSepCirclesByPath(path);
-    //       drawSepCirclesByPath(path);
-    //     }
-    //   }
-    // }
+      } else {//shrotSide is solid [shortHoles.length <= longHoles.length]
+      //else {// shortside is solid 
+        console.log('SOLID SHORT SIDE');
+        for (let i = 0; i < shortHoles.length; i++) { // draw solid circles
+          if (shortHoles[i].name.toString().startsWith('hor')) { //height > width
+            let xStart = rectMoveX - width/2 + length + diameter;
+            let yStart = rectMoveY - height/2 + length + (i+1)*deltaMaxSide;
+            for (let j = 0; j < shortHoles[i].circNum; j++) {
+              draw_circle(xStart + j * shortHoles[i].circStep*scalar, yStart, radius)
+            }
+          } else { // width >= height
+            let xStart = rectMoveX - width/2 + length + (i+1)*deltaMaxSide;
+            let yStart = rectMoveY - height/2 + length + diameter;
+            for (let j = 0; j < shortHoles[i].circNum; j++) {
+              draw_circle(xStart, yStart + j * shortHoles[i].circStep*scalar, radius)
+            }
+          }
+        } 
+        // draw 
+        if (longHoles[0].name.toString().startsWith('vert')) { //height > width
+          console.log('VERT!!!');
+          for (let i = 0; i < wasteCuts.longCut; i++) {
+            let xStart = rectMoveX - width/2 + length + (i+1)*deltaMinSide;
+            let yStart = rectMoveY - height/2 + length + diameter;
+            for (let j = 0; j < wasteCuts.shortCut+1; j++) {
+              for (let k = 0; k < longHoles[i * (wasteCuts.longCut+1) + j].circNum; k++) {
+                draw_circle(xStart, yStart + k * longHoles[i * (wasteCuts.longCut+1) + j].circStep * scalar, radius)
+              }
+              yStart += deltaMaxSide;
+            }
+          }
+        } else { // width >= height
+          console.log('HOR!!!');
+          for (let i = 0; i < wasteCuts.longCut; i++) {
+            let xStart = rectMoveX - width/2 + length + diameter;
+            let yStart = rectMoveY - height/2 + length + (i+1)*deltaMinSide;
+            for (let j = 0; j < wasteCuts.shortCut+1; j++) {
+              for (let k = 0; k < longHoles[i * (wasteCuts.longCut+1) + j].circNum; k++) {
+                draw_circle(xStart + k * longHoles[i * (wasteCuts.longCut+1) + j].circStep * scalar, yStart, radius)
+              }
+              xStart += deltaMaxSide;
+            }
+          }
+        }
+      }
   }
   function calc_separate(wasteCuts, minSide, maxSide) {
 
