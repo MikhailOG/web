@@ -8,17 +8,22 @@
 				"label": ""
 			},
 			{
-				"line": 1548,
+				"line": 1552,
 				"column": 11,
 				"label": "get_sepCircNum"
 			},
 			{
-				"line": 1573,
+				"line": 1589,
 				"column": 2,
 				"label": "calc_wasteQty"
 			},
 			{
-				"line": 2100,
+				"line": 1683,
+				"column": 8,
+				"label": ""
+			},
+			{
+				"line": 2165,
 				"column": 5,
 				"label": "sepStandart"
 			}
