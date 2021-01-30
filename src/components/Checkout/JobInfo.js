@@ -14,7 +14,7 @@ class JobInfo extends Component {
         escapeButtonLeftPosition: null,
         escaped: false
     }
-
+    canvasInfo = {};
     animationDuration = '0.5s';
 
     componentDidMount() {
@@ -32,7 +32,7 @@ class JobInfo extends Component {
             }, 10)
         }
         if (this.props.currentJob.showCanvas) {
-            canvas(this.props.currentJob.serviceName, this.props.currentJob.data, this.props.currentJob.preferences.concreteWeight, this.props.currentJob.preferences.wasteWeight)
+            this.canvasInfo = canvas(this.props.currentJob.serviceName, this.props.currentJob.data, this.props.currentJob.preferences.concreteWeight, this.props.currentJob.preferences.wasteWeight)
         }
 
     };
