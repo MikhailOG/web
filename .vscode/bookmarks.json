@@ -3,29 +3,19 @@
 		"path": "$ROOTPATH$\\src\\Scripts\\canvas.js",
 		"bookmarks": [
 			{
-				"line": 553,
+				"line": 9,
 				"column": 1,
 				"label": ""
 			},
 			{
-				"line": 1552,
-				"column": 11,
-				"label": "get_sepCircNum"
-			},
-			{
-				"line": 1589,
-				"column": 2,
-				"label": "calc_wasteQty"
-			},
-			{
-				"line": 1683,
-				"column": 8,
+				"line": 543,
+				"column": 15,
 				"label": ""
 			},
 			{
-				"line": 2165,
-				"column": 5,
-				"label": "sepStandart"
+				"line": 1676,
+				"column": 10,
+				"label": ""
 			}
 		]
 	}

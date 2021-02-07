@@ -12,9 +12,9 @@ class JobInfo extends Component {
         canvasStyle: {},
         canvasGradientAngle: '45deg',
         escapeButtonLeftPosition: null,
-        escaped: false
+        escaped: false,
+        canvasInfo: null
     }
-    canvasInfo = {};
     animationDuration = '0.5s';
 
     componentDidMount() {
@@ -31,8 +31,14 @@ class JobInfo extends Component {
                 this.setState({wrapperStyle: {transform: 'translateY(0)'}})
             }, 10)
         }
-        if (this.props.currentJob.showCanvas) {
-            this.canvasInfo = canvas(this.props.currentJob.serviceName, this.props.currentJob.data, this.props.currentJob.preferences.concreteWeight, this.props.currentJob.preferences.wasteWeight)
+        if (this.props.currentJob.showCanvas && this.state.canvasInfo == null) {
+            let canvasInfo = canvas(this.props.currentJob.serviceName, this.props.currentJob.data, this.props.currentJob.preferences.concreteWeight, this.props.currentJob.preferences.wasteWeight)
+            setTimeout(() => {
+                this.setState({
+                    canvasInfo: canvasInfo
+                })
+            }, 0)
+
         }
 
     };
@@ -81,6 +87,7 @@ class JobInfo extends Component {
     }
     render () {
             //const jobType = this.props.currentJob.preferences.job==='wall'?'в стене':'в перекрытии';
+
             return (
                 <div className="job-info-wrapper" id="jobInfoWrapper" style={this.state.wrapperStyle}>
                     <div className="job-info" style={this.state.checkoutStyle}>
@@ -95,6 +102,16 @@ class JobInfo extends Component {
                             escaped={this.state.escaped}
                             />
                         <h3>Congrats!</h3>
+                            {this.state.canvasInfo == null? null: 
+                            <div>
+                            <h3>Количество отверстий по периметру: {this.state.canvasInfo.mainHolesNum}</h3>
+                            <h3>Проем поделен на {this.state.canvasInfo.partsQty} частей</h3>
+                            <h3>Количество отверстий для деления: {this.state.canvasInfo.sepHolesNum}</h3>
+                            <h3>Суммарное количество отверстий: {this.state.canvasInfo.mainHolesNum + this.state.canvasInfo.sepHolesNum}</h3>
+                            <h3>Вес одной части {Math.round(this.state.canvasInfo.singlePartWeight)} кг</h3>
+                            <h3>Общий вес проема (мусора) {Math.round(this.state.canvasInfo.totalWeight)} кг</h3>
+                            </div>
+                            }
                             {/* <div className='job-description'>
                                 <p>{this.props.currentJob.title + ' ' + jobType}</p>
                             </div> */}
