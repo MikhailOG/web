@@ -1,6 +1,4 @@
-
-
-export function canvas(serviceName, data, concreteWeight, wasteWeight) {
+export async function canvas(serviceName, data, concreteWeight, wasteWeight, callback) {
   const DIAMETERS = [42, 52, 62, 72, 82, 92, 102, 112, 122, 132, 142, 152, 162, 172, 182, 192, 200, 250, 300, 350];
   var holesNum = 0;
   //var sepHolesNum = 0;

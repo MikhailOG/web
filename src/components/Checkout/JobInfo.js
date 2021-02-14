@@ -32,13 +32,8 @@ class JobInfo extends Component {
             }, 10)
         }
         if (this.props.currentJob.showCanvas && this.state.canvasInfo == null) {
-            let canvasInfo = canvas(this.props.currentJob.serviceName, this.props.currentJob.data, this.props.currentJob.preferences.concreteWeight, this.props.currentJob.preferences.wasteWeight)
-            setTimeout(() => {
-                this.setState({
-                    canvasInfo: canvasInfo
-                })
-            }, 0)
-
+            canvas(this.props.currentJob.serviceName, this.props.currentJob.data, this.props.currentJob.preferences.concreteWeight, this.props.currentJob.preferences.wasteWeight)
+            .then(response => this.setState({canvasInfo: response}))
         }
 
     };

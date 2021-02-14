@@ -3,7 +3,7 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import './styles/App.css';
 import Layout from './Layout/Layout';
 import Calculator from './components/CalculationRibbon/Calculator';
-
+import ImagesList from './components/Gallery/ImageList';
 
 class App extends Component {
 
@@ -14,6 +14,7 @@ class App extends Component {
             <Layout click = {this.clickRemoveHandler}>
                 <Route path ='/' exact render={() => <h1>Home</h1>}/>
                 <Route path ='/calculator' exact component={Calculator}/>
+                <Route path ='/gallery' exact component={ImagesList}/>
             </Layout>
           </BrowserRouter>
         );    
