@@ -15,12 +15,12 @@ class ImageCard extends Component {
         this.setState({ spans });
     }
     render() {
-        console.log(require(`../../images/${this.props.index}.jpeg`))
         return(
             <div style={{ gridRowEnd: `span ${this.state.spans}`}}>
+
                 <img 
                     ref={this.imageRef}
-                    src={require(`../../images/${this.props.index}.jpeg`).default} 
+                    src={this.props.index === 50 ? require(`../../images/${this.props.index}.png`).default : require(`../../images/${this.props.index}.jpg`).default} 
                     alt={`image #${this.props.index}`}
                 />
             </div>
