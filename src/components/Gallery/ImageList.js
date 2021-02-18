@@ -9,6 +9,9 @@ const ImagesList = (props) => {
     return (
         <div className="images-list">
         {imgArr.map(imgIndex => <ImageCard key={imgIndex} index={imgIndex}/>)}
+        <hr/>
+        <img src={require('../../images/50.png').default}/>
+        <img src={require('../../images/51.jpg').default}/>
         </div>
     )
 }
