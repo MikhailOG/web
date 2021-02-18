@@ -5,7 +5,6 @@ class ImageCard extends Component {
         super(props);
         this.state = { spans: 0};
         this.imageRef = React.createRef();
-        this.img = require(`../../images/${this.props.index}.jpeg`)
     }
     componentDidMount() {
         this.imageRef.current.addEventListener('load', this.setSpans); 
@@ -16,11 +15,12 @@ class ImageCard extends Component {
         this.setState({ spans });
     }
     render() {
+        console.log(require(`../../images/${this.props.index}.jpeg`))
         return(
             <div style={{ gridRowEnd: `span ${this.state.spans}`}}>
                 <img 
                     ref={this.imageRef}
-                    src={this.img.default} 
+                    src={require(`../../images/${this.props.index}.jpeg`).default} 
                     alt={`image #${this.props.index}`}
                 />
             </div>
