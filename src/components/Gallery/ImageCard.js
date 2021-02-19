@@ -19,6 +19,7 @@ class ImageCard extends Component {
     render() {
         return(
             <div style={{ gridRowEnd: `span ${this.state.spans}`}}>
+
                 <img 
                     ref={this.imageRef}
                     src={this.props.img} 
