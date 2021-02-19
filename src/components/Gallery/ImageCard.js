@@ -21,6 +21,7 @@ class ImageCard extends Component {
             <div style={{ gridRowEnd: `span ${this.state.spans}`}}>
 
                 <img 
+                    onClick={() => this.props.imageClickedHandler(this.props.img)}
                     ref={this.imageRef}
                     src={this.props.img} 
                     alt={`image #${this.props.key}`}
