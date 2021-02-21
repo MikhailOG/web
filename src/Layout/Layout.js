@@ -52,8 +52,9 @@ class Layout extends Component {
                 telefone="+7 (926) 932 68 40"
                 email="info@diamondcoring.ru"
                 />
-                <Nav/>
+                
             </div>
+            <Nav/>
             <LayoutContext.Provider value={{
                 windowWidth: this.props.innerWidth,
                 windowHeight: this.props.innerHeight,

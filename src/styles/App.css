@@ -51,6 +51,10 @@ html {
 }
 
 .web {
+  display: grid;
+  grid-template-columns: [first] 25% [second] 25% [third] 25% [fourth] 25% [end];
+  grid-template-rows: [header-start] 11rem [header-end nav-start] auto [main-start nav-end] auto [main-end];
+  flex-direction: column;
   align-items: center;
   background: #E3D7FF;
   color: #10387d;
@@ -65,11 +69,42 @@ html {
   background-color: black;
   opacity: 0.65;
 }
+.web .nav {
+  grid-area: nav-start/first/nav-end/end;
+  text-align: center;
+  margin: 0;
+  display: flex;
+  align-items: stretch;
+  border-top: 3px solid #10387d;
+  border-bottom: 3px solid #10387d;
+  position: sticky;
+  top: 0;
+  width: 100%;
+}
+.web .nav a {
+  padding: 0.625rem;
+  background: #f3fffd;
+  width: 25%;
+  text-decoration: none;
+}
+.web .nav a:hover {
+  background: #E3D7FF;
+  color: #10387d;
+  text-shadow: 1px 1px #f3fffd;
+}
+.web .nav a.active {
+  background: #966B9D;
+  color: #f3fffd;
+  text-shadow: 1px 1px #10387d;
+}
 
 .grid-container {
-  display: grid;
+  display: flex;
+  align-self: stretch;
+  grid-area: header-start/first/header-end/end;
   grid-template-columns: [first] 25% [second] 25% [third] 25% [fourth] 25% [end];
   grid-template-rows: [header-start] 8.4375rem [header-end nav-start] auto [nav-end];
+  width: 100%;
 }
 .grid-container header {
   grid-area: header-start/first/header-end/end;
@@ -81,7 +116,7 @@ html {
   font-family: "Philosopher", sans-serif;
   display: grid;
   grid-template-columns: 7.8125rem 1fr 1fr;
-  grid-template-rows: 8.4375rem;
+  grid-template-rows: 11rem;
   background: #B9D6F2;
 }
 .grid-container header .header-cont figure {
@@ -118,44 +153,24 @@ html {
   margin-top: 0.625rem;
 }
 .grid-container header .header-cont .contacts {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
   grid-column: 3;
   grid-row: 1;
   text-align: right;
-  margin: 0.3rem 1.5625rem 0 0.625rem;
+  margin: 4rem 1.5625rem 0 0.625rem;
+}
+.grid-container header .header-cont .contacts p {
+  margin: 0 0 1rem 0;
 }
 .grid-container header .header-cont .contacts i {
   margin-right: 0.35rem;
 }
-.grid-container .nav {
-  grid-area: nav-start/first/nav-end/end;
-  text-align: center;
-  margin: 0;
-  display: flex;
-  align-items: stretch;
-  border-top: 3px solid #10387d;
-  border-bottom: 3px solid #10387d;
-  position: sticky;
-  top: 0;
-  width: 100%;
-}
-.grid-container .nav a {
-  padding: 0.625rem;
-  background: #f3fffd;
-  width: 25%;
-  text-decoration: none;
-}
-.grid-container .nav a:hover {
-  background: #E3D7FF;
-  color: #10387d;
-  text-shadow: 1px 1px #f3fffd;
-}
-.grid-container .nav a.active {
-  background: #966B9D;
-  color: #f3fffd;
-  text-shadow: 1px 1px #10387d;
-}
 
 .main-container {
+  grid-area: main-start/first/nav-end/end;
+  width: 100%;
   background-color: #B9D6F2;
   grid-template-columns: repeat(12, calc(100%/12));
   grid-template-rows: auto;

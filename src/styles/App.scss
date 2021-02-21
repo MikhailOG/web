@@ -18,6 +18,7 @@ font-family: 'Vollkorn', serif;
 $unit: repeat(12, calc(100%/12));
 $menuWidth: calc(25% - 7.5px);
 $menuHeight: calc(8*(0.8em + 0.2vw));
+$headerHeight: 11rem;
 /*btn*/
 
 /*colors*/
@@ -60,6 +61,10 @@ html {
   box-sizing: inherit;
 }
 .web {
+  display: grid;
+  grid-template-columns: [first] 25% [second] 25% [third] 25% [fourth] 25% [end];
+  grid-template-rows: [header-start] $headerHeight [header-end nav-start] auto [main-start nav-end] auto [main-end];
+  flex-direction: column;
   align-items: center;
   background: $mainBackgroundColor;
   color: $mainTextColor;
@@ -73,11 +78,42 @@ html {
     background-color: rgb(0, 0, 0);
     opacity: 0.65;
   }
+  .nav {
+    grid-area: nav-start / first / nav-end / end;
+    text-align: center;
+    margin: 0;
+    display: flex;
+    align-items: stretch;
+    border-top: 3px solid $mainTextColor;
+    border-bottom: 3px solid $mainTextColor;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    a {
+      padding: 0.625rem;
+      background: $whiteColor;
+      width: 25%;
+      text-decoration: none;
+      &:hover {
+        background: $mainBackgroundColor;
+        color: $mainTextColor;
+        text-shadow: 1px 1px $whiteColor;
+      }
+      &.active {
+        background: $modeColor;
+        color: $whiteColor;
+        text-shadow: 1px 1px $mainTextColor;
+      }
+    }
+  }
 }
 .grid-container {
-  display: grid;
+  display: flex;
+  align-self: stretch;
+  grid-area: header-start / first / header-end / end;;
   grid-template-columns: [first] 25% [second] 25% [third] 25% [fourth] 25% [end];
   grid-template-rows: [header-start] 8.4375rem [header-end nav-start] auto [nav-end];
+  width: 100%;
   header {
     grid-area: header-start / first / header-end / end;
     p, i {
@@ -87,7 +123,7 @@ html {
       font-family: 'Philosopher', sans-serif;
       display: grid;
       grid-template-columns: 7.8125rem 1fr 1fr;
-      grid-template-rows: 8.4375rem;
+      grid-template-rows: $headerHeight;
       background: $headerColor;
       figure {
         grid-column: 1;
@@ -123,46 +159,26 @@ html {
         }
       }
       .contacts {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
         grid-column: 3;
         grid-row: 1;
         text-align: right;
-        margin: 0.3rem 1.5625rem 0 0.625rem;
+        margin: 4rem 1.5625rem 0 0.625rem;
+        p {
+          margin: 0 0 1rem 0;
+        }
         i {
           margin-right: 0.35rem;
         }
       }
     }
   }
-  .nav {
-    grid-area: nav-start / first / nav-end / end;
-    text-align: center;
-    margin: 0;
-    display: flex;
-    align-items: stretch;
-    border-top: 3px solid $mainTextColor;
-    border-bottom: 3px solid $mainTextColor;
-    position: sticky;
-    top: 0;
-    width: 100%;
-    a {
-      padding: 0.625rem;
-      background: $whiteColor;
-      width: 25%;
-      text-decoration: none;
-      &:hover {
-        background: $mainBackgroundColor;
-        color: $mainTextColor;
-        text-shadow: 1px 1px $whiteColor;
-      }
-      &.active {
-        background: $modeColor;
-        color: $whiteColor;
-        text-shadow: 1px 1px $mainTextColor;
-      }
-    }
-  }
 }
 .main-container {
+  grid-area: main-start / first / nav-end / end;
+  width: 100%;
   background-color: $headerColor;
   grid-template-columns: $unit;
   grid-template-rows: auto;
