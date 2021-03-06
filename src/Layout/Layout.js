@@ -15,7 +15,6 @@ class Layout extends Component {
         // showBackdrop: false,
         // showCheckout: true
     };
-
     componentDidMount() {
         if (!this.state.firstMount) {
             this.props.onResize();
@@ -30,49 +29,47 @@ class Layout extends Component {
     };
 
     clickHandler = (event) => {
-        console.log('Clikced')
+        console.log('Clicked')
         if (this.state.clickedEvt) 
             this.setState({clicked: false, clickedEvt: null});
         else         
             this.setState({clicked: true, clickedEvt: event.target}, ()=>{setTimeout(() => 
                 this.setState({clicked: false, clickedEvt: null})
             , 50)})
-
     };
-    
     render() {
         console.log('showJobInfo: ' + this.props.jobInfo.showJobInfo)
         return(
             <div onClick={(event) => this.clickHandler(event)} className="web">
-            <Backdrop showBackdrop={this.props.showBackdrop}></Backdrop>
-            <div className="grid-container">
+                <Backdrop 
+                    showBackdrop={this.props.showBackdrop}
+                    onBockdropClicked={this.props.onToggleBackdrop}
+                    />
                 <Header 
-                title="Diamond coring services" 
-                titleText="Алмазная резка и алмазное бурение" 
-                telefone="+7 (926) 932 68 40"
-                email="info@diamondcoring.ru"
+                    title="Diamond coring" 
+                    titleText="Алмазная резка и алмазное бурение" 
+                    telefone="+7 (926) 932 68 40"
+                    email="info@diamondcoring.ru"
                 />
-                
-            </div>
-            <Nav/>
-            <LayoutContext.Provider value={{
-                windowWidth: this.props.innerWidth,
-                windowHeight: this.props.innerHeight,
-                clicked: this.state.clicked,
-                clickedEvt: this.state.clickedEvt,
-                handleClick: this.clickHandler
-            }}>
-                <div className="main-container">
+                <Nav/>
+                <LayoutContext.Provider value={{
+                    windowWidth: this.props.innerWidth,
+                    windowHeight: this.props.innerHeight,
+                    clicked: this.state.clicked,
+                    clickedEvt: this.state.clickedEvt,
+                    handleClick: this.clickHandler,
+                    toggleBackdrop: this.props.onToggleBackdrop
+                }}>
+                    <div className="main-container">
                         {this.props.children}
                         {this.props.jobInfo.showJobInfo?
                             <JobInfo 
-                            showJobInfo={this.props.jobInfo.showJobInfo}
-                            canvasSize={Math.min(this.props.innerWidth, this.props.innerHeight)*0.75*8/12}/>:null}
-                </div>
-            </LayoutContext.Provider>
+                                showJobInfo={this.props.jobInfo.showJobInfo}
+                                canvasSize={Math.min(this.props.innerWidth, this.props.innerHeight)*0.75*8/12}
+                            />:null}
+                    </div>
+                </LayoutContext.Provider>
             </div>
-
-
         );
     };
 };
@@ -86,7 +83,7 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToPros = dispatch => {
+const mapDispatchToProps = dispatch => {
     return {
         onResize: () => dispatch(actionCreators.windowResize()),
         onToggleBackdrop: () => dispatch(actionCreators.toggleBackdrop()),
@@ -94,4 +91,4 @@ const mapDispatchToPros = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToPros)(Layout);
+export default connect(mapStateToProps, mapDispatchToProps)(Layout);

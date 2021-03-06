@@ -50,8 +50,6 @@ class JobInfo extends Component {
         };
     };
 
-
-
     erase = () => {
         this.setState({
             wrapperStyle: {
@@ -80,9 +78,7 @@ class JobInfo extends Component {
         );
 
     }
-    render () {
-            //const jobType = this.props.currentJob.preferences.job==='wall'?'в стене':'в перекрытии';
-
+    render() {
             return (
                 <div className="job-info-wrapper" id="jobInfoWrapper" style={this.state.wrapperStyle}>
                     <div className="job-info" style={this.state.checkoutStyle}>
@@ -96,7 +92,7 @@ class JobInfo extends Component {
                             style={{top:convertRemToPixels(0.4), left: this.state.escapeButtonLeftPosition}}
                             escaped={this.state.escaped}
                             />
-                        <h3>Congrats!</h3>
+                        <h3>{this.props.currentJob.jobData}</h3>
                             {this.state.canvasInfo == null? null: 
                             <div>
                             <h3>Количество отверстий по периметру: {this.state.canvasInfo.mainHolesNum}</h3>
@@ -110,7 +106,6 @@ class JobInfo extends Component {
                             {/* <div className='job-description'>
                                 <p>{this.props.currentJob.title + ' ' + jobType}</p>
                             </div> */}
-                            {this.props.currentJob.jobData}
                         {this.props.currentJob.showCanvas?<canvas 
                             id="myCanvas" 
                             width={this.props.canvasSize} 

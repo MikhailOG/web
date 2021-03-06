@@ -6,7 +6,7 @@ class ImageCard extends Component {
         super(props);
         this.state = { spans: 0};
         this.imageRef = React.createRef();
-        console.log(this.props)
+        //console.log(this.props)
     }
     componentDidMount() {
         this.imageRef.current.addEventListener('load', this.setSpans); 
@@ -21,10 +21,10 @@ class ImageCard extends Component {
             <div style={{ gridRowEnd: `span ${this.state.spans}`}}>
 
                 <img 
-                    onClick={() => this.props.imageClickedHandler(this.props.img)}
+                    onClick={() => this.props.imageClickedHandler(this.props.img, this.props.imgKey)}
                     ref={this.imageRef}
                     src={this.props.img} 
-                    alt={`image #${this.props.key}`}
+                    alt={`image #${this.props.imgIndex}`}
                 />
             </div>
         );
