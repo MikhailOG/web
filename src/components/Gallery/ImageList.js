@@ -47,7 +47,7 @@ class ImagesList extends Component {
         let dotIndex = this.state.zoomedImage.imgKey.indexOf('.');
         let index = Number(this.state.zoomedImage.imgKey.slice(0, dotIndex));
         if (index>1) index--;
-        else index = 49;
+        else index = 56;
         index = String(index);
         let newImgKey = index.concat('', this.state.zoomedImage.imgKey.substr(dotIndex));
         this.setState({ zoomedImage: {image:this.state.images[newImgKey].default , imgKey: newImgKey}});
@@ -55,7 +55,7 @@ class ImagesList extends Component {
     nextImage = () => {
         let dotIndex = this.state.zoomedImage.imgKey.indexOf('.');
         let index = Number(this.state.zoomedImage.imgKey.slice(0, dotIndex));
-        if (index<49) index++;
+        if (index<56) index++;
         else index = 1;
         index = String(index);
         let newImgKey = index.concat('', this.state.zoomedImage.imgKey.substr(dotIndex));

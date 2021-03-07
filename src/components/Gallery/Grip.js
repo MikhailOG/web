@@ -7,7 +7,7 @@ const Grip = (props) => {
         className = {arrowClass}>
             <i 
                 style={props.style} 
-                class={`fas fa-angle-${props.direction}`}
+                className={`fas fa-angle-${props.direction}`}
                 onClick={props.clicked}></i>
         </div>
     );

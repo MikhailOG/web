@@ -64,10 +64,11 @@ html {
 .web {
   display: grid;
   grid-template-columns: [first] 25% [second] 25% [third] 25% [fourth] 25% [end];
-  grid-template-rows: [header-start] auto [header-end nav-start] auto [main-start nav-end] auto [main-end footer-start] auto [footer-end];
+  grid-template-rows: [header-start] 7.8125rem [header-end nav-start] 3rem [main-start nav-end] auto [main-end footer-start] 7.8125rem [footer-end];
   align-items: center;
-  background: #E3D7FF;
+  background: #B9D6F2;
   color: #10387d;
+  height: 100%;
 }
 .web .backdrop {
   position: fixed;
@@ -90,6 +91,7 @@ html {
   position: sticky;
   top: 0;
   width: 100%;
+  height: 100%;
   z-index: 1;
 }
 .web .nav a {
@@ -168,19 +170,21 @@ html {
 .web .main-container {
   grid-area: main-start/first/main-end/end;
   width: 100%;
+  align-self: start;
   background-color: #B9D6F2;
   grid-template-columns: repeat(12, calc(100%/12));
   grid-template-rows: auto;
   display: grid;
   font-size: 1.125rem;
   font-weight: 600;
+  padding-bottom: 3rem;
 }
 .web .main-container .menu {
   grid-area: 1/3/3/11;
   display: grid;
   grid-column-gap: 10px;
   grid-template-columns: repeat(4, calc(25% - 7.5px));
-  grid-template-rows: calc(8*(0.8em + 0.2vw)) 25rem;
+  grid-template-rows: auto;
 }
 .web .main-container .menu .btnBed {
   display: flex;
@@ -625,6 +629,74 @@ html {
 }
 .web .main-container .input-rows .input .preferences .yes-no-block > div > div > div i > p {
   margin-left: 0.3rem;
+}
+.web .main-container .price {
+  grid-area: 1/3/2/11;
+  text-align: center;
+}
+.web .main-container .price table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #f3fffd;
+}
+.web .main-container .price table thead, .web .main-container .price table tfoot {
+  background-color: #10387d;
+  color: #f3fffd;
+}
+.web .main-container .price table th {
+  padding: 0.5rem;
+}
+.web .main-container .price table td {
+  padding: 0.5rem;
+  white-space: nowrap;
+  border-style: double none;
+  vertical-align: top;
+  text-align: center;
+}
+.web .main-container .price table .bottom-row td {
+  border-bottom-style: none;
+}
+.web .main-container .price table .top-row td {
+  border-top-style: none;
+}
+.web .main-container .price table .bottom-lined td {
+  border-bottom-style: double;
+}
+.web .main-container .price .notes ul {
+  text-align: left;
+}
+.web .main-container .price .notes ul li {
+  padding-bottom: 0.5rem;
+}
+.web footer {
+  grid-area: footer-start/first/footer-end/end;
+  align-self: stretch;
+  background-color: #B9D6F2;
+  border-top: 3px solid #10387d;
+}
+.web footer .footer {
+  font-family: "Philosopher", sans-serif;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+.web footer .footer .footer-greeting {
+  display: flex;
+  flex-direction: column;
+  font-size: 1.7rem;
+  justify-content: space-between;
+  align-items: center;
+}
+.web footer .footer .footer-greeting :first-child {
+  margin-bottom: 0.5rem;
+}
+.web footer .footer p {
+  margin: 0;
+}
+.web footer .footer a i {
+  font-size: 2rem;
 }
 
 a {

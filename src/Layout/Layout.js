@@ -6,14 +6,20 @@ import Backdrop from '../components/Backdrop/Backdrop';
 import JobInfo from '../components/Checkout/JobInfo';
 import { connect } from 'react-redux';
 import * as actionCreators from '../store/actions/index';
+import Footer from '../components/Footer/Footer';
 
 class Layout extends Component {
+    constructor(props) {
+        super(props);
+        this.webDiv = React.createRef();
+    }
     state = {
         firstMount: false,
         clicked: false,
-        clickedEvt: null
+        clickedEvt: null,
         // showBackdrop: false,
         // showCheckout: true
+        webDivStyle: null
     };
     componentDidMount() {
         if (!this.state.firstMount) {
@@ -23,7 +29,15 @@ class Layout extends Component {
             });
         }
         window.addEventListener('resize', this.props.onResize);
+        if (this.webDiv.current.clientHeight < this.props.innerHeight) {
+            this.setState({webDivStyle: {height: '100vh'}})
+        }
     };
+    componentDidUpdate() {
+        if (this.webDiv.current.clientHeight < this.props.innerHeight) {
+            this.setState({webDivStyle: {height: '100vh'}})
+        }
+    }
     componentWillUnmount(){
         window.removeEventListener('resize', this.props.onResize);
     };
@@ -38,9 +52,14 @@ class Layout extends Component {
             , 50)})
     };
     render() {
-        console.log('showJobInfo: ' + this.props.jobInfo.showJobInfo)
+        let webDivStyle = null
+        this.state.webDivStyle?webDivStyle=this.state.webDivStyle:null
         return(
-            <div onClick={(event) => this.clickHandler(event)} className="web">
+            <div 
+                onClick={(event) => this.clickHandler(event)} 
+                style={webDivStyle}
+                ref={this.webDiv} 
+                className="web">
                 <Backdrop 
                     showBackdrop={this.props.showBackdrop}
                     onBockdropClicked={this.props.onToggleBackdrop}
@@ -69,6 +88,7 @@ class Layout extends Component {
                             />:null}
                     </div>
                 </LayoutContext.Provider>
+                <Footer/>
             </div>
         );
     };

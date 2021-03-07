@@ -10,7 +10,7 @@ const nav = () => {
             <NavLink to='price'>
                 <i className="fas fa-dollar-sign"></i> Прайс-лист
             </NavLink>
-            <NavLink to='gallery'>
+            <NavLink onLoad = {() => console.log('gallery loaded')} onClick = {() => console.log('gallery clicked')} to='gallery'>
                 <i className="far fa-images"></i> Фото работ
             </NavLink>
             <NavLink to='contacts'>

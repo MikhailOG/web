@@ -12,9 +12,12 @@ class ImageCard extends Component {
         this.imageRef.current.addEventListener('load', this.setSpans); 
     }
     setSpans = () => {
-        const height = this.imageRef.current.clientHeight;
-        const spans = Math.ceil( height / 10+1);
-        this.setState({ spans });
+        if (this.imageRef.current) {
+            this.imageRef.current.removeEventListener('load', this.setSpans); 
+            const height = this.imageRef.current.clientHeight;
+            const spans = Math.ceil( height / 10+1);
+            this.setState({ spans });
+        }
     }
     render() {
         return(

@@ -17,8 +17,12 @@ font-family: 'Vollkorn', serif;
 /* SASS variables */
 $unit: repeat(12, calc(100%/12));
 $menuWidth: calc(25% - 7.5px);
-$menuHeight: calc(8*(0.8em + 0.2vw));
+//$menuHeight: calc(8*(0.8em + 0.2vw));
 $headerHeight: 7.8125rem;
+$navHeight: 3rem;
+$viewportHeight: 100vw;
+$menuHeight: auto;
+//$menuHeight: calc(100vh - 3rem - 7.8125rem - 7.8125rem);
 /*btn*/
 
 /*colors*/
@@ -80,10 +84,11 @@ html {
 .web {
   display: grid;
   grid-template-columns: [first] 25% [second] 25% [third] 25% [fourth] 25% [end];
-  grid-template-rows: [header-start] auto [header-end nav-start] auto [main-start nav-end] auto [main-end footer-start] auto [footer-end];
+  grid-template-rows: [header-start] $headerHeight [header-end nav-start] $navHeight [main-start nav-end] $menuHeight [main-end footer-start] $headerHeight [footer-end];
   align-items: center;
-  background: $mainBackgroundColor;
+  background: $headerColor;
   color: $mainTextColor;
+  height: 100%;
   .backdrop {
     position: fixed;
     top: 0;
@@ -105,6 +110,7 @@ html {
     position: sticky;
     top: 0;
     width: 100%;
+    height: 100%;
     z-index: $nav-z-index;
     a {
       padding: 0.625rem;
@@ -187,18 +193,21 @@ html {
   .main-container {
     grid-area: main-start / first / main-end / end;
     width: 100%;
+    align-self: start;
     background-color: $headerColor;
     grid-template-columns: $unit;
     grid-template-rows: auto;
     display: grid;
     font-size: 1.125rem;
     font-weight: 600;
+    padding-bottom: 3rem;
     .menu {
       grid-area: 1 / 3 / 3 / 11;
       display: grid;
       grid-column-gap: 10px;
       grid-template-columns: repeat(4, $menuWidth);
-      grid-template-rows: $menuHeight 25rem;
+      // grid-template-rows: $menuHeight 25rem;
+      grid-template-rows: auto;
       $depth:50vw;
       $text-color:$mainTextColor;
       $lighten-on-hover:3%;
@@ -750,6 +759,82 @@ html {
         //   // height: 10rem;
         //   transition: max-height 0.15s ease-in;
         // }
+      }
+    }
+    .price {
+      grid-area: 1 / 3 / 2 / 11;
+      text-align: center;
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: $whiteColor;
+        thead, tfoot {
+          background-color: $mainTextColor;
+          color: $whiteColor;
+        }
+        th {
+          padding: 0.5rem;
+        }
+        td {
+          padding: 0.5rem;
+          white-space: nowrap;
+          border-style: double none; 
+          vertical-align: top; 
+          text-align: center;
+        }
+        .bottom-row {
+          td {
+            border-bottom-style: none; 
+          }
+        }
+        .top-row {
+          td {
+            border-top-style: none;
+          }
+        }
+        .bottom-lined {
+          td {
+            border-bottom-style: double; 
+          }
+        }
+      }
+      .notes {
+        ul {
+          text-align: left;
+          li {
+            padding-bottom: 0.5rem;
+          }
+        }
+      }
+    }
+  }
+  footer {
+    grid-area: footer-start / first / footer-end / end;
+    align-self: stretch;
+    background-color: $headerColor;
+    border-top: 3px solid $mainTextColor;
+    .footer {
+      font-family: 'Philosopher', sans-serif;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      .footer-greeting {
+        display: flex;
+        flex-direction: column;
+        font-size: 1.7rem;
+        justify-content: space-between;
+        align-items: center;
+        & :first-child {
+          margin-bottom: 0.5rem;
+        }
+      }
+      p {
+        margin: 0;
+      }
+      a i {
+        font-size: 2rem;
       }
     }
   }
