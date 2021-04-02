@@ -50,6 +50,10 @@ font-family: 'Vollkorn', serif;
   position: sticky;
 }
 
+.web .main-container .gear-spinner img, .web header .header-cont figure #gear {
+  animation: App-gear-spin infinite 1.8s linear;
+}
+
 /*---------------------------------*/
 html {
   box-sizing: border-box;
@@ -133,9 +137,6 @@ html {
   position: absolute;
   top: 0.625rem;
   left: 0.625rem;
-}
-.web header .header-cont figure #gear {
-  animation: App-gear-spin infinite 1.5s linear;
 }
 .web header .header-cont .first-name {
   grid-column: 2;
@@ -367,6 +368,14 @@ html {
 .web .main-container .images-list img {
   border: 2px solid #10387d;
   width: 250px;
+}
+.web .main-container .gear-spinner {
+  margin-top: 2rem;
+  grid-area: 1/5/3/9;
+  justify-self: start;
+}
+.web .main-container .gear-spinner img {
+  max-width: 100%;
 }
 .web .main-container .input-rows {
   margin-top: 1rem;

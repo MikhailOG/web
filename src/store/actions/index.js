@@ -1,7 +1,8 @@
 export {
     toggleBackdrop,
     toggleBackdropAsync,
-    windowResize
+    windowResize,
+    gearSpin
 } from './layout';
 
 export {

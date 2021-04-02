@@ -6,6 +6,7 @@ export const INPUT_CHANGED = 'INPUT_CHANGED';
 export const PREFERENCES_CHANGED = 'PREFERENCES_CHANGED';
 export const GET_JOB_INFO = 'GET_JOB_INFO';
 export const CLEAR_JOB_INFO = 'CLEAR_JOB_INFO';
+export const GEAR_SPIN = 'GEAR_SPIN';
 
 
 

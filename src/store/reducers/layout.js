@@ -6,7 +6,8 @@ import expect from 'expect';
 const initialState = {
         innerWidth: 0,
         innerHeight: 0,
-        showBackdrop: false
+        showBackdrop: false,
+        gearSpin: true
 }
 const reducer = (state = initialState, action) => {
     switch (action.type) {
@@ -20,6 +21,11 @@ const reducer = (state = initialState, action) => {
                 ...state,
                     innerWidth: action.innerWidth,
                     innerHeight: action.innerHeight
+            };
+        case actionTypes.GEAR_SPIN:
+            return {
+                ...state,
+                    gearSpin: !state.gearSpin
             };
         default:
             return state;

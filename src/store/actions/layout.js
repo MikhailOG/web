@@ -12,11 +12,15 @@ export const toggleBackdropAsync = () => {
         }, 500); 
     }
 };
-
 export const windowResize = () => {
     return {
         type: actionTypes.WINDOW_RESIZE,
         innerWidth: window.innerWidth, 
         innerHeight: window.innerHeight
+    };
+};
+export const gearSpin = () => {
+    return {
+        type: actionTypes.GEAR_SPIN
     };
 };

@@ -5,16 +5,20 @@ import LayoutContext from '../../context/layout-context';
 import Grip from './Grip';
 import { convertRemToPixels } from '../../Scripts/convertRemToPixels';
 import { connect } from 'react-redux';
+import gear from "../../images/gear.svg";
 
 class ImagesList extends Component {
     constructor(props) {
         super(props);
         this.imagesList = React.createRef();
+        this.imagesQty = 56;
+        this.loadedImagesQty = 0;
     }
     state = {
         images: {},
         sortedImages: [],
-        zoomedImage: null
+        zoomedImage: null,
+        loading: true
     }
     static contextType = LayoutContext;
     componentDidMount() {
@@ -37,17 +41,19 @@ class ImagesList extends Component {
         this.context.toggleBackdrop();
         this.setState({ zoomedImage: {image: image, imgKey: imgKey}});
     }
-    // getZoomedImageHeight = (zoomedImageRef) => {
-    //     let zoomedImage = zoomedImageRef.current;
-    //     let windowHeight = this.context.windowHeight;
-    //     console.log(getComputedStyle(zoomedImage).height)
-    //     this.setState({zoomedImageMaxHeight: 0.8 * windowHeight, zoomedImageHeight: getComputedStyle(zoomedImage).height});
-    // }
+    imageLoadedHandler = () => {
+        this.loadedImagesQty++;
+        if (this.loadedImagesQty === this.imagesQty) {
+            this.setState({loading: false})
+            this.loadedImagesQty = 0;
+            console.log("ALL IMAGES LOADED")
+        }
+    }
     prewImage = () => {
         let dotIndex = this.state.zoomedImage.imgKey.indexOf('.');
         let index = Number(this.state.zoomedImage.imgKey.slice(0, dotIndex));
         if (index>1) index--;
-        else index = 56;
+        else index = this.imagesQty;
         index = String(index);
         let newImgKey = index.concat('', this.state.zoomedImage.imgKey.substr(dotIndex));
         this.setState({ zoomedImage: {image:this.state.images[newImgKey].default , imgKey: newImgKey}});
@@ -55,7 +61,7 @@ class ImagesList extends Component {
     nextImage = () => {
         let dotIndex = this.state.zoomedImage.imgKey.indexOf('.');
         let index = Number(this.state.zoomedImage.imgKey.slice(0, dotIndex));
-        if (index<56) index++;
+        if (index < this.imagesQty) index++;
         else index = 1;
         index = String(index);
         let newImgKey = index.concat('', this.state.zoomedImage.imgKey.substr(dotIndex));
@@ -78,24 +84,27 @@ class ImagesList extends Component {
                     window={{height: this.context.windowHeight, width: this.context.windowWidth}}
                     getZoomedImageHeight={this.getZoomedImageHeight}
                     zoomedImage={this.state.zoomedImage.image}
-                    //zoomedImageWidth={this.imagesList.current.clientWidth}
                     />
                     <Grip clicked={this.prewImage} style={gripStyle} direction={'left'}/>
                     <Grip clicked={this.nextImage} style={gripStyle} direction={'right'}/>
                 </React.Fragment>:null}
-                <div className="images-list" ref={this.imagesList}>
+                <div className="images-list" style={this.state.loading?{opacity:'0'}:null} ref={this.imagesList}>
                     {this.state.sortedImages.map((imgKey, index) => <ImageCard 
                         key={index} 
                         imgIndex={index}
                         imgKey={imgKey}
                         img={this.state.images[imgKey].default}
                         imageClickedHandler={this.imageClickedHandler}
+                        imageLoadedHandler={this.imageLoadedHandler}
                         />)}
                 </div>
+                {this.state.loading?
+                <div class="gear-spinner">
+                <img class="spinner" src={gear} alt="logo"/>
+                </div>:null}
             </React.Fragment>
         )
     }
-
 }
 
 const mapStateToProps = state => {

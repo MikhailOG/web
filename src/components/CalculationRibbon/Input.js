@@ -144,6 +144,8 @@ const Input = (props) => {
                 mode: rowState.mode,
                 deleteButton: rowState.deleteButton,
                 drawButtonClickedHandler: () => {
+                    if (!props.spin) 
+                        props.onSpined();
                     props.onGetJobInfo(props.input);
                     props.onToggleBackdrop();
                 },
@@ -259,7 +261,8 @@ const Input = (props) => {
 
     const mapStateToProps = state => {
         return {
-            inputFromStore: state.inputs.inputRows
+            inputFromStore: state.inputs.inputRows,
+            spin: state.layout.gearSpin
         };
     };
   
@@ -270,7 +273,8 @@ const Input = (props) => {
      onAddRow: (payload) => dispatch(actionCreators.addRow(payload)),
      onDeleteRow: (payload) => dispatch(actionCreators.deleteRow(payload)),
      onGetJobInfo: (payload) => dispatch(actionCreators.getJobInfo(payload)),
-     onToggleBackdrop: () => dispatch(actionCreators.toggleBackdrop())
+     onToggleBackdrop: () => dispatch(actionCreators.toggleBackdrop()),
+     onSpined: () => dispatch(actionCreators.gearSpin())
     }
   }
   

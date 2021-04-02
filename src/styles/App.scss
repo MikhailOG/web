@@ -72,6 +72,9 @@ $arrow-index: 3;
     position: sticky;
   }
 }
+%spinner {
+    animation: App-gear-spin infinite 1.8s linear;
+}
 /*---------------------------------*/
 html {
   box-sizing: border-box;
@@ -154,8 +157,8 @@ html {
           top: 0.625rem;
           left: 0.625rem;
         }
-        #gear {
-          animation: App-gear-spin infinite 1.5s linear;
+        #gear{
+          @extend %spinner
         }
       }
       .first-name {
@@ -424,6 +427,15 @@ html {
       img {
         border: 2px solid $mainTextColor;
         width: 250px;
+      }
+    }
+    .gear-spinner {
+      margin-top: 2rem;
+      grid-area: 1 / 5 / 3 / 9;
+      justify-self: start;
+      img {
+        max-width: 100%;
+        @extend %spinner
       }
     }
     .input-rows {

@@ -17,6 +17,8 @@ class ImageCard extends Component {
             const height = this.imageRef.current.clientHeight;
             const spans = Math.ceil( height / 10+1);
             this.setState({ spans });
+            console.log(`image #${this.props.imgIndex} has loaded`)
+            this.props.imageLoadedHandler();
         }
     }
     render() {

@@ -72,6 +72,8 @@ class Calculator extends Component {
   serviceClickedHandler = (event) => {
     this.setState({ selectedService: event.target.id}
       , () => {
+        if (!this.props.spin)
+          this.props.onSpined();
         this.serviceButtonClickedHandler(); 
         this.setState({hoverIndex:null});
         this.props.onRowAdd({serviceName: this.state.selectedService, index: 0});
@@ -130,13 +132,15 @@ class Calculator extends Component {
 
 const mapStateToProps = state => {
   return {
-      inputRows: state.inputs.inputRows
+      inputRows: state.inputs.inputRows,
+      spin: state.layout.gearSpin
   };
 };
 
 const mapDispatchToPros = dispatch => {
   return {
-    onRowAdd: (payload) => dispatch(actionCreators.addRow(payload))
+    onRowAdd: (payload) => dispatch(actionCreators.addRow(payload)),
+    onSpined: () => dispatch(actionCreators.gearSpin())
   }
 }
 
