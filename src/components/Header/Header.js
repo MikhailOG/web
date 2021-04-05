@@ -14,8 +14,8 @@ const Header = (props) => {
     }
   });
   useEffect(() => {
-    console.log('header rendered...')
-    console.log(props)
+    // console.log('header rendered...')
+    // console.log(props)
     if (gearConf.style.animationPlayState == 'running') {
       setTimeout(() => {
         setGearConf({...gearConf, style: {...gearConf.style, animationPlayState: 'paused'}});

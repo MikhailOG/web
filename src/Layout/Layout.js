@@ -22,6 +22,7 @@ class Layout extends Component {
         webDivStyle: null
     };
     componentDidMount() {
+        console.log('component did mount [Layout.js]')
         if (!this.state.firstMount) {
             this.props.onResize();
             this.setState({
@@ -29,14 +30,29 @@ class Layout extends Component {
             });
         }
         window.addEventListener('resize', this.props.onResize);
-        if (this.webDiv.current.clientHeight < this.props.innerHeight) {
+        console.log('Layout rendered...')
+        console.log('web clientHeight: ' + this.webDiv.current.clientHeight)
+        console.log('window height: ' + this.props.innerHeight)
+        if (this.webDiv.current.clientHeight < window.innerHeight) {
+            console.log('set web height to 100vh')
             this.setState({webDivStyle: {height: '100vh'}})
         }
     };
     componentDidUpdate() {
-        if (this.webDiv.current.clientHeight < this.props.innerHeight) {
+        console.log('component did update [Layout.js]')
+        console.log('scroll height: ' + this.webDiv.current.scrollHeight + ', innerHeight: ' + this.props.innerHeight)
+
+        if ((this.webDiv.current.scrollHeight < this.props.innerHeight) && !this.state.webDivStyle) {
+            console.log('CDU set web height to 100vh')
             this.setState({webDivStyle: {height: '100vh'}})
         }
+        setTimeout(() => {
+            if ((this.webDiv.current.scrollHeight > this.webDiv.current.clientHeight) && this.state.webDivStyle) {
+                this.setState({webDivStyle: null})
+                console.log('CDU set web height to null')
+            } 
+        }, 50);
+
     }
     componentWillUnmount(){
         window.removeEventListener('resize', this.props.onResize);
@@ -52,12 +68,12 @@ class Layout extends Component {
             , 50)})
     };
     render() {
-        let webDivStyle = null
-        this.state.webDivStyle?webDivStyle=this.state.webDivStyle:null
+        // let webDivStyle = null
+        // this.state.webDivStyle?webDivStyle=this.state.webDivStyle:null
         return(
             <div 
                 onClick={(event) => this.clickHandler(event)} 
-                style={webDivStyle}
+                style={this.state.webDivStyle}
                 ref={this.webDiv} 
                 className="web">
                 <Backdrop 
@@ -106,8 +122,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onResize: () => dispatch(actionCreators.windowResize()),
-        onToggleBackdrop: () => dispatch(actionCreators.toggleBackdrop()),
-        
+        onToggleBackdrop: () => dispatch(actionCreators.toggleBackdrop())
     }
 }
 

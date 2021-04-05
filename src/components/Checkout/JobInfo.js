@@ -96,7 +96,7 @@ class JobInfo extends Component {
                             {this.state.canvasInfo == null? null: 
                             <div>
                             <h3>Количество отверстий по периметру: {this.state.canvasInfo.mainHolesNum}</h3>
-                            <h3>Проем поделен на {this.state.canvasInfo.partsQty} частей</h3>
+                            <h3>Проем поделен на {this.state.canvasInfo.partsQty} части(ей)</h3>
                             <h3>Количество отверстий для деления: {this.state.canvasInfo.sepHolesNum}</h3>
                             <h3>Суммарное количество отверстий: {this.state.canvasInfo.mainHolesNum + this.state.canvasInfo.sepHolesNum}</h3>
                             <h3>Вес одной части {Math.round(this.state.canvasInfo.singlePartWeight)} кг</h3>

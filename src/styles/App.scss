@@ -344,8 +344,9 @@ html {
           height: 2rem;
           outline: none;
           background: 
-          repeating-linear-gradient(45deg, transparent 0% 43%, $mainTextColor 43%  57%),
-          repeating-linear-gradient(135deg, transparent 0% 43%, $mainTextColor 43%  57%);
+          repeating-linear-gradient(45deg, #0000 0% 43%, #10387d 43% 57%), repeating-linear-gradient(135deg, #0000 0% 43%, #10387d 43% 57%);
+          // repeating-linear-gradient(45deg, transparent 0% 43%, $mainTextColor 43%  57%),
+          // repeating-linear-gradient(135deg, transparent 0% 43%, $mainTextColor 43%  57%);
           //transition: all 5s ease-in  3s;
           border: 3px transparent;
           border-radius: 100%;
@@ -415,6 +416,19 @@ html {
     .right-arrow {
       grid-area: 1 / 11 / 3 / 13;
       @extend %arrow-shared;
+    }
+    .escape {
+      grid-area: 1 / 12 / 3 / 13;
+      font-size: 3rem;
+      color: $whiteColor;
+      i {
+        top: 6rem;
+        position: sticky;
+        z-index: $arrow-index;
+      }
+      i:hover {
+        color: $redButtonBackgroundColor;
+      }
     }
     .images-list {
       margin-top: 2rem;

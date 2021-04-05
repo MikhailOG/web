@@ -80,7 +80,7 @@ const Price = () => {
 
                 </tfoot>
             </table>
-            <div class="notes">
+            <div className="notes">
                 <p>К работам повышенной сложности применяются повышающие коэффициенты:</p>
                 <ul>
                     <li><i>Устройство отверстий на высоте более 3 метров от пола</i></li>
@@ -216,7 +216,7 @@ const Price = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class='top-row bottom-lined'>
+                    <tr className='top-row bottom-lined'>
                         <td>Обрамление</td>
                         <td>2000</td>
                         <td>2600</td>

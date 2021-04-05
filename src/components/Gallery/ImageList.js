@@ -3,8 +3,10 @@ import ImageCard from './ImageCard';
 import ZoomedImage from './ZoomedImage';
 import LayoutContext from '../../context/layout-context';
 import Grip from './Grip';
+import Escape from './Escape';
 import { convertRemToPixels } from '../../Scripts/convertRemToPixels';
 import { connect } from 'react-redux';
+import * as actionCreators from '../../store/actions/index';
 import gear from "../../images/gear.svg";
 
 class ImagesList extends Component {
@@ -87,6 +89,7 @@ class ImagesList extends Component {
                     />
                     <Grip clicked={this.prewImage} style={gripStyle} direction={'left'}/>
                     <Grip clicked={this.nextImage} style={gripStyle} direction={'right'}/>
+                    <Escape clicked={this.props.onToggleBackdrop}/>
                 </React.Fragment>:null}
                 <div className="images-list" style={this.state.loading?{opacity:'0'}:null} ref={this.imagesList}>
                     {this.state.sortedImages.map((imgKey, index) => <ImageCard 
@@ -99,8 +102,8 @@ class ImagesList extends Component {
                         />)}
                 </div>
                 {this.state.loading?
-                <div class="gear-spinner">
-                <img class="spinner" src={gear} alt="logo"/>
+                <div className="gear-spinner">
+                <img className="spinner" src={gear} alt="logo"/>
                 </div>:null}
             </React.Fragment>
         )
@@ -112,5 +115,10 @@ const mapStateToProps = state => {
         showBackdrop: state.layout.showBackdrop
     };
 };
+const mapDispatchToProps = dispatch => {
+    return {
+        onToggleBackdrop: () => dispatch(actionCreators.toggleBackdrop())
+    }
+}
 
-export default connect(mapStateToProps)(ImagesList)
+export default connect(mapStateToProps, mapDispatchToProps)(ImagesList)
