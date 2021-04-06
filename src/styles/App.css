@@ -304,7 +304,7 @@ html {
   z-index: 1;
 }
 .web .main-container .job-info-wrapper .job-info button:hover {
-  background: repeating-linear-gradient(45deg, transparent 0% 43%, #993955 43% 57%), repeating-linear-gradient(135deg, transparent 0% 43%, #993955 43% 57%);
+  background: repeating-linear-gradient(45deg, transparent, transparent 0% 43%, #993955 43% 57%, transparent 57% 100%), repeating-linear-gradient(135deg, transparent, transparent 0% 43%, #993955 43% 57%, transparent 57% 100%);
 }
 .web .main-container .job-info-wrapper .job-info canvas {
   margin: 2rem;
