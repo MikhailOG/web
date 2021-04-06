@@ -297,7 +297,7 @@ html {
   width: 2rem;
   height: 2rem;
   outline: none;
-  background: repeating-linear-gradient(45deg, #0000 0% 43%, #10387d 43% 57%), repeating-linear-gradient(135deg, #0000 0% 43%, #10387d 43% 57%);
+  background: repeating-linear-gradient(45deg, rgba(0, 0, 0, 0) 0% 43%, #10387d 43% 57%), repeating-linear-gradient(135deg, rgba(0, 0, 0, 0) 0% 43%, #10387d 43% 57%);
   border: 3px transparent;
   border-radius: 100%;
   position: relative;
