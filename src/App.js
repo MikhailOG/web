@@ -12,7 +12,7 @@ class App extends Component {
         console.log('[App.js] render')
         return (
           <BrowserRouter>
-            <Layout click = {this.clickRemoveHandler}>
+            <Layout>
                 <Route path ='/' exact render={() => <h1>Home</h1>}/>
                 <Route path ='/calculator' exact component={Calculator}/>
                 <Route path ='/price' exact component={Price}/>

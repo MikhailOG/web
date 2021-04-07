@@ -6,7 +6,6 @@ export async function canvas(serviceName, data, concreteWeight, wasteWeight, cal
   var holesDistVert = 0;
   var error = false;
   var weightSpread = 2;
-  var info = {};
   // get data
   var width = data.width;
   var height = data.height;
@@ -33,6 +32,7 @@ export async function canvas(serviceName, data, concreteWeight, wasteWeight, cal
     leftEnhancement: leftEnhancement,
     rightEnhancement: rightEnhancement
   }
+  var info = {input: unscaled};
   // declaring function variables
   var x;
   var y;
@@ -552,18 +552,18 @@ export async function canvas(serviceName, data, concreteWeight, wasteWeight, cal
             fill_rectangle("rgb(223,222,227)");
             circlesByPath(path);
             holesNum--;
-            info = {
-              mainHolesNum: holesNum
-            }
+            // info = {...info,
+            //   mainHolesNum: holesNum
+            // }
             //-----
             //waste calc
-            wasteInfo = sepStandart();
-            info = {...info, ...wasteInfo}
+            info = {...info, ...sepStandart(), mainHolesNum: holesNum};
             //-----
             }
           else if ((width<=diameter)&&(height<=diameter)) {
               fill_circle(rectMoveX, rectMoveY, radius);
               draw_circle(rectMoveX, rectMoveY, radius);
+              info = {...info, ...sepStandart(), mainHolesNum: holesNum}; //incorrect wasteWeight
           }
           else if ((width>diameter)&&(height<=diameter)) {
               var path = new Path(rectMoveX + width/2 - length, rectMoveY,
@@ -571,6 +571,7 @@ export async function canvas(serviceName, data, concreteWeight, wasteWeight, cal
                   [0]);
               fill_rectangle("rgb(223,222,227)");
               circlesByPath(path);
+              info = {...info, ...sepStandart(), mainHolesNum: holesNum}; //incorrect wasteWeight
           }
           else if ((width<=diameter)&&(height>diameter)) {
               var path = new Path(rectMoveX, rectMoveY + height/2 - length,
@@ -578,6 +579,7 @@ export async function canvas(serviceName, data, concreteWeight, wasteWeight, cal
                   [- height + 2*length]);
               fill_rectangle("rgb(223,222,227)");
               circlesByPath(path);
+              info = {...info, ...sepStandart(), mainHolesNum: holesNum}; //incorrect wasteWeight
           }
           draw_rectangle(width, height, "standart");
       break;
@@ -1942,7 +1944,7 @@ export async function canvas(serviceName, data, concreteWeight, wasteWeight, cal
       let real_part_weight;
 
       do {
-        //console.log('COUNTER: ' + counter);
+        console.log('COUNTER: ' + counter);
         // console.log('new WeightToCalc: ' + weightToCalc)
         // console.log('parts QTY: ' + partsQty)
         wasteCuts = calc_wasteQty(partsQty, minSide, maxSide);

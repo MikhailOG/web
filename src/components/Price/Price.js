@@ -40,6 +40,12 @@ const Price = () => {
                         <td>41</td>
                     </tr>
                     <tr>
+                        <td>152-162</td>
+                        <td>28</td>
+                        <td>28</td>
+                        <td>45</td>
+                    </tr>
+                    <tr>
                         <td>172-192</td>
                         <td>41</td>
                         <td>41</td>
