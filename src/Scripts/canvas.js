@@ -552,12 +552,12 @@ export async function canvas(serviceName, data, concreteWeight, wasteWeight, cal
             fill_rectangle("rgb(223,222,227)");
             circlesByPath(path);
             holesNum--;
-            // info = {...info,
-            //   mainHolesNum: holesNum
-            // }
+            info = {...info,
+              mainHolesNum: holesNum
+            }
             //-----
             //waste calc
-            info = {...info, ...sepStandart(), mainHolesNum: holesNum};
+            info = {...info, ...sepStandart()};
             //-----
             }
           else if ((width<=diameter)&&(height<=diameter)) {
