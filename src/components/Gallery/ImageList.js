@@ -104,6 +104,7 @@ class ImagesList extends Component {
                 {this.state.loading?
                 <div className="gear-spinner">
                 <img className="spinner" src={gear} alt="logo"/>
+                <h2>Загрузка {Math.round(100*this.loadedImagesQty/this.imagesQty)}%...</h2>
                 </div>:null}
             </React.Fragment>
         )

@@ -386,9 +386,10 @@ html {
   margin-top: 2rem;
   grid-area: 1/5/3/9;
   justify-self: start;
+  text-align: center;
 }
 .web .main-container .gear-spinner img {
-  max-width: 100%;
+  max-width: 80%;
 }
 .web .main-container .input-rows {
   margin-top: 1rem;

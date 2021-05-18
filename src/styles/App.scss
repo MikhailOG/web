@@ -446,8 +446,9 @@ html {
       margin-top: 2rem;
       grid-area: 1 / 5 / 3 / 9;
       justify-self: start;
+      text-align: center;
       img {
-        max-width: 100%;
+        max-width: 80%;
         @extend %spinner
       }
     }
