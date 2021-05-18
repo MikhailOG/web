@@ -10,7 +10,6 @@ const Footer = () => {
                     <span className="sr-only">info@diamondcoring.ru</span>
                     </a> */}
                     <p>Всегда на связи, ждем Ваших звонков!</p>
-                    <p>Надеемся Вам понравилось у нас на сайте...</p>
                 </div>
                 <p>Copyright 2021 <i className="far fa-gem" style={{fontSize: "1.25rem"}}></i> by Diamond Coring</p>
             </div>

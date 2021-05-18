@@ -701,7 +701,7 @@ html {
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
 }
 .web footer .footer .footer-greeting {
@@ -712,10 +712,10 @@ html {
   align-items: center;
 }
 .web footer .footer .footer-greeting :first-child {
-  margin-bottom: 0.5rem;
+  margin-top: 1.7rem;
 }
-.web footer .footer p {
-  margin: 0;
+.web footer .footer :last-child {
+  margin-bottom: 0.5rem;
 }
 .web footer .footer a i {
   font-size: 2rem;
