@@ -14,13 +14,13 @@ class ImagesList extends Component {
         super(props);
         this.imagesList = React.createRef();
         this.imagesQty = 56;
-        this.loadedImagesQty = 0;
     }
     state = {
         images: {},
         sortedImages: [],
         zoomedImage: null,
-        loading: true
+        loading: true,
+        loadedImagesQty: 0
     }
     static contextType = LayoutContext;
     componentDidMount() {
@@ -44,12 +44,12 @@ class ImagesList extends Component {
         this.setState({ zoomedImage: {image: image, imgKey: imgKey}});
     }
     imageLoadedHandler = () => {
-        this.loadedImagesQty++;
-        if (this.loadedImagesQty === this.imagesQty) {
-            this.setState({loading: false})
-            this.loadedImagesQty = 0;
-            console.log("ALL IMAGES LOADED")
-        }
+        this.setState({loadedImagesQty: this.state.loadedImagesQty + 1}, () => {
+            if (this.state.loadedImagesQty === this.imagesQty) {
+                this.setState({loading: false, loadedImagesQty: 0})
+                console.log("ALL IMAGES LOADED")
+            }
+        })
     }
     prewImage = () => {
         let dotIndex = this.state.zoomedImage.imgKey.indexOf('.');
@@ -104,7 +104,7 @@ class ImagesList extends Component {
                 {this.state.loading?
                 <div className="gear-spinner">
                 <img className="spinner" src={gear} alt="logo"/>
-                <h2>Загрузка {Math.round(100*this.loadedImagesQty/this.imagesQty)}%...</h2>
+                <h2>Загрузка {Math.round(100*this.state.loadedImagesQty/this.imagesQty)}%...</h2>
                 </div>:null}
             </React.Fragment>
         )

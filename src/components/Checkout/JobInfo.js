@@ -60,7 +60,8 @@ class JobInfo extends Component {
                 backgroundPosition: "0% 100%"
             },
             checkoutStyle: {
-                color: "red",
+                color: "transparent",
+                transition: "color 0.3s ease-in",
                 background: "radial-gradient(circle at top right, transparent 39.5%, #10387d 39.5% 39.65%, #ABA9BF 39.65%)",
                 animation: "gradientBG " + this.animationDuration + " linear 1",
                 backgroundSize: "280% 280%",
@@ -77,7 +78,10 @@ class JobInfo extends Component {
             escaped: true
         }
         );
-
+        setTimeout(()=>{
+            let c = document.getElementById('myCanvas');
+            c.getContext('2d').clearRect(0, 0, c.width, c.height);
+        }, 300);
     }
     render() {
         // get coordinates of current job
