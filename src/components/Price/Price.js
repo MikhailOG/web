@@ -204,7 +204,7 @@ const Price = () => {
                         <td>любая</td>
                         <td>16000</td>
                         <td>16000</td>
-                        <td>1600</td>
+                        <td>16000</td>
                     </tr>
                 </tbody>
             </table>

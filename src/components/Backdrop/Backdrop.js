@@ -4,7 +4,7 @@ const Backdrop = (props) => {
     return (
         props.showBackdrop?<div 
         className='backdrop'
-        onClick={props.onBockdropClicked}
+        onClick={!props.showJobInfo?props.onBackdropClicked:null}
         >{props.children}</div>:null
     );
 }

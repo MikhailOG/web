@@ -94,6 +94,7 @@ class Calculator extends Component {
     console.log('[Calculator.js] render')
     return (
       <div 
+      style={this.props.showJobInfo?{opacity:'0'}:null}
       onMouseMove = {this.getElement} 
       onMouseLeave={this.clearServices} 
       className="menu">
@@ -133,7 +134,8 @@ class Calculator extends Component {
 const mapStateToProps = state => {
   return {
       inputRows: state.inputs.inputRows,
-      spin: state.layout.gearSpin
+      spin: state.layout.gearSpin,
+      showJobInfo: state.calc.jobInfo.showJobInfo
   };
 };
 

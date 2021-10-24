@@ -8,14 +8,19 @@ import * as actionCreators from '../../store/actions/index';
 import { string } from 'prop-types';
 
 class JobInfo extends Component {
+    constructor(props) {
+        super(props);
+        this.jobInfo = React.createRef();
+    }
     state={
         wrapperStyle: {transform: 'translateY(-100vh)'},
-        checkoutStyle: {},
-        canvasStyle: {},
+        checkoutStyle: {opacity: '1'},
+        canvasStyle: {opacity: '1'},
         canvasGradientAngle: '45deg',
         escapeButtonLeftPosition: null,
         escaped: false,
-        canvasInfo: null
+        canvasInfo: null,
+        canvasSize: this.props.canvasSize
     }
     animationDuration = '0.5s';
     wastePrice = 3000;
@@ -30,7 +35,7 @@ class JobInfo extends Component {
         if (this.state.wrapperStyle.transform === 'translateY(-100vh)' && this.props.showJobInfo){
             console.log('transform')
             setTimeout(() => {
-                this.setState({wrapperStyle: {transform: 'translateY(0)'}})
+                this.setState({wrapperStyle: {transform: 'translateY(0)', opacity: '1'}})
             }, 10)
         }
         if (this.props.currentJob.showCanvas && this.state.canvasInfo == null) {
@@ -45,7 +50,8 @@ class JobInfo extends Component {
     handleResize = () => {
         if (document.documentElement.querySelector('.escape') && (this.state.escapeButtonLeftPosition != parseFloat(getComputedStyle(document.documentElement.querySelector('.job-info')).width)) - convertRemToPixels(2.4)){
             this.setState({
-                escapeButtonLeftPosition: parseFloat(getComputedStyle(document.documentElement.querySelector('.job-info')).width) - convertRemToPixels(2.4)
+                escapeButtonLeftPosition: parseFloat(getComputedStyle(document.documentElement.querySelector('.job-info')).width) - convertRemToPixels(2.4),
+                canvasSize: (this.jobInfo.current.clientWidth/2-convertRemToPixels(3))
             })
             canvas(this.props.currentJob.serviceName, this.props.currentJob.data, this.props.currentJob.preferences.concreteWeight, this.props.currentJob.preferences.wasteWeight)
         };
@@ -81,6 +87,9 @@ class JobInfo extends Component {
         setTimeout(()=>{
             let c = document.getElementById('myCanvas');
             c.getContext('2d').clearRect(0, 0, c.width, c.height);
+            this.setState({textStyle: {
+                opacity: 0
+            }})
         }, 300);
     }
     render() {
@@ -158,33 +167,33 @@ class JobInfo extends Component {
                     let totalWastePrice = Math.round(this.wastePrice * this.state.canvasInfo.totalWeight / 1000);
                     let multiEmbrasure = this.props.currentJob.data.qty === 1 ? null :
                     <Fragment>
-                        <h3>Метраж бурения {this.props.currentJob.data.qty} проемов: {coringLength*this.props.currentJob.data.qty} м</h3>
-                        <h3>Стоимость бурения {this.props.currentJob.data.qty} проемов: {totalCoringPrice} &#x20bd;</h3>
+                        <h3 style={this.state.textStyle}>Метраж бурения {this.props.currentJob.data.qty} проемов: {coringLength*this.props.currentJob.data.qty} м</h3>
+                        <h3 style={this.state.textStyle}>Стоимость бурения {this.props.currentJob.data.qty} проемов: {totalCoringPrice} &#x20bd;</h3>
                     </Fragment>
                     let holesEnding = this.props.currentJob.data.qty === 1 ? null : " в одном проеме";
                     let singleEmbrasureEnding = this.props.currentJob.data.qty === 1 ? null : " 1 проема";
                     priceText = (
                         <Fragment>
-                            <h3>Количество отверстий &#xD8;{this.state.canvasInfo.input.diameter} x {this.state.canvasInfo.input.depth} мм{holesEnding} : {holesNum} шт.</h3>
+                            <h3 style={this.state.textStyle}>Количество отверстий &#xD8;{this.state.canvasInfo.input.diameter} x {this.state.canvasInfo.input.depth} мм{holesEnding} : {holesNum} шт.</h3>
                             {this.state.canvasInfo.partsQty===0? null:
                                 <Fragment>
                                     <h3>Проем поделен на {this.state.canvasInfo.partsQty} {ending}</h3>
                                     <h3>Вес одной части {Math.round(this.state.canvasInfo.singlePartWeight)} кг</h3>
-                                    {priceText}
+                                    {/* {priceText} */}
                                 </Fragment>
                             }
-                            <h3>Метраж бурения{singleEmbrasureEnding}: {coringLength} м</h3>
-                            <h3>Стоимость бурения{singleEmbrasureEnding}: {singleEmbrasurePrice} &#x20bd;</h3>
+                            <h3 style={this.state.textStyle}>Метраж бурения{singleEmbrasureEnding}: {coringLength} м</h3>
+                            <h3 style={this.state.textStyle}>Стоимость бурения{singleEmbrasureEnding}: {singleEmbrasurePrice} &#x20bd;</h3>
                             {multiEmbrasure}
-                            <h3>Вес мусора: {Math.round(this.state.canvasInfo.totalWeight)} кг</h3>
-                            <h3>Стоимость выноса мусора (без вывоза): {totalWastePrice} &#x20bd;</h3>
-                            <h3>Стоимость итого: {totalWastePrice + totalCoringPrice} &#x20bd;</h3>
+                            <h3 style={this.state.textStyle}>Вес мусора: {Math.round(this.state.canvasInfo.totalWeight)} кг</h3>
+                            <h3 style={this.state.textStyle}>Стоимость выноса мусора (без вывоза): {totalWastePrice} &#x20bd;</h3>
+                            <h3 style={this.state.textStyle}>Стоимость итого: {totalWastePrice + totalCoringPrice} &#x20bd;</h3>
                     </Fragment>)
                 }
         }
             return (
                 <div className="job-info-wrapper" id="jobInfoWrapper" style={this.state.wrapperStyle}>
-                    <div className="job-info" style={this.state.checkoutStyle}>
+                    <div className="job-info" ref={this.jobInfo} style={this.state.checkoutStyle}>
                         <Button
                             clicked={() => {
                                 this.props.onClearJobInfo();
@@ -196,20 +205,24 @@ class JobInfo extends Component {
                             escaped={this.state.escaped}
                             />
                         <h3>{this.props.currentJob.jobData}</h3>
-                            {this.state.canvasInfo == null? null: 
-                            <div>
+                        <div className='canvas-info'>
+                        {this.state.canvasInfo == null? null: 
+                            <div style={this.state.canvasStyle}>
                                 {priceText}
                             </div>
                             }
+                            {this.props.currentJob.showCanvas?<canvas 
+                            id="myCanvas" 
+                            width={this.state.canvasSize} 
+                            height={this.state.canvasSize}
+                            style={this.state.canvasStyle}>
+                        </canvas>:null}
+                        </div>
+
                             {/* <div className='job-description'>
                                 <p>{this.props.currentJob.title + ' ' + jobType}</p>
                             </div> */}
-                        {this.props.currentJob.showCanvas?<canvas 
-                            id="myCanvas" 
-                            width={this.props.canvasSize} 
-                            height={this.props.canvasSize}
-                            style={this.state.canvasStyle}>
-                        </canvas>:null}
+
                     </div>          
                 </div>
             );

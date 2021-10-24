@@ -20,7 +20,7 @@ font-family: 'Vollkorn', serif;
 /*-------------------------------------*/
 /*z-indexes*/
 /*shared*/
-.web .main-container .input-rows .input button, .web .main-container .input-rows .input, .web .main-container .input-rows .input-mod, .web .main-container .input-rows, .web .main-container .job-info-wrapper .job-info canvas, .web .main-container .menu .btnBed .btn {
+.web .main-container .input-rows .input button, .web .main-container .input-rows .input, .web .main-container .input-rows .input-mod, .web .main-container .input-rows, .web .main-container .job-info-wrapper .job-info .canvas-info div, .web .main-container .job-info-wrapper .job-info .canvas-info canvas, .web .main-container .menu .btnBed .btn {
   border-radius: 15px;
   border: 3px solid #10387d;
 }
@@ -306,14 +306,33 @@ html {
 .web .main-container .job-info-wrapper .job-info button:hover {
   background: repeating-linear-gradient(45deg, transparent, transparent 0% 43%, #993955 43% 57%, transparent 57% 100%), repeating-linear-gradient(135deg, transparent, transparent 0% 43%, #993955 43% 57%, transparent 57% 100%);
 }
-.web .main-container .job-info-wrapper .job-info canvas {
-  margin: 2rem;
+.web .main-container .job-info-wrapper .job-info .job-description {
+  text-align: center;
+}
+.web .main-container .job-info-wrapper .job-info .canvas-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.web .main-container .job-info-wrapper .job-info .canvas-info div, .web .main-container .job-info-wrapper .job-info .canvas-info canvas {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
   background-color: #f3fffd;
   background-size: 280% 280%;
   transition: background-color 0.4s ease-in, border-color 0.35s ease-in;
 }
-.web .main-container .job-info-wrapper .job-info .job-description {
-  text-align: center;
+.web .main-container .job-info-wrapper .job-info .canvas-info div h3, .web .main-container .job-info-wrapper .job-info .canvas-info canvas h3 {
+  margin-left: 0.3rem;
+  margin-right: 0.3rem;
+  color: #10387d;
+  text-shadow: 1px 0px 1px #dfdee3;
+}
+.web .main-container .job-info-wrapper .job-info .canvas-info div {
+  margin-left: 2rem;
+  margin-right: 1rem;
+}
+.web .main-container .job-info-wrapper .job-info .canvas-info canvas {
+  margin-left: 1rem;
+  margin-right: 2rem;
 }
 @keyframes gradientBG {
   0% {
@@ -516,6 +535,10 @@ html {
   flex-grow: 1;
   text-align: right;
 }
+.web .main-container .input-rows .input .buttons .button, .web .main-container .input-rows .input .cog .button {
+  margin-top: 0;
+  align-self: flex-start;
+}
 .web .main-container .input-rows .input .cog {
   margin-left: 1rem;
   font-size: 2.5rem;
@@ -602,6 +625,7 @@ html {
 .web .main-container .input-rows .input .preferences .input-block {
   display: flex;
   text-align: center;
+  margin-top: 0.2rem;
 }
 .web .main-container .input-rows .input .preferences .input-block > div {
   display: flex;

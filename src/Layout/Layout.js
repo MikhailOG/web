@@ -7,6 +7,7 @@ import JobInfo from '../components/Checkout/JobInfo';
 import { connect } from 'react-redux';
 import * as actionCreators from '../store/actions/index';
 import Footer from '../components/Footer/Footer';
+import { convertRemToPixels } from '../Scripts/convertRemToPixels';
 
 class Layout extends Component {
     constructor(props) {
@@ -22,7 +23,7 @@ class Layout extends Component {
         webDivStyle: null
     };
     componentDidMount() {
-        console.log('component did mount [Layout.js]')
+        console.log('component did mount [Layout.js]');
         if (!this.state.firstMount) {
             this.props.onResize();
             this.setState({
@@ -59,7 +60,7 @@ class Layout extends Component {
     };
 
     clickHandler = (event) => {
-        console.log('Clicked')
+        console.log('Clicked evnt')
         if (this.state.clickedEvt) 
             this.setState({clicked: false, clickedEvt: null});
         else         
@@ -70,6 +71,7 @@ class Layout extends Component {
     render() {
         // let webDivStyle = null
         // this.state.webDivStyle?webDivStyle=this.state.webDivStyle:null
+        let canvasSize = this.props.innerWidth*0.5*8/12-convertRemToPixels(3);
         return(
             <div 
                 onClick={(event) => this.clickHandler(event)} 
@@ -78,7 +80,8 @@ class Layout extends Component {
                 className="web">
                 <Backdrop 
                     showBackdrop={this.props.showBackdrop}
-                    onBockdropClicked={this.props.onToggleBackdrop}
+                    onBackdropClicked={this.props.onToggleBackdrop}
+                    showJobInfo={this.props.jobInfo.showJobInfo}
                     />
                 <Header 
                     title="Diamond coring" 
@@ -100,7 +103,7 @@ class Layout extends Component {
                         {this.props.jobInfo.showJobInfo?
                             <JobInfo 
                                 showJobInfo={this.props.jobInfo.showJobInfo}
-                                canvasSize={Math.min(this.props.innerWidth, this.props.innerHeight)*0.75*8/12}
+                                canvasSize={canvasSize}
                             />:null}
                     </div>
                 </LayoutContext.Provider>
